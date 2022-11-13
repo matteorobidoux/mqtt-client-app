@@ -18,7 +18,7 @@ import javax.crypto.SecretKey;
 /**
  * @author Rim Dallali
  */
-public class KeyStoreApp {
+public class KeyStoreHelper {
 
     /**
      * Access point for MQTT to get desired certificate
@@ -28,7 +28,7 @@ public class KeyStoreApp {
      * @throws Exception
      * @return Certificate
      */
-    public static Certificate extractCertificate(String alias) throws Exception {
+    public Certificate extractCertificate(String alias) throws Exception {
         Scanner scanner = new Scanner(System.in);
         Console console = System.console();
 
@@ -50,7 +50,7 @@ public class KeyStoreApp {
                         password = console.readPassword();
                     }
                     //loading the keystore and getting the certificate
-                    KeyStore ks = loadKeyStore(password, filename, alias);
+                    KeyStore ks = loadKeyStore(password, filename);
                     return getKeyStoreInfo(ks, password, filename, alias);
                 }
             } catch (EOFException e) {
@@ -73,7 +73,7 @@ public class KeyStoreApp {
      * @param certificate
      * @throws Exception
      */
-    public static void storeCertificate(String alias, Certificate certificate) throws Exception {
+    public void storeCertificate(String alias, Certificate certificate) throws Exception {
         Scanner scanner = new Scanner(System.in);
         Console console = System.console();
 
@@ -94,10 +94,8 @@ public class KeyStoreApp {
                         System.out.println("--- Invalid password, try again ---");
                         password = console.readPassword();
                     }
-                    System.out.println(filename);
-
-                    KeyStore ks = loadKeyStore(password, filename, alias);
-                    storeToKeyStore(ks, alias, certificate, password);
+                    KeyStore ks = loadKeyStore(password, filename);
+                    storeToKeyStore(ks, alias, certificate);
                 }
             } catch (EOFException e) {
                 System.out.println("Given file path is INVALID");
@@ -111,22 +109,12 @@ public class KeyStoreApp {
     }
 
     /**
-     * Helper for MQTT to extract public key from input certificate
-     * @param certificate
-     * @return PublicKey
-     */
-    public static PublicKey extractPublicKey(Certificate certificate) {
-        PublicKey publicKey = certificate.getPublicKey();
-        return publicKey;
-    }
-
-    /**
      * Password validation
      * 
      * @param password
      * @return boolean
      */
-    private static boolean validatePassword(char[] password) {
+    private boolean validatePassword(char[] password) {
         return (password.length >= 6 && password.length <= 30);
     }
 
@@ -138,11 +126,11 @@ public class KeyStoreApp {
      * @return KeyStore
      * @throws Exception
      */
-    private static KeyStore loadKeyStore(char[] password, String filename, String alias) throws Exception {
+    public KeyStore loadKeyStore(char[] password, String filename) throws Exception {
         System.out.println("loading the key store");
         System.out.println("------------------------------------");
         FileInputStream fis = null;
-        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType(), "SunEC");
+        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
         fis = new FileInputStream(filename);
         ks.load(fis, password);
         System.out.println("KeyStore has been loaded");
@@ -158,12 +146,12 @@ public class KeyStoreApp {
      * @return Certificate
      * @throws Exception
      */
-    private static Certificate getKeyStoreInfo(KeyStore ks, char[] password, String filename, String alias) throws Exception {
+    public Certificate getKeyStoreInfo(KeyStore ks, char[] password, String filename, String alias) throws Exception {
         System.out.println("Get Trusted Certificate");
-        System.out.println("------------------------------------");
+        System.out.println("-----------------------");
 
         // get private key and trusted certificate from keystore
-        Certificate trustedCertificate =  ks.getCertificate(alias);;
+        Certificate trustedCertificate = ks.getCertificate(alias);;
         return trustedCertificate;
     }
 
@@ -173,12 +161,11 @@ public class KeyStoreApp {
      * @param keyStore
      * @param alias
      * @param certificate
-     * @param password
      * @throws Exception
      */
-    private static void storeToKeyStore(KeyStore keyStore, String alias, Certificate certificate, char[] password) throws Exception {
+    public void storeToKeyStore(KeyStore keyStore, String alias, Certificate certificate) throws Exception {
         System.out.println("Storing the certificate");
-        System.out.println("------------------------------------");
+        System.out.println("-----------------------");
         keyStore.setCertificateEntry(alias, certificate);
         System.out.println("certificate alias entry has been set\nalias: " + alias + "\ncertificate: " + certificate.getPublicKey().toString());
     }
@@ -190,14 +177,14 @@ public class KeyStoreApp {
      * @param privateKey
      * @param password
      * @param secretKey
+     * @param message
      * @throws Exception
      */
-    private static void signMessage(PublicKey publicKey, PrivateKey privateKey, char[] password, SecretKey secretKey,
+    private void signMessage(PublicKey publicKey, PrivateKey privateKey, char[] password, SecretKey secretKey,
             String message) throws Exception {
         System.out.println("Signing and Verifying a message");
-        System.out.println("------------------------------------");
+        System.out.println("-------------------------------");
         SignatureHelper sighelp = new SignatureHelper();
-
         String algorithm = "SHA256withECDSA";
         // Generate signature for the message.
         byte[] signature = sighelp.generateSignature(algorithm, privateKey, message);
@@ -215,7 +202,7 @@ public class KeyStoreApp {
      * @return boolean
      * @throws Exception
      */
-    private static boolean verifySignature(byte[] signature, PublicKey publicKey, String algorithm, String receivedMsg,
+    private boolean verifySignature(byte[] signature, PublicKey publicKey, String algorithm, String receivedMsg,
             SignatureHelper sighelp) throws Exception {
         boolean verified = sighelp.verifySignature(signature, publicKey, algorithm, receivedMsg);
         if (verified) {
@@ -233,7 +220,7 @@ public class KeyStoreApp {
      * @return String
      * @throws EOFException
      */
-    private static String getFilename() throws EOFException {
+    private String getFilename() throws EOFException {
         Scanner scanner = new Scanner(System.in);
         boolean validFile = false;
         String normalizedFilename = null;

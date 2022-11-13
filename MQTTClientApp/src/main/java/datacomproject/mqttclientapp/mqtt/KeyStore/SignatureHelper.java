@@ -37,7 +37,7 @@ public class SignatureHelper {
   public boolean verifySignature(byte[] signature, PublicKey publickey, String algorithm, String msg) throws Exception {
 
     // Create an instance of the signature scheme for the given signature algorithm
-    Signature sig = Signature.getInstance(algorithm, "SunEC");
+    Signature sig = Signature.getInstance(algorithm);
 
     // Initialize the signature verification scheme.
     sig.initVerify(publickey);
