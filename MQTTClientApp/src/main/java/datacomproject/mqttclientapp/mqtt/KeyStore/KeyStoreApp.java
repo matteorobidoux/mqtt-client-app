@@ -142,7 +142,7 @@ public class KeyStoreApp {
         System.out.println("loading the key store");
         System.out.println("------------------------------------");
         FileInputStream fis = null;
-        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType(), "SunEC");
         fis = new FileInputStream(filename);
         ks.load(fis, password);
         System.out.println("KeyStore has been loaded");
