@@ -11,6 +11,7 @@ package datacomproject.mqttclientapp;
 public class App {
     
     public static void main(String[]args){
-        
+        MQTT m = new MQTT();
+        m.setup();
     }
 }
