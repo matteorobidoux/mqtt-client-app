@@ -20,15 +20,11 @@ import javax.crypto.SecretKey;
  */
 public class KeyStoreHelper {
 
-    /**
-     * Access point for MQTT to get desired certificate
-     * Get trusted certificate from keystore using input alias
-     * 
-     * @param alias
-     * @throws Exception
-     * @return Certificate
-     */
-    public Certificate extractCertificate(String alias) throws Exception {
+    public String filepath;
+    public char[] password;
+    public KeyStore ks;
+
+    public void getUserInput() throws Exception {
         Scanner scanner = new Scanner(System.in);
         Console console = System.console();
 
@@ -36,10 +32,9 @@ public class KeyStoreHelper {
         System.out.println("------------------------------------------------");
         System.out.println("-- Provide path where the keystore is located --");
         boolean validKeyStore = false;
-        String filename = null;
         while (!validKeyStore) {
             try {
-                filename = getFilename();
+                filepath = getFilename();
                 validKeyStore = true;
                 if (validKeyStore) {
                     // getting and validating password
@@ -49,9 +44,8 @@ public class KeyStoreHelper {
                         System.out.println("--- Invalid password, try again ---");
                         password = console.readPassword();
                     }
-                    //loading the keystore and getting the certificate
-                    KeyStore ks = loadKeyStore(password, filename);
-                    return getKeyStoreInfo(ks, password, filename, alias);
+                    // loading the keystore
+                    this.ks = loadKeyStore(password, filepath);
                 }
             } catch (EOFException e) {
                 System.out.println("Given file path is INVALID");
@@ -62,7 +56,19 @@ public class KeyStoreHelper {
             }
         }
         scanner.close();
-        return null;
+    }
+
+    /**
+     * Access point for MQTT to get desired certificate
+     * Get trusted certificate from keystore using input alias
+     * 
+     * @param alias
+     * @throws Exception
+     * @return Certificate
+     */
+    public Certificate extractCertificate(String alias) throws Exception {
+        getUserInput();
+        return getKeyStoreInfo(ks, password, filepath, alias);
     }
 
     /**
@@ -74,38 +80,8 @@ public class KeyStoreHelper {
      * @throws Exception
      */
     public void storeCertificate(String alias, Certificate certificate) throws Exception {
-        Scanner scanner = new Scanner(System.in);
-        Console console = System.console();
-
-        // getting and validating filename
-        System.out.println("------------------------------------------------");
-        System.out.println("-- Provide path where the keystore is located --");
-        boolean validKeyStore = false;
-        String filename = null;
-        while (!validKeyStore) {
-            try {
-                filename = getFilename();
-                validKeyStore = true;
-                if (validKeyStore) {
-                    // getting and validating password
-                    System.out.println("-------- Provide password --------");
-                    char[] password = console.readPassword();
-                    while (!validatePassword(password)) {
-                        System.out.println("--- Invalid password, try again ---");
-                        password = console.readPassword();
-                    }
-                    KeyStore ks = loadKeyStore(password, filename);
-                    storeToKeyStore(ks, alias, certificate);
-                }
-            } catch (EOFException e) {
-                System.out.println("Given file path is INVALID");
-                validKeyStore = false;
-            } catch (IOException ie) {
-                System.out.println("Wrong KeyStore password OR Invalid KeyStore path, try again");
-                validKeyStore = false;
-            }
-        }
-        scanner.close();
+        getUserInput();
+        storeToKeyStore(ks, alias, certificate);
     }
 
     /**
@@ -151,7 +127,8 @@ public class KeyStoreHelper {
         System.out.println("-----------------------");
 
         // get private key and trusted certificate from keystore
-        Certificate trustedCertificate = ks.getCertificate(alias);;
+        Certificate trustedCertificate = ks.getCertificate(alias);
+        ;
         return trustedCertificate;
     }
 
@@ -167,7 +144,8 @@ public class KeyStoreHelper {
         System.out.println("Storing the certificate");
         System.out.println("-----------------------");
         keyStore.setCertificateEntry(alias, certificate);
-        System.out.println("certificate alias entry has been set\nalias: " + alias + "\ncertificate: " + certificate.getPublicKey().toString());
+        System.out.println("certificate alias entry has been set\nalias: " + alias + "\ncertificate: "
+                + certificate.getPublicKey().toString());
     }
 
     /**
