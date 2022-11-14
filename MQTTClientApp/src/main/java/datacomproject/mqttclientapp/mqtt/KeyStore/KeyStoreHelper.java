@@ -93,6 +93,30 @@ public class KeyStoreHelper {
     }
 
     /**
+     * Gets the private key from given certificate at the specified alias
+     * 
+     * @param certificate
+     * @param alias 
+     * @return PrivateKey
+     * @throws KeyStoreException
+     * @throws UnrecoverableEntryException
+     * @throws NoSuchAlgorithmException
+     * TODO can we pass the certificate instead of the alias
+     */
+    public PrivateKey extractPrivateKey(String alias, char[] password) throws Exception {
+        System.out.println("------Getting the Private Key-------");
+        System.out.println("------------------------------------");
+        KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(password);
+
+        KeyStore.PrivateKeyEntry privateKeyEntry = null;
+
+        // get private key from keystore 
+        privateKeyEntry = (KeyStore.PrivateKeyEntry) ks.getEntry(alias, protParam); 
+        PrivateKey privateKey = privateKeyEntry.getPrivateKey();
+        return privateKey;
+    } 
+
+    /**
      * Store the input certificate to the keystore at input alias
      * returns a boolean representing whether the store succeeded or not
      * TODO do we want to overwrite the certificate at given alias or not?

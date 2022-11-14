@@ -91,4 +91,11 @@ public class KeyStoreHelperTest {
     byte[] signature = ksh.signMessage(privateKey, messageToBeSigned);
     assertFalse(ksh.verifySignature(signature, publicKey, algorithm, receivedMsg));
   }
+
+  @Test
+  public void testExtractPrivateKey() throws Exception {
+    // Certificate certificate = ksh.extractCertificate("TEST");
+    PrivateKey pk = ksh.extractPrivateKey("TEST", password);
+    assertNotNull(pk);
+  }
 }
