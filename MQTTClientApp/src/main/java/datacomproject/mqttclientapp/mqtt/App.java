@@ -4,13 +4,16 @@
  */
 package datacomproject.mqttclientapp.mqtt;
 
+import datacomproject.mqttclientapp.mqtt.KeyStore.KeyStoreHelper;
+
 /**
  *
  * @author Matteo
  */
 public class App {
     
-    public static void main(String[]args){
-        
+    public static void main(String[]args) throws Exception{
+        KeyStoreHelper ksh = new KeyStoreHelper();
+        ksh.getUserInput();
     }
 }

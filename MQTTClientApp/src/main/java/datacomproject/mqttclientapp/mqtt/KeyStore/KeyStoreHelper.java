@@ -43,7 +43,7 @@ public class KeyStoreHelper {
                         System.out.println("--- Invalid password, try again --");
                         password = console.readPassword();
                     }
-                    // loading the keystore
+                    // load the keystore
                     this.ks = loadKeyStore(password, filepath);
                 }
             } catch (EOFException e) {
@@ -55,42 +55,6 @@ public class KeyStoreHelper {
             }
         }
         scanner.close();
-    }
-
-    /**
-     * Access point for MQTT to get desired certificate
-     * Get trusted certificate from keystore using input alias
-     * 
-     * @param alias
-     * @throws Exception
-     * @return Certificate
-     */
-    public Certificate extractCertificate(String alias) throws Exception {
-        getUserInput();
-        return getKeyStoreInfo(alias);
-    }
-
-    /**
-     * Access point for MQTT to store given certificate
-     * Stores the given certificate to the given alias in the keystore
-     * 
-     * @param alias
-     * @param certificate
-     * @throws Exception
-     */
-    public void storeCertificate(String alias, Certificate certificate) throws Exception {
-        getUserInput();
-        storeToKeyStore(alias, certificate);
-    }
-
-    /**
-     * Password validation
-     * 
-     * @param password
-     * @return boolean
-     */
-    private boolean validatePassword(char[] password) {
-        return (password.length >= 6 && password.length <= 30);
     }
 
     /**
@@ -119,7 +83,7 @@ public class KeyStoreHelper {
      * @return Certificate
      * @throws Exception
      */
-    public Certificate getKeyStoreInfo(String alias) throws Exception {
+    public Certificate extractCertificate(String alias) throws Exception {
         System.out.println("Get Trusted Certificate");
         System.out.println("-----------------------");
 
@@ -135,7 +99,7 @@ public class KeyStoreHelper {
      * @param certificate
      * @throws Exception
      */
-    public void storeToKeyStore(String alias, Certificate certificate) throws Exception {
+    public void storeCertificate(String alias, Certificate certificate) throws Exception {
         System.out.println("Storing the certificate");
         System.out.println("-----------------------");
         ks.setCertificateEntry(alias, certificate);
@@ -143,15 +107,12 @@ public class KeyStoreHelper {
                 + certificate.getPublicKey().toString());
     }
 
-    public void setKeyStore(KeyStore keyStore) {
-        ks = keyStore;
-    }
-
     /**
      * Sign and Verify a string message
      * 
      * @param privateKey
      * @param message
+     * @return byte[]
      * @throws Exception
      */
     public byte[] signMessage(PrivateKey privateKey, String message) throws Exception {
@@ -223,11 +184,40 @@ public class KeyStoreHelper {
     }
 
     /**
-     * Code illustrating digital signature generation and verification
+     * Password validation
+     * Helper method
+     * 
+     * @param password
+     * @return boolean
+     */
+    private boolean validatePassword(char[] password) {
+        return (password.length >= 6 && password.length <= 30);
+    }
+
+    /**
+     * @param keyStore
+     * 
+     * TEST HELPER
+     * sets the keystore class instance 
+     */
+    public void setKeyStore(KeyStore keyStore) {
+        ks = keyStore;
+    }
+
+
+    /**
+     * Private class containing digital signature generation and verification helper
+     * methods
      */
     private class SignatureHelper {
+
         /**
-         * Method for generating digital signature.
+         * @param algorithm
+         * @param privatekey
+         * @param message
+         * @return byte[]
+         * @throws Exception
+         *                   Method for generating digital signature.
          */
         public byte[] generateSignature(String algorithm, PrivateKey privatekey, String message) throws Exception {
             // Create an instance of the signature scheme for the given signature algorithm
@@ -244,10 +234,15 @@ public class KeyStoreHelper {
         }
 
         /**
-         * Method for verifying digital signature.
+         * @param signature
+         * @param pk
+         * @param alg
+         * @param msg
+         * @return boolean
+         * @throws Exception
+         *                   Method for verifying digital signature.
          */
         public boolean verifySignature(byte[] signature, PublicKey pk, String alg, String msg) throws Exception {
-
             // Create an instance of the signature scheme for the given signature algorithm
             Signature sig = Signature.getInstance(alg);
 

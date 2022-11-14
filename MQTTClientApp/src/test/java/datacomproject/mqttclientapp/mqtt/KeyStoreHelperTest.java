@@ -42,21 +42,21 @@ public class KeyStoreHelperTest {
   @Test
   public void testExtractCertificate() throws Exception {
     String alias = "TEST";
-    Certificate certificate = ksh.getKeyStoreInfo(alias);
+    Certificate certificate = ksh.extractCertificate(alias);
     assertNotNull(certificate);
   }
 
   @Test
   public void testStoreCertificate() throws Exception {
     String alias = "STORETEST";
-    Certificate originalCertificate = ksh.getKeyStoreInfo("TEST");
+    Certificate originalCertificate = ksh.extractCertificate("TEST");
     assertNotNull(originalCertificate);
 
     //store the certificate to the new alias SCORETEST
-    ksh.storeToKeyStore(alias, originalCertificate);
+    ksh.storeCertificate(alias, originalCertificate);
 
     //get the certificate from the new alias we stored it to
-    Certificate storedCertificate = ksh.getKeyStoreInfo(alias);
+    Certificate storedCertificate = ksh.extractCertificate(alias);
     assertNotNull(storedCertificate);
   }
 
@@ -67,7 +67,7 @@ public class KeyStoreHelperTest {
 
   @Test
   public void testGetKeyStoreInfo() throws Exception {
-    Certificate certificate = ksh.getKeyStoreInfo("TEST");
+    Certificate certificate = ksh.extractCertificate("TEST");
     assertNotNull(certificate);
   }
 
