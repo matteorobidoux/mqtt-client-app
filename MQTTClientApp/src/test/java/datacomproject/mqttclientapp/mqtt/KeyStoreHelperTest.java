@@ -1,7 +1,6 @@
 package datacomproject.mqttclientapp.mqtt;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -24,7 +23,7 @@ public class KeyStoreHelperTest {
   KeyStoreHelper ksh;
   KeyStore ks;
   String filename = "src/test/java/datacomproject/mqttclientapp/mqtt/ECcertif.ks";
-  char[] password = new char[]{'p', 'a', 's', 's', 'w', 'o', 'r', 'd'};
+  char[] password = new char[] { 'p', 'a', 's', 's', 'w', 'o', 'r', 'd' };
 
   public KeyStoreHelperTest() throws Exception {
     KeyPairGenerator generator = KeyPairGenerator.getInstance("EC");
@@ -52,10 +51,10 @@ public class KeyStoreHelperTest {
     Certificate originalCertificate = ksh.extractCertificate("TEST");
     assertNotNull(originalCertificate);
 
-    //store the certificate to the new alias SCORETEST
+    // store the certificate to the new alias STORETEST
     ksh.storeCertificate(alias, originalCertificate);
 
-    //get the certificate from the new alias we stored it to
+    // get the certificate from the new alias we stored it to
     Certificate storedCertificate = ksh.extractCertificate(alias);
     assertNotNull(storedCertificate);
   }
@@ -80,5 +79,16 @@ public class KeyStoreHelperTest {
 
     byte[] signature = ksh.signMessage(privateKey, messageToBeSigned);
     assertTrue(ksh.verifySignature(signature, publicKey, algorithm, receivedMsg));
+  }
+
+  @Test
+  public void testFailSignVerifySignature() throws Exception {
+    String algorithm = "SHA256withECDSA";
+
+    String messageToBeSigned = "This is the message to be signed.";
+    String receivedMsg = "Message to fail signature";
+
+    byte[] signature = ksh.signMessage(privateKey, messageToBeSigned);
+    assertFalse(ksh.verifySignature(signature, publicKey, algorithm, receivedMsg));
   }
 }

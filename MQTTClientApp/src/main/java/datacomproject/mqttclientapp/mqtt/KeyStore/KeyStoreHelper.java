@@ -7,6 +7,7 @@ import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.cert.Certificate;
 import java.security.*;
 import java.text.Normalizer;
@@ -83,20 +84,22 @@ public class KeyStoreHelper {
      * @return Certificate
      * @throws Exception
      */
-    public Certificate extractCertificate(String alias) throws Exception {
+    public Certificate extractCertificate(String alias) throws KeyStoreException {
         System.out.println("Get Trusted Certificate");
         System.out.println("-----------------------");
 
-        // get trusted certificate from keystore
         Certificate trustedCertificate = ks.getCertificate(alias);
         return trustedCertificate;
     }
 
     /**
      * Store the input certificate to the keystore at input alias
+     * returns a boolean representing whether the store succeeded or not
+     * TODO do we want to overwrite the certificate at given alias or not?
      * 
      * @param alias
      * @param certificate
+     * @return boolean
      * @throws Exception
      */
     public void storeCertificate(String alias, Certificate certificate) throws Exception {
@@ -144,6 +147,22 @@ public class KeyStoreHelper {
             System.out.println("message has NOT been verified");
         }
         return verified;
+    }
+
+    /**
+     * Checks if the given alias is part of the aliases in the keystore
+     * 
+     * @param alias
+     * @return boolean
+     * @throws KeyStoreException
+     */
+    public boolean checkAlias(String alias) throws KeyStoreException {
+        while (ks.aliases().hasMoreElements()) {
+            if (ks.aliases().nextElement().equals(alias)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -198,12 +217,11 @@ public class KeyStoreHelper {
      * @param keyStore
      * 
      * TEST HELPER
-     * sets the keystore class instance 
+     * sets the keystore class instance
      */
     public void setKeyStore(KeyStore keyStore) {
         ks = keyStore;
     }
-
 
     /**
      * Private class containing digital signature generation and verification helper
@@ -216,10 +234,15 @@ public class KeyStoreHelper {
          * @param privatekey
          * @param message
          * @return byte[]
+         * @throws UnsupportedEncodingException
+         * @throws SignatureException
+         * @throws InvalidKeyException
+         * @throws NoSuchAlgorithmException
          * @throws Exception
-         *                   Method for generating digital signature.
+         * Method for generating digital signature.
          */
-        public byte[] generateSignature(String algorithm, PrivateKey privatekey, String message) throws Exception {
+        public byte[] generateSignature(String algorithm, PrivateKey privatekey, String message)
+                throws SignatureException, UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException {
             // Create an instance of the signature scheme for the given signature algorithm
             Signature sig = Signature.getInstance(algorithm);
 
@@ -240,7 +263,7 @@ public class KeyStoreHelper {
          * @param msg
          * @return boolean
          * @throws Exception
-         *                   Method for verifying digital signature.
+         * Method for verifying digital signature.
          */
         public boolean verifySignature(byte[] signature, PublicKey pk, String alg, String msg) throws Exception {
             // Create an instance of the signature scheme for the given signature algorithm
