@@ -9,6 +9,8 @@ import com.pi4j.context.Context;
 import datacomproject.mqttclientapp.mqtt.Camera.Camera.PicConfig;
 import datacomproject.mqttclientapp.mqtt.Camera.Camera.PicConfig.Builder;
 import datacomproject.mqttclientapp.mqtt.Camera.Camera.VidConfig;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
@@ -28,12 +30,15 @@ public class CameraApp implements IApplication {
     public void execute(Context pi4j) {
         System.out.println("\nInitializing the camera");
         Camera camera = new Camera();
+        
+        Path userHome = Paths.get(System.getProperty("user.home"));
+        System.out.println(userHome);
 
         System.out.println("Setting up the config to take a picture.");
         
         //Configure the camera setup
         PicConfig config = Camera.PicConfig.Builder.newInstance()
-                .outputPath("/home/cdavis/Pictures/")
+                .outputPath(userHome + "/Pictures/")
 		.delay(3000)
 		.disablePreview(true)
 		.encoding(Camera.PicEncoding.PNG)
@@ -53,7 +58,7 @@ public class CameraApp implements IApplication {
         
         //Configure the video setup
         VidConfig vidconfig = Camera.VidConfig.Builder.newInstance()
-                .outputPath("/home/cdavis/Videos/")
+                .outputPath(userHome + "/Videos/")
                 .disablePreview(true)
 		.recordTime(3000)
 		.useDate(true)
@@ -64,18 +69,16 @@ public class CameraApp implements IApplication {
     }
 
     
-    public static void main(String[] args) {
-
-        //Initialize the Pi4J Runtime Context
-        Context pi4j = Pi4J.newAutoContext();
-
-        CameraApp runApp = new CameraApp();
-        runApp.execute(pi4j);
-        
-        // Shutdown Pi4J
-        pi4j.shutdown();
-
-    }
-    
+//    public static void main(String[] args) {
+//
+//        //Initialize the Pi4J Runtime Context
+//        Context pi4j = Pi4J.newAutoContext();
+//
+//        CameraApp runApp = new CameraApp();
+//        runApp.execute(pi4j);
+//        
+//        // Shutdown Pi4J
+//        pi4j.shutdown();
+//    }
 }
 

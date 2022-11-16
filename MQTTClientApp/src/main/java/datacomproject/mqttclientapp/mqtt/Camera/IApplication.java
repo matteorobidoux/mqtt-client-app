@@ -46,7 +46,7 @@ public interface IApplication {
 
     /**
      * Utility function to sleep for the specified amount of milliseconds.
-     * An {@link InterruptedException} will be catched and ignored while setting the interrupt flag again.
+     * An {@link InterruptedException} will be caught and ignored while setting the interrupt flag again.
      *
      * @param milliseconds Time in milliseconds to sleep
      */

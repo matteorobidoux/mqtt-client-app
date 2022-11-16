@@ -7,6 +7,8 @@ package datacomproject.mqttclientapp.mqtt.Camera;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
 /**
@@ -38,8 +40,10 @@ public class Camera extends Component{
      * If a file already exists, the code will break. better use useDate while taking pictures
      */
     public void takeStill() {
+        Path userHome = Paths.get(System.getProperty("user.home"));
+        System.out.println(userHome);
         takeStill(PicConfig.Builder.newInstance()
-                .outputPath("/home/cdavis/Pictures/").build());
+                .outputPath("/home/${}/Pictures/").build());
     }
 
     /**
@@ -66,8 +70,9 @@ public class Camera extends Component{
      * If a file already exists, the code will break. better use useDate while taking videos
      */
     public void takeVid() {
+        Path userHome = Paths.get(System.getProperty("user.home"));
         takeVid(VidConfig.Builder.newInstance()
-                .outputPath("/home/cdavis/Videos/").recordTime(5000).build());
+                .outputPath(userHome + "/Videos/").recordTime(5000).build());
     }
 
     /**
