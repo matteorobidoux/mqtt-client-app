@@ -1,4 +1,4 @@
-package datacomproject.mqttclientapp.mqtt.KeyStore;
+package datacomproject.mqttclientapp.KeyStore;
 
 import java.util.Scanner;
 import java.io.Console;
@@ -95,7 +95,6 @@ public class KeyStoreHelper {
      * @param alias 
      * @return PrivateKey
      * @throws Exception
-     * TODO can we pass the certificate instead of the alias
      */
     public PrivateKey extractPrivateKey(String alias, char[] password) throws Exception {
         System.out.println("------Getting the Private Key-------");
@@ -199,7 +198,7 @@ public class KeyStoreHelper {
      * @param keyStore
      * 
      * TEST HELPER
-     * sets the keystore class instance
+     * sets the keystore class instance for the unit tests
      */
     public void setKeyStore(KeyStore keyStore) {
         ks = keyStore;

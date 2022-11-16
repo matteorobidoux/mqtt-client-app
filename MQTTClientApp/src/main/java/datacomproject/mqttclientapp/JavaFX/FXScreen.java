@@ -1,3 +1,4 @@
+package datacomproject.mqttclientapp.JavaFX;
 //package datacomproject.mqttclientapp.mqtt;
 //
 //import eu.hansolo.tilesfx.Tile;
@@ -10,10 +11,6 @@
 //import javafx.scene.layout.*;
 //import javafx.scene.paint.Color;
 //import javafx.scene.control.*;
-//
-///**
-// * @author Rim Dallali
-// */
 //
 ///* Class to Create the GUI with the help of TilesFX library */
 //public class FXScreen extends HBox {

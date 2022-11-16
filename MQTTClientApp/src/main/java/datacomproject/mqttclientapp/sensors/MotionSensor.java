@@ -2,15 +2,14 @@ package datacomproject.mqttclientapp.sensors;
 
 import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
-import datacomproject.mqttclientapp.mqtt.Camera.CameraApp;
-import java.io.IOException;
+import datacomproject.mqttclientapp.Camera.CameraApp;
 import java.util.Date;
 
 /**
  *
  * @author Rim Dallali
  */
-public class MotionSensor {
+public class MotionSensor extends AbstractSensor {
 
     private final String programPath = "src/main/Python/SenseLED.py";
 
@@ -19,7 +18,7 @@ public class MotionSensor {
             boolean motionState = false;
             while (true) {
                 try {
-                    String output = callProcess();
+                    String output = callProcess(programPath); 
                     if (output.equals("on") && !motionState) {
                         motionState = true;
                         Date timeStamp = new Date();
@@ -47,17 +46,5 @@ public class MotionSensor {
         });
         // Start the thread
         motionThread.start();
-    }
-
-    private String callProcess() {
-        String output = "";
-        try {
-            MyProcessBuilder myProcessBuilder = new MyProcessBuilder(programPath);
-            output = myProcessBuilder.startProcess();
-
-        } catch (IOException e) {
-            System.err.println("startProcess failed");
-        }
-        return output;
     }
 }

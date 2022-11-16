@@ -3,7 +3,7 @@
 # Filename    : DHT11.py
 # Description :	read the temperature and humidity data of DHT11
 # Author      : freenove
-# modification: 2020/10/16
+# modification: 2022/11/16
 ########################################################################
 import RPi.GPIO as GPIO
 import time

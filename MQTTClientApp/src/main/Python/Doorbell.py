@@ -3,7 +3,7 @@
 # Filename    : Doorbell.py
 # Description :	activate buzzer sound on button push
 # Author      : freenove
-# modification: 2022/11/12
+# modification: 2022/11/16
 ########################################################################
 import RPi.GPIO as GPIO
 buzzerPin = 11 # define buzzerPin

@@ -8,7 +8,8 @@ import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.spec.ECGenParameterSpec;
 import org.junit.jupiter.api.Test;
-import datacomproject.mqttclientapp.mqtt.KeyStore.KeyStoreHelper;
+
+import datacomproject.mqttclientapp.KeyStore.KeyStoreHelper;
 
 /**
  * @author Rim Dallali

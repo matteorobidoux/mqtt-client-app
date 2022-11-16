@@ -1,13 +1,12 @@
 package datacomproject.mqttclientapp.sensors;
 
-import java.io.IOException;
 import java.util.Date;
 
 /**
  *
  * @author Rim Dallali
  */
-public class DoorbellButton {
+public class DoorbellButton extends AbstractSensor {
 
     private final String programPath = "src/main/Python/Doorbell.py";
 
@@ -16,7 +15,7 @@ public class DoorbellButton {
             boolean buttonState = false;
             while (true) {
                 try {
-                    String output = callProcess();
+                    String output = callProcess(programPath);
                     if (output.equals("on") && !buttonState) {
                         buttonState = true;
                         Date timeStamp = new Date();
@@ -35,17 +34,5 @@ public class DoorbellButton {
 
         //Start the thread
         doorbellThread.start();
-    }
-
-    private String callProcess() {
-        String output = "";
-        try {
-            MyProcessBuilder myProcessBuilder = new MyProcessBuilder(programPath);
-            output = myProcessBuilder.startProcess();
-
-        } catch (IOException e) {
-            System.err.println("startProcess failed");
-        }
-        return output;
     }
 }

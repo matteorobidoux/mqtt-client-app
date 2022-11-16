@@ -1,4 +1,4 @@
-package datacomproject.mqttclientapp.mqtt;
+package datacomproject.mqttclientapp.JavaFX;
 
 public class SystemInfo {
 
