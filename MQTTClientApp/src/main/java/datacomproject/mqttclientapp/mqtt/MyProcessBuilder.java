@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package datacomproject.mqttclientapp.mqtt;
 
 import java.io.BufferedReader;
@@ -19,7 +15,7 @@ public class MyProcessBuilder {
   //Stores the output from the process
   private String theOutput;
   
-  private ProcessBuilder processBuilder;
+  private final ProcessBuilder processBuilder;
   
  //The constructor to execute Python command takes a String
   public MyProcessBuilder(String theApp) {
@@ -46,14 +42,13 @@ public class MyProcessBuilder {
   
   //Start the process and get the output
   String startProcess() throws IOException {
-     
       //Initialize theOutput to null String
       this.theOutput = "";
       
       //Start the process
-      var process = this.processBuilder.start();
+      Process process = this.processBuilder.start();
       
-      try (var reader = new BufferedReader(
+      try (BufferedReader reader = new BufferedReader(
           new InputStreamReader(process.getInputStream()))) {
 
           String line;
@@ -61,8 +56,8 @@ public class MyProcessBuilder {
           while ((line = reader.readLine()) != null) {
               this.theOutput = this.theOutput + line;
           }
-
       }
+      
       return this.theOutput;
   }
 }

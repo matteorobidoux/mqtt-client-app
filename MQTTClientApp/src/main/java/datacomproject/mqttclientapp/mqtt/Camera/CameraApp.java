@@ -6,6 +6,9 @@ package datacomproject.mqttclientapp.mqtt.Camera;
 
 import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
+import datacomproject.mqttclientapp.mqtt.Camera.Camera.PicConfig;
+import datacomproject.mqttclientapp.mqtt.Camera.Camera.PicConfig.Builder;
+import datacomproject.mqttclientapp.mqtt.Camera.Camera.VidConfig;
 
 /**
  *
@@ -29,7 +32,7 @@ public class CameraApp implements IApplication {
         System.out.println("Setting up the config to take a picture.");
         
         //Configure the camera setup
-        var config = Camera.PicConfig.Builder.newInstance()
+        PicConfig config = Camera.PicConfig.Builder.newInstance()
                 .outputPath("/home/cdavis/Pictures/")
 		.delay(3000)
 		.disablePreview(true)
@@ -49,7 +52,7 @@ public class CameraApp implements IApplication {
         System.out.println("Taking a video for 3 seconds");
         
         //Configure the video setup
-        var vidconfig = Camera.VidConfig.Builder.newInstance()
+        VidConfig vidconfig = Camera.VidConfig.Builder.newInstance()
                 .outputPath("/home/cdavis/Videos/")
                 .disablePreview(true)
 		.recordTime(3000)
@@ -64,7 +67,7 @@ public class CameraApp implements IApplication {
     public static void main(String[] args) {
 
         //Initialize the Pi4J Runtime Context
-        var pi4j = Pi4J.newAutoContext();
+        Context pi4j = Pi4J.newAutoContext();
 
         CameraApp runApp = new CameraApp();
         runApp.execute(pi4j);

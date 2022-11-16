@@ -71,6 +71,12 @@
             <artifactId>pi4j-plugin-pigpio</artifactId>
             <version>${pi4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>eu.hansolo</groupId>
+            <artifactId>tilesfx</artifactId>
+            <version>11.13</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>

@@ -13,7 +13,10 @@ import datacomproject.mqttclientapp.mqtt.KeyStore.KeyStoreHelper;
 public class App {
     
     public static void main(String[]args) throws Exception{
-        KeyStoreHelper ksh = new KeyStoreHelper();
-        ksh.getUserInput();
+//        KeyStoreHelper ksh = new KeyStoreHelper();
+//        ksh.getUserInput();
+        System.out.println("Capturing temperature and humidity data...");
+        SensorDHT dht_sensor = new SensorDHT();
+        dht_sensor.startThread();
     }
 }
