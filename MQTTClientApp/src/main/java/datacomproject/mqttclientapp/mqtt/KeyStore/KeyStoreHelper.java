@@ -1,13 +1,11 @@
 package datacomproject.mqttclientapp.mqtt.KeyStore;
 
-import java.util.Base64;
 import java.util.Scanner;
 import java.io.Console;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.cert.Certificate;
 import java.security.*;
 import java.text.Normalizer;
@@ -22,7 +20,6 @@ public class KeyStoreHelper {
     private String filepath;
     private char[] password;
     private KeyStore ks;
-    private SignatureHelper sighelp = new SignatureHelper();
 
     public void getUserInput() throws Exception {
         Scanner scanner = new Scanner(System.in);
@@ -39,7 +36,7 @@ public class KeyStoreHelper {
                 if (validKeyStore) {
                     // getting and validating password
                     System.out.println("-------- Provide password --------");
-                    char[] password = console.readPassword();
+                    password = console.readPassword();
                     while (!validatePassword(password)) {
                         System.out.println("--- Invalid password, try again --");
                         password = console.readPassword();
@@ -69,9 +66,8 @@ public class KeyStoreHelper {
     public KeyStore loadKeyStore(char[] password, String filename) throws Exception {
         System.out.println("loading the key store");
         System.out.println("---------------------");
-        FileInputStream fis = null;
         KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-        fis = new FileInputStream(filename);
+        FileInputStream fis = new FileInputStream(filename);
         ks.load(fis, password);
         System.out.println("KeyStore has been loaded");
         return ks;
@@ -82,7 +78,7 @@ public class KeyStoreHelper {
      * 
      * @param alias
      * @return Certificate
-     * @throws Exception
+     * @throws KeyStoreException
      */
     public Certificate extractCertificate(String alias) throws KeyStoreException {
         System.out.println("Get Trusted Certificate");
@@ -95,12 +91,10 @@ public class KeyStoreHelper {
     /**
      * Gets the private key from given certificate at the specified alias
      * 
-     * @param certificate
+     * @param password
      * @param alias 
      * @return PrivateKey
-     * @throws KeyStoreException
-     * @throws UnrecoverableEntryException
-     * @throws NoSuchAlgorithmException
+     * @throws Exception
      * TODO can we pass the certificate instead of the alias
      */
     public PrivateKey extractPrivateKey(String alias, char[] password) throws Exception {
@@ -124,53 +118,18 @@ public class KeyStoreHelper {
      * @param alias
      * @param certificate
      * @return boolean
-     * @throws Exception
      */
-    public void storeCertificate(String alias, Certificate certificate) throws Exception {
+    public boolean storeCertificate(String alias, Certificate certificate) {
         System.out.println("Storing the certificate");
         System.out.println("-----------------------");
-        ks.setCertificateEntry(alias, certificate);
-        System.out.println("certificate alias entry has been set\nalias: " + alias + "\ncertificate: "
+        try {
+            ks.setCertificateEntry(alias, certificate);
+            System.out.println("certificate alias entry has been set\nalias: " + alias + "\ncertificate: "
                 + certificate.getPublicKey().toString());
-    }
-
-    /**
-     * Sign and Verify a string message
-     * 
-     * @param privateKey
-     * @param message
-     * @return byte[]
-     * @throws Exception
-     */
-    public byte[] signMessage(PrivateKey privateKey, String message) throws Exception {
-        System.out.println("Signing and Verifying a message");
-        System.out.println("-------------------------------");
-        SignatureHelper sighelp = new SignatureHelper();
-        String algorithm = "SHA256withECDSA";
-        // Generate signature for the message.
-        byte[] signature = sighelp.generateSignature(algorithm, privateKey, message);
-        System.out.println("\nSignature: " + Base64.getEncoder().encodeToString(signature));
-        return signature;
-    }
-
-    /**
-     * Verify digital signature given as input
-     * 
-     * @param signature
-     * @param publicKey
-     * @param alg
-     * @param msg
-     * @return boolean
-     * @throws Exception
-     */
-    public boolean verifySignature(byte[] signature, PublicKey publicKey, String alg, String msg) throws Exception {
-        boolean verified = sighelp.verifySignature(signature, publicKey, alg, msg);
-        if (verified) {
-            System.out.println("message has been verified");
-        } else {
-            System.out.println("message has NOT been verified");
-        }
-        return verified;
+            return true;
+        } catch (KeyStoreException e) {
+            return false;
+        } 
     }
 
     /**
@@ -245,69 +204,5 @@ public class KeyStoreHelper {
      */
     public void setKeyStore(KeyStore keyStore) {
         ks = keyStore;
-    }
-
-    /**
-     * Private class containing digital signature generation and verification helper
-     * methods
-     */
-    private class SignatureHelper {
-
-        /**
-         * @param algorithm
-         * @param privatekey
-         * @param message
-         * @return byte[]
-         * @throws UnsupportedEncodingException
-         * @throws SignatureException
-         * @throws InvalidKeyException
-         * @throws NoSuchAlgorithmException
-         * @throws Exception
-         * Method for generating digital signature.
-         */
-        public byte[] generateSignature(String algorithm, PrivateKey privatekey, String message)
-                throws SignatureException, UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException {
-            // Create an instance of the signature scheme for the given signature algorithm
-            Signature sig = Signature.getInstance(algorithm);
-
-            // Initialize the signature scheme
-            sig.initSign(privatekey);
-
-            // Compute the signature
-            sig.update(message.getBytes("UTF-8"));
-            byte[] signature = sig.sign();
-
-            return signature;
-        }
-
-        /**
-         * @param signature
-         * @param pk
-         * @param alg
-         * @param msg
-         * @return boolean
-         * @throws Exception
-         * Method for verifying digital signature.
-         */
-        public boolean verifySignature(byte[] signature, PublicKey pk, String alg, String msg) throws Exception {
-            // Create an instance of the signature scheme for the given signature algorithm
-            Signature sig = Signature.getInstance(alg);
-
-            // Initialize the signature verification scheme.
-            sig.initVerify(pk);
-
-            // Compute the signature.
-            sig.update(msg.getBytes("UTF-8"));
-
-            // Verify the signature.
-            boolean validSignature = sig.verify(signature);
-
-            if (validSignature) {
-                System.out.println("\nSignature is valid");
-            } else {
-                System.out.println("\nSignature is NOT valid!!!");
-            }
-            return validSignature;
-        }
     }
 }
