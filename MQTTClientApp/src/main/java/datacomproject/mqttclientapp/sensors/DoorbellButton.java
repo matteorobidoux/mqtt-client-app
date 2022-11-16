@@ -1,8 +1,5 @@
 package datacomproject.mqttclientapp.sensors;
 
-import com.pi4j.Pi4J;
-import com.pi4j.context.Context;
-import datacomproject.mqttclientapp.mqtt.Camera.CameraApp;
 import java.io.IOException;
 import java.util.Date;
 

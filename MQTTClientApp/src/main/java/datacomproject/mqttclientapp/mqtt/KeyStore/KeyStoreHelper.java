@@ -113,7 +113,6 @@ public class KeyStoreHelper {
     /**
      * Store the input certificate to the keystore at input alias
      * returns a boolean representing whether the store succeeded or not
-     * TODO do we want to overwrite the certificate at given alias or not?
      * 
      * @param alias
      * @param certificate

@@ -5,7 +5,6 @@ import com.pi4j.context.Context;
 import datacomproject.mqttclientapp.mqtt.Camera.CameraApp;
 import java.io.IOException;
 import java.util.Date;
-import jdk.jfr.Timestamp;
 
 /**
  *
@@ -16,16 +15,16 @@ public class MotionSensor {
     private final String programPath = "src/main/Python/SenseLED.py";
 
     public void startThread() {
-        Thread exampleThread = new Thread(() -> {
-            boolean buttonState = false;
+        Thread motionThread = new Thread(() -> {
+            boolean motionState = false;
             while (true) {
                 try {
                     String output = callProcess();
-                    if (output.equals("on") && !buttonState) {
-                        buttonState = true;
+                    if (output.equals("on") && !motionState) {
+                        motionState = true;
                         Date timeStamp = new Date();
                         System.out.println("!!Motion Detected!! --> " + timeStamp);
-                        
+
                         Thread cameraThread = new Thread(() -> {
                             Context pi4j = Pi4J.newAutoContext();
 
@@ -36,20 +35,18 @@ public class MotionSensor {
                             pi4j.shutdown();
                         });
 
-                        //Start the thread
+                        // Start the thread
                         cameraThread.start();
-                    } else if (output.equals("off") && buttonState) {
-                        
-                        buttonState = false;
+                    } else if (output.equals("off") && motionState) {
+                        motionState = false;
                     }
                 } catch (Exception ex) {
                     System.err.println("exampleThread thread got interrupted");
                 }
             }
         });
-
-        //Start the thread
-        exampleThread.start();
+        // Start the thread
+        motionThread.start();
     }
 
     private String callProcess() {

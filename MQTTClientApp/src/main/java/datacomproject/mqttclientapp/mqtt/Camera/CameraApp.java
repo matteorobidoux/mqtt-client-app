@@ -4,11 +4,9 @@
  */
 package datacomproject.mqttclientapp.mqtt.Camera;
 
-import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import datacomproject.mqttclientapp.mqtt.Camera.Camera.PicConfig;
-import datacomproject.mqttclientapp.mqtt.Camera.Camera.PicConfig.Builder;
-import datacomproject.mqttclientapp.mqtt.Camera.Camera.VidConfig;
+import datacomproject.mqttclientapp.mqtt.Camera.Camera.VidConfig; 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -67,18 +65,5 @@ public class CameraApp implements IApplication {
         //Take the video
         camera.takeVid(vidconfig); 
     }
-
-    
-//    public static void main(String[] args) {
-//
-//        //Initialize the Pi4J Runtime Context
-//        Context pi4j = Pi4J.newAutoContext();
-//
-//        CameraApp runApp = new CameraApp();
-//        runApp.execute(pi4j);
-//        
-//        // Shutdown Pi4J
-//        pi4j.shutdown();
-//    }
 }
 
