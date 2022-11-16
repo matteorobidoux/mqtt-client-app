@@ -4,6 +4,8 @@ import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import datacomproject.mqttclientapp.mqtt.Camera.CameraApp;
 import java.io.IOException;
+import java.util.Date;
+import jdk.jfr.Timestamp;
 
 /**
  *
@@ -21,9 +23,10 @@ public class MotionSensor {
                     String output = callProcess();
                     if (output.equals("on") && !buttonState) {
                         buttonState = true;
+                        Date timeStamp = new Date();
+                        System.out.println("!!Motion Detected!! --> " + timeStamp);
                         
-                        Thread motionThread = new Thread(() -> {
-                            //CODE FOR CAMERA START => NOT SURE IF FUNCTIONAL
+                        Thread cameraThread = new Thread(() -> {
                             Context pi4j = Pi4J.newAutoContext();
 
                             CameraApp runApp = new CameraApp();
@@ -31,16 +34,14 @@ public class MotionSensor {
 
                             // Shutdown Pi4J
                             pi4j.shutdown();
-                            //CODE FOR CAMERA END
                         });
 
                         //Start the thread
-                        motionThread.start();
+                        cameraThread.start();
                     } else if (output.equals("off") && buttonState) {
-                        System.out.println("!!Motion Detected!!");
+                        
                         buttonState = false;
                     }
-                    
                 } catch (Exception ex) {
                     System.err.println("exampleThread thread got interrupted");
                 }

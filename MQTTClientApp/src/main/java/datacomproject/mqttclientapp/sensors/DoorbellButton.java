@@ -4,6 +4,7 @@ import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import datacomproject.mqttclientapp.mqtt.Camera.CameraApp;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  *
@@ -21,21 +22,9 @@ public class DoorbellButton {
                     String output = callProcess();
                     if (output.equals("on") && !buttonState) {
                         buttonState = true;
-                        System.out.println("button state => pressed");
-                        Thread cameraThread = new Thread(() -> {
-                            //CODE FOR CAMERA START => NOT SURE IF FUNCTIONAL
-                            Context pi4j = Pi4J.newAutoContext();
-
-                            CameraApp runApp = new CameraApp();
-                            runApp.execute(pi4j);
-
-                            // Shutdown Pi4J
-                            pi4j.shutdown();
-                            //CODE FOR CAMERA END
-                        });
-
-                        //Start the thread
-                        cameraThread.start();
+                        Date timeStamp = new Date();
+                        System.out.println("button state => pressed at " + timeStamp);
+                        //take timestamp here
                     } else if (output.equals("off") && buttonState) {
                         System.out.println("button state => released");
                         buttonState = false;

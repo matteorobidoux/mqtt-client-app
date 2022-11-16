@@ -1,6 +1,7 @@
 package datacomproject.mqttclientapp.sensors;
 
 import java.io.IOException;
+import java.util.Date;
 
 /**
  *
@@ -17,6 +18,8 @@ public class DHTSensor {
                     String output = callProcess();
                     double humidity = Double.parseDouble(output.split(" ")[0]);
                     double temperature = Double.parseDouble(output.split(" ")[1]);
+                    Date timeStamp = new Date();
+                    System.out.println("DHT sensor data captured at: " + timeStamp);
                     System.out.println("temparature => " + temperature);
                     System.out.println("humidity    => " + humidity);
                     //Delay 5 seconds
