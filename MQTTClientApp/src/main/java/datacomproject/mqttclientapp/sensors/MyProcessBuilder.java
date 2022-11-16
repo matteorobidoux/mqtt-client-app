@@ -1,4 +1,4 @@
-package datacomproject.mqttclientapp.mqtt;
+package datacomproject.mqttclientapp.sensors;
 
 import java.io.BufferedReader;
 import java.io.IOException;
