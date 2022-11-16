@@ -4,9 +4,10 @@
  */
 package datacomproject.mqttclientapp.mqtt;
 
-import datacomproject.mqttclientapp.sensors.SensorDHT;
+import datacomproject.mqttclientapp.sensors.DHTSensor;
 //import datacomproject.mqttclientapp.mqtt.KeyStore.KeyStoreHelper;
-import datacomproject.mqttclientapp.sensors.ButtonDoorbell;
+import datacomproject.mqttclientapp.sensors.DoorbellButton;
+import datacomproject.mqttclientapp.sensors.MotionSensor;
 
 /**
  *
@@ -19,13 +20,18 @@ public class App {
 //        ksh.getUserInput();
 
         // getting temperature and humidity data
-//        System.out.println("Capturing temperature and humidity data...");
-//        SensorDHT dht_sensor = new SensorDHT();
-//        dht_sensor.startThread();
+        System.out.println("Capturing temperature and humidity data...");
+        DHTSensor dht_sensor = new DHTSensor();
+        dht_sensor.startThread();
         
         // getting doorbell data if pressed
         System.out.println("getting doorbell data if pressed...");
-        ButtonDoorbell doorbell_button = new ButtonDoorbell();
+        DoorbellButton doorbell_button = new DoorbellButton();
         doorbell_button.startThread();
+        
+        // getting doorbell data if pressed
+        System.out.println("getting motion sensor data if detected...");
+        MotionSensor motion_sensor = new MotionSensor();
+        motion_sensor.startThread();
     }
 }

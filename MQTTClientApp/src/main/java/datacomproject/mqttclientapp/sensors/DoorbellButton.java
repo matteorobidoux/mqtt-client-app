@@ -6,7 +6,7 @@ import java.io.IOException;
  *
  * @author Rim Dallali
  */
-public class ButtonDoorbell {
+public class DoorbellButton {
 
     private final String programPath = "src/main/Python/Doorbell.py";
 

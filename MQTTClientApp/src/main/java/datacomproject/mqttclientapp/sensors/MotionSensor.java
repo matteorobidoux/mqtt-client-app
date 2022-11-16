@@ -6,22 +6,24 @@ import java.io.IOException;
  *
  * @author Rim Dallali
  */
-public class SensorDHT {
+public class MotionSensor {
 
-    private final String programPath = "src/main/Python/DHT11.py";
+    private final String programPath = "src/main/Python/SenseLED.py";
 
     public void startThread() {
         Thread exampleThread = new Thread(() -> {
+            boolean buttonState = false;
             while (true) {
                 try {
                     String output = callProcess();
-                    double humidity = Double.parseDouble(output.split(" ")[0]);
-                    double temperature = Double.parseDouble(output.split(" ")[1]);
-                    System.out.println("temparature => " + temperature);
-                    System.out.println("humidity    => " + humidity);
-                    //Delay 5 seconds
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
+                    if (output.equals("on") && !buttonState) {
+                        buttonState = true;
+                    } else if (output.equals("off") && buttonState) {
+                        System.out.println("!!Motion Detected!!");
+                        buttonState = false;
+                    }
+                    
+                } catch (Exception ex) {
                     System.err.println("exampleThread thread got interrupted");
                 }
             }
