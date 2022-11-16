@@ -18,8 +18,6 @@ import datacomproject.mqttclientapp.mqtt.KeyStore.KeyStoreHelper;
 
 public class KeyStoreHelperTest {
 
-  PublicKey publicKey;
-  PrivateKey privateKey;
   KeyStoreHelper ksh;
   KeyStore ks;
   String filename = "src/test/java/datacomproject/mqttclientapp/mqtt/ECcertif.ks";
@@ -29,10 +27,7 @@ public class KeyStoreHelperTest {
     KeyPairGenerator generator = KeyPairGenerator.getInstance("EC");
     ECGenParameterSpec ecParaSpec = new ECGenParameterSpec("secp256r1");
     generator.initialize(ecParaSpec);
-    KeyPair keys = generator.generateKeyPair();
 
-    publicKey = keys.getPublic();
-    privateKey = keys.getPrivate();
     ksh = new KeyStoreHelper();
     ks = ksh.loadKeyStore(password, filename);
     ksh.setKeyStore(ks);
@@ -68,28 +63,6 @@ public class KeyStoreHelperTest {
   public void testGetKeyStoreInfo() throws Exception {
     Certificate certificate = ksh.extractCertificate("TEST");
     assertNotNull(certificate);
-  }
-
-  @Test
-  public void testSignVerifySignature() throws Exception {
-    String algorithm = "SHA256withECDSA";
-
-    String messageToBeSigned = "This is the message to be signed.";
-    String receivedMsg = "This is the message to be signed.";
-
-    byte[] signature = ksh.signMessage(privateKey, messageToBeSigned);
-    assertTrue(ksh.verifySignature(signature, publicKey, algorithm, receivedMsg));
-  }
-
-  @Test
-  public void testFailSignVerifySignature() throws Exception {
-    String algorithm = "SHA256withECDSA";
-
-    String messageToBeSigned = "This is the message to be signed.";
-    String receivedMsg = "Message to fail signature";
-
-    byte[] signature = ksh.signMessage(privateKey, messageToBeSigned);
-    assertFalse(ksh.verifySignature(signature, publicKey, algorithm, receivedMsg));
   }
 
   @Test
