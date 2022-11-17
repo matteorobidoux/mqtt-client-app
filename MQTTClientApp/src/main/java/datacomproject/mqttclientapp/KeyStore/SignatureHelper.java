@@ -1,9 +1,12 @@
-package datacomproject.mqttclientapp.mqtt.KeyStore;
+package datacomproject.mqttclientapp.KeyStore;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 
+/**
+ * @author Rim Dallali
+ */
 public class SignatureHelper {
 
     /**

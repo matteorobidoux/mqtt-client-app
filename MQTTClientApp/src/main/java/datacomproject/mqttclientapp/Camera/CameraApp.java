@@ -1,28 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
-package datacomproject.mqttclientapp.mqtt.Camera;
+package datacomproject.mqttclientapp.Camera;
 
-import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
-import datacomproject.mqttclientapp.mqtt.Camera.Camera.PicConfig;
-import datacomproject.mqttclientapp.mqtt.Camera.Camera.PicConfig.Builder;
-import datacomproject.mqttclientapp.mqtt.Camera.Camera.VidConfig;
+
+import datacomproject.mqttclientapp.Camera.Camera.PicConfig;
+import datacomproject.mqttclientapp.Camera.Camera.VidConfig;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
+ 
 /**
  *
- * @author Ray Hernaez
+ * @original_author Carlton Davis 
+ * @modified_by Rim Dallali 
  */
 
 public class CameraApp implements IApplication {
     
-    //Pi4J code to control camera
-
     /**
-     *
+     *pi4j code to control the camera
      * @param pi4j
      */
    
@@ -67,18 +62,5 @@ public class CameraApp implements IApplication {
         //Take the video
         camera.takeVid(vidconfig); 
     }
-
-    
-//    public static void main(String[] args) {
-//
-//        //Initialize the Pi4J Runtime Context
-//        Context pi4j = Pi4J.newAutoContext();
-//
-//        CameraApp runApp = new CameraApp();
-//        runApp.execute(pi4j);
-//        
-//        // Shutdown Pi4J
-//        pi4j.shutdown();
-//    }
 }
 
