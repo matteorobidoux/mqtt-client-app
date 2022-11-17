@@ -27,7 +27,7 @@ public class App {
     public static void main(String[] args) throws Exception {
         App app = new App();
         app.initialize();
-        // app.displayData();
+        app.displayData();
     }
 
     public void displayData() {
