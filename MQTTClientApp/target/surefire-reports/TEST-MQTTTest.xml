@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="MQTTTest" time="0.095" tests="1" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="sun.desktop" value="windows"/>
+    <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
+    <property name="java.specification.version" value="11"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.class.path" value="C:\Users\Matteo\Documents\Data Communication\MQTTClientApp\mqttclientapp\MQTTClientApp\target\test-classes;C:\Users\Matteo\Documents\Data Communication\MQTTClientApp\mqttclientapp\MQTTClientApp\target\classes;C:\Users\Matteo\.m2\repository\com\hivemq\hivemq-mqtt-client\1.2.1\hivemq-mqtt-client-1.2.1.jar;C:\Users\Matteo\.m2\repository\io\reactivex\rxjava2\rxjava\2.2.19\rxjava-2.2.19.jar;C:\Users\Matteo\.m2\repository\org\reactivestreams\reactive-streams\1.0.3\reactive-streams-1.0.3.jar;C:\Users\Matteo\.m2\repository\io\netty\netty-buffer\4.1.48.Final\netty-buffer-4.1.48.Final.jar;C:\Users\Matteo\.m2\repository\io\netty\netty-codec\4.1.48.Final\netty-codec-4.1.48.Final.jar;C:\Users\Matteo\.m2\repository\io\netty\netty-common\4.1.48.Final\netty-common-4.1.48.Final.jar;C:\Users\Matteo\.m2\repository\io\netty\netty-handler\4.1.48.Final\netty-handler-4.1.48.Final.jar;C:\Users\Matteo\.m2\repository\io\netty\netty-resolver\4.1.48.Final\netty-resolver-4.1.48.Final.jar;C:\Users\Matteo\.m2\repository\io\netty\netty-transport\4.1.48.Final\netty-transport-4.1.48.Final.jar;C:\Users\Matteo\.m2\repository\org\jctools\jctools-core\2.1.2\jctools-core-2.1.2.jar;C:\Users\Matteo\.m2\repository\org\jetbrains\annotations\16.0.3\annotations-16.0.3.jar;C:\Users\Matteo\.m2\repository\com\google\dagger\dagger\2.27\dagger-2.27.jar;C:\Users\Matteo\.m2\repository\javax\inject\javax.inject\1\javax.inject-1.jar;C:\Users\Matteo\.m2\repository\org\json\json\20180130\json-20180130.jar;C:\Users\Matteo\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.6.0\junit-jupiter-api-5.6.0.jar;C:\Users\Matteo\.m2\repository\org\apiguardian\apiguardian-api\1.1.0\apiguardian-api-1.1.0.jar;C:\Users\Matteo\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\Matteo\.m2\repository\org\junit\platform\junit-platform-commons\1.6.0\junit-platform-commons-1.6.0.jar;C:\Users\Matteo\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.6.0\junit-jupiter-params-5.6.0.jar;C:\Users\Matteo\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.6.0\junit-jupiter-engine-5.6.0.jar;C:\Users\Matteo\.m2\repository\org\junit\platform\junit-platform-engine\1.6.0\junit-platform-engine-1.6.0.jar;"/>
+    <property name="java.vm.vendor" value="Eclipse Foundation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="https://adoptium.net/"/>
+    <property name="user.timezone" value="America/New_York"/>
+    <property name="java.vm.specification.version" value="11"/>
+    <property name="os.name" value="Windows 10"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.boot.library.path" value="C:\Users\Matteo\AppData\Local\Programs\Eclipse Foundation\jdk-11.0.12.7-hotspot\bin"/>
+    <property name="sun.java.command" value="C:\Users\Matteo\AppData\Local\Temp\surefire12460370066915828986\surefirebooter1437527024603644325.jar C:\Users\Matteo\AppData\Local\Temp\surefire12460370066915828986 2022-11-18T13-23-41_153-jvmRun1 surefire616045417319921251tmp surefire_010950718042845733097tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="test" value="MQTTTest#MQTTPublishMessageError"/>
+    <property name="surefire.test.class.path" value="C:\Users\Matteo\Documents\Data Communication\MQTTClientApp\mqttclientapp\MQTTClientApp\target\test-classes;C:\Users\Matteo\Documents\Data Communication\MQTTClientApp\mqttclientapp\MQTTClientApp\target\classes;C:\Users\Matteo\.m2\repository\com\hivemq\hivemq-mqtt-client\1.2.1\hivemq-mqtt-client-1.2.1.jar;C:\Users\Matteo\.m2\repository\io\reactivex\rxjava2\rxjava\2.2.19\rxjava-2.2.19.jar;C:\Users\Matteo\.m2\repository\org\reactivestreams\reactive-streams\1.0.3\reactive-streams-1.0.3.jar;C:\Users\Matteo\.m2\repository\io\netty\netty-buffer\4.1.48.Final\netty-buffer-4.1.48.Final.jar;C:\Users\Matteo\.m2\repository\io\netty\netty-codec\4.1.48.Final\netty-codec-4.1.48.Final.jar;C:\Users\Matteo\.m2\repository\io\netty\netty-common\4.1.48.Final\netty-common-4.1.48.Final.jar;C:\Users\Matteo\.m2\repository\io\netty\netty-handler\4.1.48.Final\netty-handler-4.1.48.Final.jar;C:\Users\Matteo\.m2\repository\io\netty\netty-resolver\4.1.48.Final\netty-resolver-4.1.48.Final.jar;C:\Users\Matteo\.m2\repository\io\netty\netty-transport\4.1.48.Final\netty-transport-4.1.48.Final.jar;C:\Users\Matteo\.m2\repository\org\jctools\jctools-core\2.1.2\jctools-core-2.1.2.jar;C:\Users\Matteo\.m2\repository\org\jetbrains\annotations\16.0.3\annotations-16.0.3.jar;C:\Users\Matteo\.m2\repository\com\google\dagger\dagger\2.27\dagger-2.27.jar;C:\Users\Matteo\.m2\repository\javax\inject\javax.inject\1\javax.inject-1.jar;C:\Users\Matteo\.m2\repository\org\json\json\20180130\json-20180130.jar;C:\Users\Matteo\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.6.0\junit-jupiter-api-5.6.0.jar;C:\Users\Matteo\.m2\repository\org\apiguardian\apiguardian-api\1.1.0\apiguardian-api-1.1.0.jar;C:\Users\Matteo\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\Matteo\.m2\repository\org\junit\platform\junit-platform-commons\1.6.0\junit-platform-commons-1.6.0.jar;C:\Users\Matteo\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.6.0\junit-jupiter-params-5.6.0.jar;C:\Users\Matteo\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.6.0\junit-jupiter-engine-5.6.0.jar;C:\Users\Matteo\.m2\repository\org\junit\platform\junit-platform-engine\1.6.0\junit-platform-engine-1.6.0.jar;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\Matteo"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2021-07-20"/>
+    <property name="java.home" value="C:\Users\Matteo\AppData\Local\Programs\Eclipse Foundation\jdk-11.0.12.7-hotspot"/>
+    <property name="file.separator" value="\"/>
+    <property name="basedir" value="C:\Users\Matteo\Documents\Data Communication\MQTTClientApp\mqttclientapp\MQTTClientApp"/>
+    <property name="java.vm.compressedOopsMode" value="32-bit"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
+    <property name="surefire.real.class.path" value="C:\Users\Matteo\AppData\Local\Temp\surefire12460370066915828986\surefirebooter1437527024603644325.jar"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="11.0.12+7"/>
+    <property name="user.name" value="Matteo"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="Temurin-11.0.12+7"/>
+    <property name="maven.ext.class.path" value="C:\Program Files\NetBeans-12.6\netbeans\java\maven-nblib\netbeans-eventspy.jar"/>
+    <property name="localRepository" value="C:\Users\Matteo\.m2\repository"/>
+    <property name="java.vendor.url.bug" value="https://github.com/adoptium/adoptium-support/issues"/>
+    <property name="java.io.tmpdir" value="C:\Users\Matteo\AppData\Local\Temp\"/>
+    <property name="java.version" value="11.0.12"/>
+    <property name="user.dir" value="C:\Users\Matteo\Documents\Data Communication\MQTTClientApp\mqttclientapp\MQTTClientApp"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="java.library.path" value="C:\Users\Matteo\AppData\Local\Programs\Eclipse Foundation\jdk-11.0.12.7-hotspot\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\OracleXE\dbhomeXE\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Python\Python310;C:\Program Files\dotnet\;C:\Program Files\PuTTY\;C:\Program Files\libwebp-1.2.4-windows-x64\bin\;C:\Program Files\opencover.4.7.1221;C:\Program Files\nodejs\;C:\Users\Matteo\Downloads\apache-maven-3.8.6-bin\apache-maven-3.8.6\bin;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Python\Python310\Scripts\;C:\Python\Python310\;C:\Users\Matteo\AppData\Local\Programs\Eclipse Foundation\jdk-11.0.12.7-hotspot\bin;C:\Users\Matteo\AppData\Local\Microsoft\WindowsApps;C:\Users\Matteo\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\heroku\bin;C:\Users\Matteo\.dotnet\tools;C:\Users\Matteo\AppData\Roaming\npm;."/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.vendor" value="Eclipse Foundation"/>
+    <property name="java.vm.version" value="11.0.12+7"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="55.0"/>
+  </properties>
+  <testcase name="MQTTPublishMessageError" classname="MQTTTest" time="0.072"/>
+</testsuite>

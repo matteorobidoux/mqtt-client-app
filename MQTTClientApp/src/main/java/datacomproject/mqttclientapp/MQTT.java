@@ -19,12 +19,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 public class MQTT {
     
-    private static Scanner scanner = new Scanner(System.in);
-    private static Mqtt5BlockingClient client;
-    private static String username;
+    private Scanner scanner = new Scanner(System.in);
+    private Mqtt5BlockingClient client;
+    private String username;
+    
     
     // Asks client for their HiveMQ username
-    private static String getUsername(){
+    private String getUsername(){
         System.out.print("Please Enter Your HiveMQ Username: ");
         String user = scanner.nextLine();
         username = user;
@@ -33,7 +34,7 @@ public class MQTT {
     }
     
     // Asks client for their HiveMQ password
-    private static String getPassword(){
+    private String getPassword(){
         Console console = System.console();
         System.out.print("Please Enter Your HiveMQ Password: ");
         char[] password = console.readPassword();
@@ -42,7 +43,7 @@ public class MQTT {
     }
 
     // Retrives MQTT Client
-    public static Mqtt5BlockingClient getMqttClient(){
+    public Mqtt5BlockingClient getMqttClient(){
         try{
             System.out.println("Retrieving MQTT Client...");
             client = MqttClient.builder()
@@ -60,7 +61,7 @@ public class MQTT {
     }
     
     // Connects to HiveMQ using client credentials
-    public static void createConnection(){
+    public void createConnection(){
         boolean valid = false;
         while(!valid){
             username = getUsername();
@@ -83,14 +84,14 @@ public class MQTT {
     }
     
     // Client subscribes to a specific topic
-    public static void subscribe(String topic){
+    public void subscribe(String topic){
         client.subscribeWith()
                 .topicFilter(getTopic(topic))
                 .send();
     }
     
     // Rerieves all messages sent to the client
-    public static List<JSONObject> retrieveMessage(){
+    public List<JSONObject> retrieveMessage(){
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
         client.toAsync().publishes(ALL, publish -> {
             JSONObject jsonObject = new JSONObject(UTF_8.decode(publish.getPayload().get()).toString());
@@ -103,7 +104,7 @@ public class MQTT {
     }
     
     // Publish message to a specific topic sending a JSON object which contains the datas being sent
-    public static void publishMessage(String topic, JSONObject data){
+    public void publishMessage(String topic, JSONObject data){
         client.publishWith()
                 .topic(getTopic(topic))
                 .payload(UTF_8.encode(data.toString()))
@@ -111,12 +112,12 @@ public class MQTT {
     }
 
     // Gets the topic using the topic path and client username to create it
-    private static String getTopic(String topicPath){
+    private String getTopic(String topicPath){
         return username + "/" + topicPath;
     }
 
     // Disconnect from the client
-    public static void disconnect(){
+    public void disconnect(){
         client.disconnect();
     }
 }
