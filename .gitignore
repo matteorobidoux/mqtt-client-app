@@ -1,1 +1,4 @@
 /MQTTClientApp/nbproject/
+*/target/
+*/nbproject/
+.vscode/
