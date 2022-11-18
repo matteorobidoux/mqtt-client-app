@@ -4,6 +4,8 @@
  */
 package datacomproject.mqttclientapp;
 
+import org.json.JSONObject;
+
 /**
  *
  * @author Matteo

@@ -7,7 +7,6 @@ import java.util.Scanner;
 
 import org.json.JSONObject;
 import com.hivemq.client.mqtt.MqttClient;
-import com.hivemq.client.mqtt.mqtt3.exceptions.Mqtt3ConnAckException;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import com.hivemq.client.mqtt.mqtt5.exceptions.Mqtt5ConnAckException;
 
@@ -25,7 +24,7 @@ public class MQTT {
     private static String username;
     
     // Asks client for their HiveMQ username
-    public static String getUsername(){
+    private static String getUsername(){
         System.out.print("Please Enter Your HiveMQ Username: ");
         String user = scanner.nextLine();
         username = user;
@@ -34,7 +33,7 @@ public class MQTT {
     }
     
     // Asks client for their HiveMQ password
-    public static String getPassword(){
+    private static String getPassword(){
         Console console = System.console();
         System.out.print("Please Enter Your HiveMQ Password: ");
         char[] password = console.readPassword();
@@ -44,13 +43,19 @@ public class MQTT {
 
     // Retrives MQTT Client
     public static Mqtt5BlockingClient getMqttClient(){
-        client = MqttClient.builder()
-                .useMqttVersion5()
-                .serverHost("5a81e32977cf48798ae1059437f7dd15.s1.eu.hivemq.cloud")
-                .serverPort(8883)
-                .sslWithDefaultConfig()
-                .buildBlocking();
-        
+        try{
+            System.out.println("Retrieving MQTT Client...");
+            client = MqttClient.builder()
+                    .useMqttVersion5()
+                    .serverHost("5a81e32977cf48798ae1059437f7dd15.s1.eu.hivemq.cloud")
+                    .serverPort(8883)
+                    .sslWithDefaultConfig()
+                    .buildBlocking();
+        } catch(Mqtt5ConnAckException e){
+            System.out.println("Unable to Retrieve MQTT Client!");
+            System.exit(0);
+        }  
+        System.out.println("Retrieved MQTT Client!");   
         return client;
     }
     
@@ -78,14 +83,14 @@ public class MQTT {
     }
     
     // Client subscribes to a specific topic
-    private static void subscribe(String topic){
+    public static void subscribe(String topic){
         client.subscribeWith()
-                .topicFilter(topic)
+                .topicFilter(getTopic(topic))
                 .send();
     }
     
     // Rerieves all messages sent to the client
-    private static List<JSONObject> retrieveMessage(){
+    public static List<JSONObject> retrieveMessage(){
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
         client.toAsync().publishes(ALL, publish -> {
             JSONObject jsonObject = new JSONObject(UTF_8.decode(publish.getPayload().get()).toString());
@@ -98,9 +103,9 @@ public class MQTT {
     }
     
     // Publish message to a specific topic sending a JSON object which contains the datas being sent
-    private static void publishMessage(String topic, JSONObject data){
+    public static void publishMessage(String topic, JSONObject data){
         client.publishWith()
-                .topic(topic)
+                .topic(getTopic(topic))
                 .payload(UTF_8.encode(data.toString()))
                 .send();
     }
@@ -111,7 +116,7 @@ public class MQTT {
     }
 
     // Disconnect from the client
-    private static void disconnect(){
+    public static void disconnect(){
         client.disconnect();
     }
 }
