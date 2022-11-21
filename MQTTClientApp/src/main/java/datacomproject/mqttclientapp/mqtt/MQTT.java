@@ -19,28 +19,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 public class MQTT {
     
-    private Scanner scanner = new Scanner(System.in);
     private Mqtt5BlockingClient client;
     private String username;
-    
-    
-    // Asks client for their HiveMQ username
-    private String getUsername(){
-        System.out.print("Please Enter Your HiveMQ Username: ");
-        String user = scanner.nextLine();
-        username = user;
-        System.out.println("");
-        return user;
-    }
-    
-    // Asks client for their HiveMQ password
-    private String getPassword(){
-        Console console = System.console();
-        System.out.print("Please Enter Your HiveMQ Password: ");
-        char[] password = console.readPassword();
-        System.out.println("");
-        return String.valueOf(password);
-    }
 
     // Retrives MQTT Client
     public Mqtt5BlockingClient getMqttClient(){
@@ -61,26 +41,22 @@ public class MQTT {
     }
     
     // Connects to HiveMQ using client credentials
-    public void createConnection(){
-        boolean valid = false;
-        while(!valid){
-            username = getUsername();
-            String password = getPassword();
-            System.out.println("Connecting to HiveMQ...");
-            try{
-                client.connectWith()
-                    .simpleAuth()
-                    .username(username)
-                    .password(UTF_8.encode(password))
-                    .applySimpleAuth()
-                    .send();
-                valid = true;
-            } catch(Mqtt5ConnAckException e){
-                System.out.println("Invalid Username or Password, Try Again...");
-            }
+    public boolean createConnection(String username, String password){
+        System.out.println("Connecting to HiveMQ...");
+        try{
+            client.connectWith()
+                .simpleAuth()
+                .username(username)
+                .password(UTF_8.encode(password))
+                .applySimpleAuth()
+                .send();
+            System.out.println("Connected successfully");
+            this.username = username;
+            return true;
+        } catch(Mqtt5ConnAckException | NullPointerException e){
+            System.out.println("Invalid Username or Password, Try Again...");
+            return false;
         }
-
-        System.out.println("Connected successfully");
     }
     
     // Client subscribes to a specific topic

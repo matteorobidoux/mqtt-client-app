@@ -25,6 +25,12 @@ public class MQTTTest {
          Mqtt5BlockingClient client = mqtt.getMqttClient();
          assertNotNull(client);
     }
+    
+    @Test
+    public void MQTTCreateConnectionTest(){
+        boolean connectionEstablished = mqtt.createConnection("TestUsername", "TestPassword");
+        assertEquals(false, connectionEstablished);
+    }
 
     @Test
     public void MQTTPublishMessageTestNullPointerException(){
@@ -44,6 +50,13 @@ public class MQTTTest {
     public void MQTTRetrieveMessageTestNullPointerException(){
         assertThrows(NullPointerException.class, () -> {
             mqtt.retrieveMessage();
+        });
+    }
+
+    @Test
+    public void MQTTDisconnectTestNullPointerException(){
+        assertThrows(NullPointerException.class, () -> {
+            mqtt.disconnect();
         });
     }
 }
