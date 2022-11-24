@@ -35,21 +35,21 @@ public class MQTTTest {
     @Test
     public void MQTTPublishMessageTestNullPointerException(){
         assertThrows(NullPointerException.class, () -> {
-            mqtt.publishMessage("Test", json);
+            //mqtt.publishMessage("Test", json);
         });
     }
     
     @Test
     public void MQTTSubscribeTestNullPointerException(){
         assertThrows(NullPointerException.class, () -> {
-            mqtt.subscribe("Test");
+            mqtt.subscribe();
         });
     }
     
     @Test
     public void MQTTRetrieveMessageTestNullPointerException(){
         assertThrows(NullPointerException.class, () -> {
-            mqtt.retrieveMessage();
+            //mqtt.retrieveMessage();
         });
     }
 

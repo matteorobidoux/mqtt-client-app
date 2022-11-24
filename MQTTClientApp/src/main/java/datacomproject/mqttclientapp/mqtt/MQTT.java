@@ -1,6 +1,11 @@
 package datacomproject.mqttclientapp.mqtt;
 
+import datacomproject.mqttclientapp.KeyStore.*;
+
 import java.io.Console;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,6 +18,7 @@ import com.hivemq.client.mqtt.mqtt5.exceptions.Mqtt5ConnAckException;
 import static com.hivemq.client.mqtt.MqttGlobalPublishFilter.ALL;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+
 /**
  *
  * @author Matteo
@@ -21,6 +27,7 @@ public class MQTT {
     
     private Mqtt5BlockingClient client;
     private String username;
+    private SignatureHelper signatureHelper = new SignatureHelper();
 
     // Retrives MQTT Client
     public Mqtt5BlockingClient getMqttClient(){
@@ -59,37 +66,53 @@ public class MQTT {
         }
     }
     
-    // Client subscribes to a specific topic
-    public void subscribe(String topic){
+    // Client subscribes to all topics begining with mqtt
+    public void subscribe(){
         client.subscribeWith()
-                .topicFilter(getTopic(topic))
+                .topicFilter("mqtt/#")
                 .send();
     }
     
     // Rerieves all messages sent to the client
-    public List<JSONObject> retrieveMessage(){
+    public List<JSONObject> retrieveMessage(byte[] signature, PublicKey publicKey, String alg) {
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
         client.toAsync().publishes(ALL, publish -> {
             JSONObject jsonObject = new JSONObject(UTF_8.decode(publish.getPayload().get()).toString());
-            System.out.println("Received message: " +
-                publish.getTopic() + " -> " +
-                jsonObject);
-            jsonObjects.add(jsonObject);
+            try {
+                if(signatureHelper.verifySignature(signature, publicKey, alg, jsonObject.toString())){
+                    System.out.println("Received message: " +
+                        publish.getTopic() + " -> " +
+                        jsonObject);
+                    jsonObjects.add(jsonObject);
+                }
+            } catch (Exception e) {
+                System.out.println("There Was A Problem Verifying The Signature...");
+            }
         });
         return jsonObjects;
     }
     
-    // Publish message to a specific topic sending a JSON object which contains the datas being sent
-    public void publishMessage(String topic, JSONObject data){
+    // Publish message to a specific topic sending a JSON object which contains the datas being sent and returns the signature of the message
+    public byte[] publishDataMessage(PrivateKey privateKey, String topic, JSONObject data) throws Exception{
+        byte[] signature = signatureHelper.signMessage(privateKey, data.toString());
         client.publishWith()
                 .topic(getTopic(topic))
                 .payload(UTF_8.encode(data.toString()))
+                .send();
+        return signature;
+    }
+
+    // Publishes a message with the certificate within it
+    public void publishCerificateMessage(String topic, Certificate certificate){
+        client.publishWith()
+                .topic(getTopic(topic))
+                .payload(UTF_8.encode(certificate.toString()))
                 .send();
     }
 
     // Gets the topic using the topic path and client username to create it
     private String getTopic(String topicPath){
-        return username + "/" + topicPath;
+        return "mqtt/" + username + "/" + topicPath;
     }
 
     // Disconnect from the client

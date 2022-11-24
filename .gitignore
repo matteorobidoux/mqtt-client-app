@@ -2,3 +2,4 @@
 */target/
 */nbproject/
 .vscode/
+/MQTTClientApp/target/surefire-reports/
