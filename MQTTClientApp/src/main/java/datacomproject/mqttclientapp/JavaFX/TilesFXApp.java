@@ -17,7 +17,7 @@ public class TilesFXApp extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        var scene = new Scene(new FXScreen(), 1060, 910);
+        var scene = new Scene(new FXScreen()); //1060, 910
         TilesFXApp.theStage = stage;
         
         //Set the active scene

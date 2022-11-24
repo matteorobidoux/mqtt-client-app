@@ -1,17 +1,205 @@
 package datacomproject.mqttclientapp.JavaFX;
 //package datacomproject.mqttclientapp.mqtt;
+
+import eu.hansolo.tilesfx.Tile.*;
+import eu.hansolo.tilesfx.TileBuilder;
+import java.io.IOException;
+import java.util.*;
+import javafx.application.Platform;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.control.*;
+import java.util.logging.*;
+
+/**
+ * @author Ray Hernaez
+ */
+
+/* Class to Create the GUI with the help of TilesFX library */
+public class FXScreen extends HBox {
+    
+    //Constructor 
+    public FXScreen() throws IOException {
+        //Build the screen
+        this.buildScreen();
+    }
+    
+    //Build the screen
+    private void buildScreen() throws IOException {
+    
+//        //Custom Tile containing a TextField
+//        Label input = new Label("Input");
+//        input.setTextFill(Color.WHITE);
+//        TextField textfield = new TextField();
+//        Button tfButton = new Button("Submit");
+//        Button clearButton = new Button("Clear");
 //
-//import eu.hansolo.tilesfx.Tile;
-//import eu.hansolo.tilesfx.Tile.SkinType;
-//import eu.hansolo.tilesfx.Tile.TextSize;
-//import eu.hansolo.tilesfx.TileBuilder;
-//import java.io.IOException;
-//import java.util.*;
-//import javafx.application.Platform;
-//import javafx.scene.layout.*;
-//import javafx.scene.paint.Color;
-//import javafx.scene.control.*;
+//        //Event handlers to get the input
+//        tfButton.setOnAction(e -> System.out.println("You entered: " + textfield.getText()));
+//        clearButton.setOnAction(e -> textfield.clear());
 //
+//        //Layout to contain the TextField and Buttons
+//        GridPane tfContainer = new GridPane();
+//
+//        //Add space between the columns of the GridPane
+//        tfContainer.setHgap(5);
+//
+//        //Add space between the rows of the GridPane
+//        tfContainer.setVgap(5);
+//
+//        //Add the nodes to the GridPane
+//        tfContainer.add(input, 1, 4);
+//        tfContainer.add(textfield, 2, 4);
+//        tfContainer.add(clearButton, 1, 5);
+//        tfContainer.add(tfButton, 3, 5);
+
+//        String temperature = ""; 
+//        String humidity = ""; 
+
+        // Generate a timestamp 
+        Date timeStamp = new Date();
+
+        // Doorbell Buzzer (Date and Time display) - Ray
+        Tile doorbellTileRay = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(260, 300)
+                .textSize(TextSize.BIGGER)
+                .title("Ray's Doorbell Buzzer")
+                .text("Doorbell pressed at: " + timeStamp) //
+                .build();
+        
+        // Motion Detector (Date and Time display) - Ray
+        Tile motionTileRay = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(260, 300)
+                .textSize(TextSize.BIGGER)
+                .title("Ray's Motion Detector")
+                .text("Motion detected at: " + timeStamp) //
+                .build();
+        
+        // Image taken after motion was detected - Ray
+        Tile imageTileRay = TileBuilder.create()
+                .skinType(SkinType.IMAGE)
+                .prefSize(260, 300)
+                .title("Ray's Detected Image")
+                .image(new Image(FXScreen.class.getResourceAsStream(imagePath))) //add imagePath string
+                .imageMask(ImageMask.ROUND)
+                .build();
+        
+        // DHT Sensor Data (Temperature and Humidity) - Ray
+        Tile dhtTileRay = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(260, 300)
+                .textSize(TextSize.BIGGER)
+                .title("Ray's DHT Sensor Readings")
+                .text("Temperature: " + temperature + "°C\nHumidity: " + humidity + "%") //
+                .build();
+        
+        //
+        // Doorbell Buzzer (Date and Time display) - Rim
+        Tile doorbellTileRim = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(260, 300)
+                .textSize(TextSize.BIGGER)
+                .title("Rim's Doorbell Buzzer")
+                .text("Doorbell pressed at: " + timeStamp) //
+                .build();
+        
+        // Motion Detector (Date and Time display) - Rim
+        Tile motionTileRim = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(260, 300)
+                .textSize(TextSize.BIGGER)
+                .title("Rim's Motion Detector")
+                .text("Motion detected at: " + timeStamp) //
+                .build();
+        
+        // Image taken after motion was detected - Rim
+        Tile imageTileRim = TileBuilder.create()
+                .skinType(SkinType.IMAGE)
+                .prefSize(260, 300)
+                .title("Rim's Detected Image")
+                .image(new Image(FXScreen.class.getResourceAsStream(imagePath))) //add imagePath string
+                .imageMask(ImageMask.ROUND)
+                .build();
+        
+        // DHT Sensor Data (Temperature and Humidity) - Rim
+        Tile dhtTileRim = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(260, 300)
+                .textSize(TextSize.BIGGER)
+                .title("Rim's DHT Sensor Readings")
+                .text("Temperature: " + temperature + "°C\nHumidity: " + humidity + "%") //
+                .build();
+        
+        //
+        // Doorbell Buzzer (Date and Time display) - Matteo
+        Tile doorbellTileMatteo = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(260, 300)
+                .textSize(TextSize.BIGGER)
+                .title("Matteo's Doorbell Buzzer")
+                .text("Doorbell pressed at: " + timeStamp) //
+                .build();
+        
+        // Motion Detector (Date and Time display) - Matteo
+        Tile motionTileMatteo = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(260, 300)
+                .textSize(TextSize.BIGGER)
+                .title("Matteo's Motion Detector")
+                .text("Motion detected at: " + timeStamp) //
+                .build();
+        
+        // Image taken after motion was detected - Matteo
+        Tile imageTileMatteo = TileBuilder.create()
+                .skinType(SkinType.IMAGE)
+                .prefSize(260, 300)
+                .title("Matteo's Detected Image")
+                .image(new Image(FXScreen.class.getResourceAsStream(imagePath))) //add imagePath string
+                .imageMask(ImageMask.ROUND)
+                .build();
+        
+        // DHT Sensor Data (Temperature and Humidity) - Matteo
+        Tile dhtTileMatteo = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(260, 300)
+                .textSize(TextSize.BIGGER)
+                .title("Matteo's DHT Sensor Readings")
+                .text("Temperature: " + temperature + "°C \nHumidity: " + humidity + "%") //
+                .build();
+        
+        //Add the tiles to VBoxes
+        VBox doorbellTilesColumn = new VBox(doorbellTileRay, doorbellTileRim, doorbellTileMatteo);
+        doorbellTilesColumn.setMinWidth(260);
+        doorbellTilesColumn.setSpacing(5);
+
+        VBox motionTilesColumn = new VBox(motionTileRay, motionTileRim, motionTileMatteo);
+        motionTilesColumn.setMinWidth(260);
+        motionTilesColumn.setSpacing(5);
+        
+        VBox imageTilesColumn = new VBox(imageTileRay, imageTileRim, imageTileMatteo);
+        imageTilesColumn.setMinWidth(260);
+        imageTilesColumn.setSpacing(5);
+        
+        VBox dhtTilesColumn = new VBox(dhtTileRay, dhtTileRim, dhtTileMatteo);
+        dhtTilesColumn.setMinWidth(260);
+        dhtTilesColumn.setSpacing(5);
+
+        //Add the VBoxes to the root layout, which is a HBox
+        this.getChildren().addAll(doorbellTilesColumn, motionTilesColumn, imageTilesColumn, dhtTilesColumn);
+        this.setSpacing(5);
+        
+    }
+    
+    //Stop the threads and close the application
+    private void endApplication() {
+        Platform.exit();
+    }
+    
+}
+
+
 ///* Class to Create the GUI with the help of TilesFX library */
 //public class FXScreen extends HBox {
 //    private static boolean running = true;
