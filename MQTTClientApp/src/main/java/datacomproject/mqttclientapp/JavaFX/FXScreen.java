@@ -84,11 +84,11 @@ public class FXScreen extends HBox {
         VBox textAreaTempVBoxRay = new VBox(textAreaTempRay);
         
         // Temperature Timestamp - Ray
-        Tile doorbellTimeTileRay = TileBuilder.create()
+        Tile tempTimeTileRay = TileBuilder.create()
                 .skinType(SkinType.CUSTOM)
-                .prefSize(300, 300)
+                .prefSize(300, 150)
                 .textSize(TextSize.BIGGER)
-                .title("Ray's Doorbell Buzzer")
+                .title("Ray's Temperature")
                 .graphic(textAreaTempVBoxRay)
                 .build();
         
@@ -141,6 +141,24 @@ public class FXScreen extends HBox {
                        .text("Taken at: " + timeStampDHT)
                        .build();
         
+        // TextArea to display the temperature timestamp - Rim
+        TextArea textAreaTempRim = new TextArea();
+        textAreaTempRim.setEditable(false);
+        textAreaTempRim.setStyle("-fx-control-inner-background: #2A2A2A; "
+                + "-fx-text-inner-color: white;"
+                + "-fx-text-box-border: transparent;");
+        textAreaTempRim.setText("\n\nTaken at: \n" + timeStampDHT);
+        VBox textAreaTempVBoxRim = new VBox(textAreaTempRim);
+        
+        // Temperature Timestamp - Rim
+        Tile tempTimeTileRim = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(300, 150)
+                .textSize(TextSize.BIGGER)
+                .title("Rim's Temperature")
+                .graphic(textAreaTempVBoxRim)
+                .build();
+        
         // Humidity reading - Rim
         Tile humidityTileRim = TileBuilder.create()
                         .skinType(SkinType.PERCENTAGE)
@@ -190,6 +208,24 @@ public class FXScreen extends HBox {
                        .text("Taken at: " + timeStampDHT)
                        .build();
         
+        // TextArea to display the temperature timestamp - Matteo
+        TextArea textAreaTempMatteo = new TextArea();
+        textAreaTempMatteo.setEditable(false);
+        textAreaTempMatteo.setStyle("-fx-control-inner-background: #2A2A2A; "
+                + "-fx-text-inner-color: white;"
+                + "-fx-text-box-border: transparent;");
+        textAreaTempMatteo.setText("\n\nTaken at: \n" + timeStampDHT);
+        VBox textAreaTempVBoxMatteo = new VBox(textAreaTempMatteo);
+        
+        // Temperature Timestamp - Matteo
+        Tile tempTimeTileMatteo = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(300, 150)
+                .textSize(TextSize.BIGGER)
+                .title("Matteo's Temperature")
+                .graphic(textAreaTempVBoxMatteo)
+                .build();
+        
         // Humidity reading - Matteo
         Tile humidityTileMatteo = TileBuilder.create()
                         .skinType(SkinType.PERCENTAGE)
@@ -230,9 +266,19 @@ public class FXScreen extends HBox {
         
         //
         //Add the tiles to VBoxes
-//        VBox doorbellTimeTilesColumn = new VBox
+        VBox doorbellTimeTilesColumn = new VBox(tempTileRay, tempTimeTileRay);
+        doorbellTimeTilesColumn.setMinWidth(300);
+        doorbellTimeTilesColumn.setSpacing(5);
         
-        VBox doorbellTilesColumn = new VBox(tempTileRay, tempTileRim, tempTileMatteo);
+        VBox doorbellTimeTilesColumn2 = new VBox(tempTileRim, tempTimeTileRim);
+        doorbellTimeTilesColumn2.setMinWidth(300);
+        doorbellTimeTilesColumn2.setSpacing(5);
+        
+        VBox doorbellTimeTilesColumn3 = new VBox(tempTileMatteo, tempTimeTileMatteo);
+        doorbellTimeTilesColumn3.setMinWidth(300);
+        doorbellTimeTilesColumn3.setSpacing(5);
+                
+        VBox doorbellTilesColumn = new VBox(doorbellTimeTilesColumn, doorbellTimeTilesColumn2, doorbellTimeTilesColumn3);
         doorbellTilesColumn.setMinWidth(300);
         doorbellTilesColumn.setSpacing(5);
 
