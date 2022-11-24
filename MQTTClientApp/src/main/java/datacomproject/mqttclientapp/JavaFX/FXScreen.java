@@ -1,6 +1,7 @@
 package datacomproject.mqttclientapp.JavaFX;
 //package datacomproject.mqttclientapp.mqtt;
 
+import eu.hansolo.tilesfx.*;
 import eu.hansolo.tilesfx.Tile.*;
 import eu.hansolo.tilesfx.TileBuilder;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.control.*;
 import java.util.logging.*;
+import javafx.scene.image.*;
 
 /**
  * @author Ray Hernaez
@@ -53,137 +55,197 @@ public class FXScreen extends HBox {
 //        tfContainer.add(clearButton, 1, 5);
 //        tfContainer.add(tfButton, 3, 5);
 
-//        String temperature = ""; 
-//        String humidity = ""; 
-
-        // Generate a timestamp 
-        Date timeStamp = new Date();
-
-        // Doorbell Buzzer (Date and Time display) - Ray
-        Tile doorbellTileRay = TileBuilder.create()
+        // Generate timestamps
+        Date timeStampDHT = new Date();
+        Date timeStampMotion = new Date();
+        Date timeStampDoorbell = new Date();
+        
+        // Image Paths
+        String imagePathRay = "";
+        String imagePathRim = "";
+        String imagePathMatteo = "";
+        
+        // Temperature reading - Ray
+        Tile tempTileRay = TileBuilder.create()
+                       .skinType(SkinType.GAUGE)
+                       .prefSize(300, 150)
+                       .title("Ray's Temperature")
+                       .unit("°C")
+                       .threshold(100)
+                       .build();
+        
+        // TextArea to display the temperature timestamp - Ray
+        TextArea textAreaTempRay = new TextArea();
+        textAreaTempRay.setEditable(false);
+        textAreaTempRay.setStyle("-fx-control-inner-background: #2A2A2A; "
+                + "-fx-text-inner-color: white;"
+                + "-fx-text-box-border: transparent;");
+        textAreaTempRay.setText("\n\nTaken at: \n" + timeStampDHT);
+        VBox textAreaTempVBoxRay = new VBox(textAreaTempRay);
+        
+        // Temperature Timestamp - Ray
+        Tile doorbellTimeTileRay = TileBuilder.create()
                 .skinType(SkinType.CUSTOM)
-                .prefSize(260, 300)
+                .prefSize(300, 300)
                 .textSize(TextSize.BIGGER)
                 .title("Ray's Doorbell Buzzer")
-                .text("Doorbell pressed at: " + timeStamp) //
+                .graphic(textAreaTempVBoxRay)
                 .build();
         
-        // Motion Detector (Date and Time display) - Ray
-        Tile motionTileRay = TileBuilder.create()
-                .skinType(SkinType.CUSTOM)
-                .prefSize(260, 300)
-                .textSize(TextSize.BIGGER)
-                .title("Ray's Motion Detector")
-                .text("Motion detected at: " + timeStamp) //
-                .build();
+        // Humidity reading - Ray
+        Tile humidityTileRay = TileBuilder.create()
+                        .skinType(SkinType.PERCENTAGE)
+                        .prefSize(300, 150)
+                        .title("Ray's Humidity")
+                        .unit("%")
+                        .maxValue(100)
+                        .text("Taken at: " + timeStampDHT)
+                        .build();
         
         // Image taken after motion was detected - Ray
         Tile imageTileRay = TileBuilder.create()
                 .skinType(SkinType.IMAGE)
-                .prefSize(260, 300)
-                .title("Ray's Detected Image")
-                .image(new Image(FXScreen.class.getResourceAsStream(imagePath))) //add imagePath string
+                .prefSize(300, 300)
+                .title("Ray's Motion Detected Image")
+                .image(new Image(FXScreen.class.getResourceAsStream(imagePathRay))) //add imagePath string
                 .imageMask(ImageMask.ROUND)
+                .text("Taken at: " + timeStampMotion)
                 .build();
         
-        // DHT Sensor Data (Temperature and Humidity) - Ray
-        Tile dhtTileRay = TileBuilder.create()
+        // TextArea to display the doorbell timestamp - Ray
+        TextArea textAreaRay = new TextArea();
+        textAreaRay.setEditable(false);
+        textAreaRay.setStyle("-fx-control-inner-background: #2A2A2A; "
+                + "-fx-text-inner-color: white;"
+                + "-fx-text-box-border: transparent;");
+        textAreaRay.setText("\n\nDoorbell pressed at: \n" + timeStampDoorbell);
+        VBox textAreaVBoxRay    = new VBox(textAreaRay);
+        
+        // Doorbell Buzzer (Date and Time display) - Ray
+        Tile doorbellTileRay = TileBuilder.create()
                 .skinType(SkinType.CUSTOM)
-                .prefSize(260, 300)
+                .prefSize(300, 300)
                 .textSize(TextSize.BIGGER)
-                .title("Ray's DHT Sensor Readings")
-                .text("Temperature: " + temperature + "°C\nHumidity: " + humidity + "%") //
+                .title("Ray's Doorbell Buzzer")
+                .graphic(textAreaVBoxRay)
                 .build();
         
         //
-        // Doorbell Buzzer (Date and Time display) - Rim
-        Tile doorbellTileRim = TileBuilder.create()
-                .skinType(SkinType.CUSTOM)
-                .prefSize(260, 300)
-                .textSize(TextSize.BIGGER)
-                .title("Rim's Doorbell Buzzer")
-                .text("Doorbell pressed at: " + timeStamp) //
-                .build();
+        // Temperature reading - Rim
+        Tile tempTileRim = TileBuilder.create()
+                       .skinType(SkinType.GAUGE)
+                       .prefSize(300, 150)
+                       .title("Rim's Temperature")
+                       .unit("°C")
+                       .threshold(100)
+                       .text("Taken at: " + timeStampDHT)
+                       .build();
         
-        // Motion Detector (Date and Time display) - Rim
-        Tile motionTileRim = TileBuilder.create()
-                .skinType(SkinType.CUSTOM)
-                .prefSize(260, 300)
-                .textSize(TextSize.BIGGER)
-                .title("Rim's Motion Detector")
-                .text("Motion detected at: " + timeStamp) //
-                .build();
+        // Humidity reading - Rim
+        Tile humidityTileRim = TileBuilder.create()
+                        .skinType(SkinType.PERCENTAGE)
+                        .prefSize(300, 150)
+                        .title("Rim's Humidity")
+                        .unit("%")
+                        .maxValue(100)
+                        .text("Taken at: " + timeStampDHT)
+                        .build();
         
         // Image taken after motion was detected - Rim
         Tile imageTileRim = TileBuilder.create()
                 .skinType(SkinType.IMAGE)
-                .prefSize(260, 300)
-                .title("Rim's Detected Image")
-                .image(new Image(FXScreen.class.getResourceAsStream(imagePath))) //add imagePath string
+                .prefSize(300, 300)
+                .title("Rim's Motion Detected Image")
+                .image(new Image(FXScreen.class.getResourceAsStream(imagePathRim))) //add imagePath string
                 .imageMask(ImageMask.ROUND)
+                .text("Taken at: " + timeStampMotion)
                 .build();
         
-        // DHT Sensor Data (Temperature and Humidity) - Rim
-        Tile dhtTileRim = TileBuilder.create()
+        // TextArea to display the doorbell timestamp - Rim
+        TextArea textAreaRim = new TextArea();
+        textAreaRim.setEditable(false);
+        textAreaRim.setStyle("-fx-control-inner-background: #2A2A2A; "
+                + "-fx-text-inner-color: white;"
+                + "-fx-text-box-border: transparent;");
+        textAreaRim.setText("\n\nDoorbell pressed at: \n" + timeStampDoorbell);
+        VBox textAreaVBoxRim    = new VBox(textAreaRim);
+        
+        // Doorbell Buzzer (Date and Time display) - Rim
+        Tile doorbellTileRim = TileBuilder.create()
                 .skinType(SkinType.CUSTOM)
-                .prefSize(260, 300)
+                .prefSize(300, 300)
                 .textSize(TextSize.BIGGER)
-                .title("Rim's DHT Sensor Readings")
-                .text("Temperature: " + temperature + "°C\nHumidity: " + humidity + "%") //
+                .title("Rim's Doorbell Buzzer")
+                .graphic(textAreaVBoxRim)
                 .build();
         
         //
-        // Doorbell Buzzer (Date and Time display) - Matteo
-        Tile doorbellTileMatteo = TileBuilder.create()
-                .skinType(SkinType.CUSTOM)
-                .prefSize(260, 300)
-                .textSize(TextSize.BIGGER)
-                .title("Matteo's Doorbell Buzzer")
-                .text("Doorbell pressed at: " + timeStamp) //
-                .build();
+        // Temperature reading - Matteo
+        Tile tempTileMatteo = TileBuilder.create()
+                       .skinType(SkinType.GAUGE)
+                       .prefSize(300, 150)
+                       .title("Matteo's Temperature")
+                       .unit("°C")
+                       .threshold(100)
+                       .text("Taken at: " + timeStampDHT)
+                       .build();
         
-        // Motion Detector (Date and Time display) - Matteo
-        Tile motionTileMatteo = TileBuilder.create()
-                .skinType(SkinType.CUSTOM)
-                .prefSize(260, 300)
-                .textSize(TextSize.BIGGER)
-                .title("Matteo's Motion Detector")
-                .text("Motion detected at: " + timeStamp) //
-                .build();
+        // Humidity reading - Matteo
+        Tile humidityTileMatteo = TileBuilder.create()
+                        .skinType(SkinType.PERCENTAGE)
+                        .prefSize(300, 150)
+                        .title("Matteo's Humidity")
+                        .unit("%")
+                        .maxValue(100)
+                        .text("Taken at: " + timeStampDHT)
+                        .build();
         
         // Image taken after motion was detected - Matteo
         Tile imageTileMatteo = TileBuilder.create()
                 .skinType(SkinType.IMAGE)
-                .prefSize(260, 300)
-                .title("Matteo's Detected Image")
-                .image(new Image(FXScreen.class.getResourceAsStream(imagePath))) //add imagePath string
+                .prefSize(300, 300)
+                .title("Matteo's Motion Detected Image")
+                .image(new Image(FXScreen.class.getResourceAsStream(imagePathMatteo))) //add imagePath string
                 .imageMask(ImageMask.ROUND)
+                .text("Taken at: " + timeStampMotion)
                 .build();
         
-        // DHT Sensor Data (Temperature and Humidity) - Matteo
-        Tile dhtTileMatteo = TileBuilder.create()
+        // TextArea to display the doorbell timestamp - Matteo
+        TextArea textAreaMatteo = new TextArea();
+        textAreaMatteo.setEditable(false);
+        textAreaMatteo.setStyle("-fx-control-inner-background: #2A2A2A; "
+                + "-fx-text-inner-color: white;"
+                + "-fx-text-box-border: transparent;");
+        textAreaMatteo.setText("\n\nDoorbell pressed at: \n" + timeStampDoorbell);
+        VBox textAreaVBoxMatteo    = new VBox(textAreaMatteo);
+        
+        // Doorbell Buzzer (Date and Time display) - Matteo
+        Tile doorbellTileMatteo = TileBuilder.create()
                 .skinType(SkinType.CUSTOM)
-                .prefSize(260, 300)
+                .prefSize(300, 300)
                 .textSize(TextSize.BIGGER)
-                .title("Matteo's DHT Sensor Readings")
-                .text("Temperature: " + temperature + "°C \nHumidity: " + humidity + "%") //
+                .title("Matteo's Doorbell Buzzer")
+                .graphic(textAreaVBoxMatteo)
                 .build();
         
+        //
         //Add the tiles to VBoxes
-        VBox doorbellTilesColumn = new VBox(doorbellTileRay, doorbellTileRim, doorbellTileMatteo);
-        doorbellTilesColumn.setMinWidth(260);
+//        VBox doorbellTimeTilesColumn = new VBox
+        
+        VBox doorbellTilesColumn = new VBox(tempTileRay, tempTileRim, tempTileMatteo);
+        doorbellTilesColumn.setMinWidth(300);
         doorbellTilesColumn.setSpacing(5);
 
-        VBox motionTilesColumn = new VBox(motionTileRay, motionTileRim, motionTileMatteo);
-        motionTilesColumn.setMinWidth(260);
+        VBox motionTilesColumn = new VBox(humidityTileRay, humidityTileRim, humidityTileMatteo);
+        motionTilesColumn.setMinWidth(300);
         motionTilesColumn.setSpacing(5);
         
         VBox imageTilesColumn = new VBox(imageTileRay, imageTileRim, imageTileMatteo);
-        imageTilesColumn.setMinWidth(260);
+        imageTilesColumn.setMinWidth(300);
         imageTilesColumn.setSpacing(5);
         
-        VBox dhtTilesColumn = new VBox(dhtTileRay, dhtTileRim, dhtTileMatteo);
-        dhtTilesColumn.setMinWidth(260);
+        VBox dhtTilesColumn = new VBox(doorbellTileRay, doorbellTileRim, doorbellTileMatteo);
+        dhtTilesColumn.setMinWidth(300);
         dhtTilesColumn.setSpacing(5);
 
         //Add the VBoxes to the root layout, which is a HBox
