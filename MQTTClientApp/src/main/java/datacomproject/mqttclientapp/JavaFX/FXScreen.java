@@ -102,6 +102,24 @@ public class FXScreen extends HBox {
                         .text("Taken at: " + timeStampDHT)
                         .build();
         
+        // TextArea to display the humidity timestamp - Ray
+        TextArea textAreaHumidityRay = new TextArea();
+        textAreaHumidityRay.setEditable(false);
+        textAreaHumidityRay.setStyle("-fx-control-inner-background: #2A2A2A; "
+                + "-fx-text-inner-color: white;"
+                + "-fx-text-box-border: transparent;");
+        textAreaHumidityRay.setText("\n\nTaken at: \n" + timeStampDHT);
+        VBox textAreaHumidityVBoxRay = new VBox(textAreaHumidityRay);
+        
+        // Temperature Timestamp - Ray
+        Tile humidityTimeTileRay = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(300, 150)
+                .textSize(TextSize.BIGGER)
+                .title("Ray's Humidity")
+                .graphic(textAreaHumidityVBoxRay)
+                .build();
+        
         // Image taken after motion was detected - Ray
         Tile imageTileRay = TileBuilder.create()
                 .skinType(SkinType.IMAGE)
@@ -168,6 +186,24 @@ public class FXScreen extends HBox {
                         .maxValue(100)
                         .text("Taken at: " + timeStampDHT)
                         .build();
+        
+        // TextArea to display the humidity timestamp - Rim
+        TextArea textAreaHumidityRim = new TextArea();
+        textAreaHumidityRim.setEditable(false);
+        textAreaHumidityRim.setStyle("-fx-control-inner-background: #2A2A2A; "
+                + "-fx-text-inner-color: white;"
+                + "-fx-text-box-border: transparent;");
+        textAreaHumidityRim.setText("\n\nTaken at: \n" + timeStampDHT);
+        VBox textAreaHumidityVBoxRim = new VBox(textAreaHumidityRim);
+        
+        // Temperature Timestamp - Rim
+        Tile humidityTimeTileRim = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(300, 150)
+                .textSize(TextSize.BIGGER)
+                .title("Rim's Humidity")
+                .graphic(textAreaHumidityVBoxRim)
+                .build();
         
         // Image taken after motion was detected - Rim
         Tile imageTileRim = TileBuilder.create()
@@ -236,6 +272,24 @@ public class FXScreen extends HBox {
                         .text("Taken at: " + timeStampDHT)
                         .build();
         
+        // TextArea to display the humidity timestamp - Matteo
+        TextArea textAreaHumidityMatteo = new TextArea();
+        textAreaHumidityMatteo.setEditable(false);
+        textAreaHumidityMatteo.setStyle("-fx-control-inner-background: #2A2A2A; "
+                + "-fx-text-inner-color: white;"
+                + "-fx-text-box-border: transparent;");
+        textAreaHumidityMatteo.setText("\n\nTaken at: \n" + timeStampDHT);
+        VBox textAreaHumidityVBoxMatteo = new VBox(textAreaHumidityMatteo);
+        
+        // Temperature Timestamp - Matteo
+        Tile humidityTimeTileMatteo = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(300, 150)
+                .textSize(TextSize.BIGGER)
+                .title("Matteo's Humidity")
+                .graphic(textAreaHumidityVBoxMatteo)
+                .build();
+        
         // Image taken after motion was detected - Matteo
         Tile imageTileMatteo = TileBuilder.create()
                 .skinType(SkinType.IMAGE)
@@ -266,36 +320,48 @@ public class FXScreen extends HBox {
         
         //
         //Add the tiles to VBoxes
-        VBox doorbellTimeTilesColumn = new VBox(tempTileRay, tempTimeTileRay);
-        doorbellTimeTilesColumn.setMinWidth(300);
-        doorbellTimeTilesColumn.setSpacing(5);
+        VBox tempTimeTilesColumn = new VBox(tempTileRay, tempTimeTileRay);
+        tempTimeTilesColumn.setMinWidth(300);
+        tempTimeTilesColumn.setSpacing(5);
         
-        VBox doorbellTimeTilesColumn2 = new VBox(tempTileRim, tempTimeTileRim);
-        doorbellTimeTilesColumn2.setMinWidth(300);
-        doorbellTimeTilesColumn2.setSpacing(5);
+        VBox tempTimeTilesColumn2 = new VBox(tempTileRim, tempTimeTileRim);
+        tempTimeTilesColumn2.setMinWidth(300);
+        tempTimeTilesColumn2.setSpacing(5);
         
-        VBox doorbellTimeTilesColumn3 = new VBox(tempTileMatteo, tempTimeTileMatteo);
-        doorbellTimeTilesColumn3.setMinWidth(300);
-        doorbellTimeTilesColumn3.setSpacing(5);
+        VBox tempTimeTilesColumn3 = new VBox(tempTileMatteo, tempTimeTileMatteo);
+        tempTimeTilesColumn3.setMinWidth(300);
+        tempTimeTilesColumn3.setSpacing(5);
+        
+        VBox humidityTimeTilesColumn = new VBox(humidityTileRay, humidityTimeTileRay);
+        humidityTimeTilesColumn.setMinWidth(300);
+        humidityTimeTilesColumn.setSpacing(5);
+        
+        VBox humidityTimeTilesColumn2 = new VBox(humidityTileRim, humidityTimeTileRim);
+        humidityTimeTilesColumn2.setMinWidth(300);
+        humidityTimeTilesColumn2.setSpacing(5);
+        
+        VBox humidityTimeTilesColumn3 = new VBox(humidityTileMatteo, humidityTimeTileMatteo);
+        humidityTimeTilesColumn3.setMinWidth(300);
+        humidityTimeTilesColumn3.setSpacing(5);
                 
-        VBox doorbellTilesColumn = new VBox(doorbellTimeTilesColumn, doorbellTimeTilesColumn2, doorbellTimeTilesColumn3);
-        doorbellTilesColumn.setMinWidth(300);
-        doorbellTilesColumn.setSpacing(5);
+        VBox tempTilesColumn = new VBox(tempTimeTilesColumn, tempTimeTilesColumn2, tempTimeTilesColumn3);
+        tempTilesColumn.setMinWidth(300);
+        tempTilesColumn.setSpacing(5);
 
-        VBox motionTilesColumn = new VBox(humidityTileRay, humidityTileRim, humidityTileMatteo);
-        motionTilesColumn.setMinWidth(300);
-        motionTilesColumn.setSpacing(5);
+        VBox humidtyTilesColumn = new VBox(humidityTimeTilesColumn, humidityTimeTilesColumn2, humidityTimeTilesColumn3);
+        humidtyTilesColumn.setMinWidth(300);
+        humidtyTilesColumn.setSpacing(5);
         
         VBox imageTilesColumn = new VBox(imageTileRay, imageTileRim, imageTileMatteo);
         imageTilesColumn.setMinWidth(300);
         imageTilesColumn.setSpacing(5);
         
-        VBox dhtTilesColumn = new VBox(doorbellTileRay, doorbellTileRim, doorbellTileMatteo);
-        dhtTilesColumn.setMinWidth(300);
-        dhtTilesColumn.setSpacing(5);
+        VBox doorbellTilesColumn = new VBox(doorbellTileRay, doorbellTileRim, doorbellTileMatteo);
+        doorbellTilesColumn.setMinWidth(300);
+        doorbellTilesColumn.setSpacing(5);
 
         //Add the VBoxes to the root layout, which is a HBox
-        this.getChildren().addAll(doorbellTilesColumn, motionTilesColumn, imageTilesColumn, dhtTilesColumn);
+        this.getChildren().addAll(tempTilesColumn, humidtyTilesColumn, imageTilesColumn, doorbellTilesColumn);
         this.setSpacing(5);
         
     }
