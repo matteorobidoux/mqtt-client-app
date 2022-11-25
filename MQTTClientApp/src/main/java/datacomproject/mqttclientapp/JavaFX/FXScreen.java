@@ -318,31 +318,40 @@ public class FXScreen extends HBox {
                 .graphic(textAreaVBoxMatteo)
                 .build();
         
+        //Setup a tile with an exit button to end the application
+        var exitButton = new Button("Exit");
+
+        //Setup event handler for the exit button
+        exitButton.setOnAction(e -> endApplication());
+
+        //Setup the tile
+        var exitTile = TileBuilder.create()
+                .skinType(SkinType.CUSTOM)
+                .prefSize(150, 300)
+                .textSize(TextSize.BIGGER)
+                .title("Quit the application")
+                .graphic(exitButton)
+                .build();
+        
         //
         //Add the tiles to VBoxes
         VBox tempTimeTilesColumn = new VBox(tempTileRay, tempTimeTileRay);
         tempTimeTilesColumn.setMinWidth(300);
-        tempTimeTilesColumn.setSpacing(5);
         
         VBox tempTimeTilesColumn2 = new VBox(tempTileRim, tempTimeTileRim);
         tempTimeTilesColumn2.setMinWidth(300);
-        tempTimeTilesColumn2.setSpacing(5);
         
         VBox tempTimeTilesColumn3 = new VBox(tempTileMatteo, tempTimeTileMatteo);
         tempTimeTilesColumn3.setMinWidth(300);
-        tempTimeTilesColumn3.setSpacing(5);
         
         VBox humidityTimeTilesColumn = new VBox(humidityTileRay, humidityTimeTileRay);
         humidityTimeTilesColumn.setMinWidth(300);
-        humidityTimeTilesColumn.setSpacing(5);
         
         VBox humidityTimeTilesColumn2 = new VBox(humidityTileRim, humidityTimeTileRim);
         humidityTimeTilesColumn2.setMinWidth(300);
-        humidityTimeTilesColumn2.setSpacing(5);
         
         VBox humidityTimeTilesColumn3 = new VBox(humidityTileMatteo, humidityTimeTileMatteo);
         humidityTimeTilesColumn3.setMinWidth(300);
-        humidityTimeTilesColumn3.setSpacing(5);
                 
         VBox tempTilesColumn = new VBox(tempTimeTilesColumn, tempTimeTilesColumn2, tempTimeTilesColumn3);
         tempTilesColumn.setMinWidth(300);
@@ -359,9 +368,10 @@ public class FXScreen extends HBox {
         VBox doorbellTilesColumn = new VBox(doorbellTileRay, doorbellTileRim, doorbellTileMatteo);
         doorbellTilesColumn.setMinWidth(300);
         doorbellTilesColumn.setSpacing(5);
-
+        
+        
         //Add the VBoxes to the root layout, which is a HBox
-        this.getChildren().addAll(tempTilesColumn, humidtyTilesColumn, imageTilesColumn, doorbellTilesColumn);
+        this.getChildren().addAll(tempTilesColumn, humidtyTilesColumn, imageTilesColumn, doorbellTilesColumn, exitTile);
         this.setSpacing(5);
         
     }
