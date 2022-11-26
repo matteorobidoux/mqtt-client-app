@@ -32,10 +32,10 @@ public class FXScreen extends HBox {
         Date timeStampMotion = new Date();
         Date timeStampDoorbell = new Date();
         
-        // Image Paths
-        String imagePathRay = "";
-        String imagePathRim = "";
-        String imagePathMatteo = "";
+        // Encoded Images (base64 string)
+        String encodedImageRay = "";
+        String encodedImageRim = "";
+        String encodedImageMatteo = "";
         
         // Temperature reading - Ray
         Tile tempTileRay = TileBuilder.create()
@@ -97,7 +97,7 @@ public class FXScreen extends HBox {
                 .skinType(SkinType.IMAGE)
                 .prefSize(300, 300)
                 .title("Ray's Motion Detected Image")
-                .image(new Image(FXScreen.class.getResourceAsStream(imagePathRay))) //add imagePath string
+                .image(new Image(encodedImageRay)) //add imagePath string
                 .imageMask(ImageMask.ROUND)
                 .text("Taken at: " + timeStampMotion)
                 .build();
@@ -182,7 +182,7 @@ public class FXScreen extends HBox {
                 .skinType(SkinType.IMAGE)
                 .prefSize(300, 300)
                 .title("Rim's Motion Detected Image")
-                .image(new Image(FXScreen.class.getResourceAsStream(imagePathRim))) //add imagePath string
+                .image(new Image(encodedImageRim)) //add imagePath string
                 .imageMask(ImageMask.ROUND)
                 .text("Taken at: " + timeStampMotion)
                 .build();
@@ -267,7 +267,7 @@ public class FXScreen extends HBox {
                 .skinType(SkinType.IMAGE)
                 .prefSize(300, 300)
                 .title("Matteo's Motion Detected Image")
-                .image(new Image(FXScreen.class.getResourceAsStream(imagePathMatteo))) //add imagePath string
+                .image(new Image(encodedImageMatteo)) //add imagePath string
                 .imageMask(ImageMask.ROUND)
                 .text("Taken at: " + timeStampMotion)
                 .build();
