@@ -19,7 +19,7 @@ public class KeyStoreHelperTest {
 
   KeyStoreHelper ksh;
   KeyStore ks;
-  String filename = "src/test/java/datacomproject/mqttclientapp/mqtt/ECcertif.ks";
+  String filename = "src/test/java/datacomproject/KeyStore/ECcertif.ks";
   char[] password = new char[] { 'p', 'a', 's', 's', 'w', 'o', 'r', 'd' };
 
   public KeyStoreHelperTest() throws Exception {
