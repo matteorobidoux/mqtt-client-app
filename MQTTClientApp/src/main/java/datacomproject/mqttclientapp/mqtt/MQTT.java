@@ -2,15 +2,12 @@ package datacomproject.mqttclientapp.mqtt;
 
 import datacomproject.mqttclientapp.KeyStore.*;
 
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
-import java.security.spec.ECGenParameterSpec;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -37,8 +34,10 @@ public class MQTT {
     private Mqtt5BlockingClient client;
     private String username;
     private SignatureHelper signatureHelper = new SignatureHelper();
-    public List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
-    public List<Certificate> certificates = new ArrayList<Certificate>();
+    public List<JSONObject> jsonObjectsMatteo = new ArrayList<JSONObject>();
+    public List<JSONObject> jsonObjectsRim = new ArrayList<JSONObject>();
+    public List<JSONObject> jsonObjectsRay = new ArrayList<JSONObject>();
+    public List<JSONObject> certificates = new ArrayList<JSONObject>();
 
     // Retrives MQTT Client
     public Mqtt5BlockingClient getMqttClient(){
@@ -77,14 +76,14 @@ public class MQTT {
         }
     }
     
-    // Client subscribes to all topics begining with mqtt
+    // Client subscribes to all topics begining with mqtt/
     public void subscribe(){
         client.subscribeWith()
                 .topicFilter("mqtt/#")
                 .send();
     }
     
-    // Rerieves all messages sent to the client and/or certificate
+    // Rerieves all messages sent to the client and/or certificate, verifies signature if it is a message and adds the data to the correct user List
     public void retrieveMessage(PublicKey publicKey, String alg) {
         client.toAsync().publishes(ALL, publish -> { 
             JSONObject jsonObject = new JSONObject(UTF_8.decode(publish.getPayload().get()).toString());
@@ -96,7 +95,13 @@ public class MQTT {
                         System.out.println("Received message: " +
                             publish.getTopic() + " -> " +
                             jsonObject);
-                        jsonObjects.add(jsonObject);
+                        if(publish.getTopic().toString().contains("matteorobidoux")){
+                            jsonObjectsMatteo.add(jsonObject);
+                        } else if(publish.getTopic().toString().contains("rimdallali")){
+                            jsonObjectsRim.add(jsonObject);
+                        } else if(publish.getTopic().toString().contains("rayhernaz")){
+                            jsonObjectsRay.add(jsonObject);
+                        }
                     }
                 } catch (Exception e) {
                     System.out.println("There Was A Problem Verifying The Signature..." + e);
@@ -105,13 +110,13 @@ public class MQTT {
                 System.out.println("Received Certificate: " +
                             publish.getTopic() + " -> " +
                             jsonObject);
-                                try {
-                                    CertificateFactory cf   = CertificateFactory.getInstance("X.509");
-                                    Certificate certificate = cf.generateCertificate(new ByteArrayInputStream(Base64.getDecoder().decode(jsonObject.get("certificate").toString())));
-                                    certificates.add(certificate);
-                                } catch (CertificateException | JSONException e) {
-                                    System.out.println("Error Retrieving Certificate");
-                                }
+                try {
+                    JSONObject certificateJSONObject = new JSONObject();
+                    certificateJSONObject.put(publish.getTopic().toString().split("/")[1], jsonObject.get("certificate"));
+                    certificates.add(certificateJSONObject);
+                } catch (JSONException e) {
+                    System.out.println("Error Retrieving Certificate");
+                }
                           
             }
         });
@@ -142,31 +147,18 @@ public class MQTT {
         return "mqtt/" + username + "/" + topicPath;
     }
 
-    // Disconnect from the client
+    // Disconnects from the client
     public void disconnect(){
         client.disconnect();
     }
 
-    public static void main(String[] args) throws Exception{
-        KeyPairGenerator generator = KeyPairGenerator.getInstance("EC");
-        ECGenParameterSpec ecParaSpec = new ECGenParameterSpec("secp256r1");
-        generator.initialize(ecParaSpec);
-        KeyPair keys = generator.generateKeyPair();
-
-        PublicKey publicKey = keys.getPublic();
-        PrivateKey privateKey = keys.getPrivate();
-
-        MQTT m = new MQTT();
-        m.getMqttClient();
-        m.createConnection("matteorobidoux", "password");
-        m.retrieveMessage(publicKey, "SHA256withECDSA");
-        m.subscribe();
-        JSONObject j = new JSONObject();
-        j.put("Testing","test");
-        m.publishDataMessage(privateKey, "test", j);
-        KeyStoreHelper k = new KeyStoreHelper();
-        k.loadKeyStore("password".toCharArray(), "./MQTTClientApp/src/test/java/datacomproject/KeyStore/ECcertif.ks");
-        Certificate c = k.extractCertificate("TEST");
-        m.publishCerificateMessage("certificate", c);
+    // Takes in a jsonObject and returns a certificate
+    public Certificate retrieveCertificate(JSONObject jsonCertificate) throws CertificateException{
+        if(jsonCertificate.has("certificate")){
+            CertificateFactory cf   = CertificateFactory.getInstance("X.509");
+            return cf.generateCertificate(new ByteArrayInputStream(Base64.getDecoder().decode(jsonCertificate.get("certificate").toString())));
+        } else {
+            return null;
+        }
     }
 }
