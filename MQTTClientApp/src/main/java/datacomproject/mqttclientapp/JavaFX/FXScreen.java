@@ -36,20 +36,46 @@ public class FXScreen extends HBox {
         
         // Encoded Images (base64 string)
         String encodedImageRay = "";
+        try {
+            File myObj = new File("images/imageRay");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                encodedImageRay = data;
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        
         String encodedImageRim = "";
         try {
-      File myObj = new File("src/image.txt");
-      Scanner myReader = new Scanner(myObj);
-      while (myReader.hasNextLine()) {
-        String data = myReader.nextLine();
-        encodedImageRim = data;
-      }
-      myReader.close();
-    } catch (FileNotFoundException e) {
-      System.out.println("An error occurred.");
-      e.printStackTrace();
-    }
+            File myObj = new File("images/imageRim");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                encodedImageRim = data;
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        
         String encodedImageMatteo = "";
+        try {
+            File myObj = new File("images/imageMatteo");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                encodedImageMatteo = data;
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
         
         // Temperature reading - Ray
         Tile tempTileRay = TileBuilder.create()
@@ -111,7 +137,7 @@ public class FXScreen extends HBox {
                 .skinType(SkinType.IMAGE)
                 .prefSize(300, 300)
                 .title("Ray's Motion Detected Image")
-//                .image(new Image(encodedImageRay)) //add imagePath string
+                .image(new Image(encodedImageRay)) //add imagePath string
                 .imageMask(ImageMask.ROUND)
                 .text("Taken at: " + timeStampMotion)
                 .build();
@@ -281,7 +307,7 @@ public class FXScreen extends HBox {
                 .skinType(SkinType.IMAGE)
                 .prefSize(300, 300)
                 .title("Matteo's Motion Detected Image")
-//                .image(new Image(encodedImageMatteo)) //add imagePath string
+                .image(new Image(encodedImageMatteo)) //add imagePath string
                 .imageMask(ImageMask.ROUND)
                 .text("Taken at: " + timeStampMotion)
                 .build();
