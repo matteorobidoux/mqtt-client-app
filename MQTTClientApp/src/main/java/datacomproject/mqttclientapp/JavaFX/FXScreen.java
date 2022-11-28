@@ -35,48 +35,10 @@ public class FXScreen extends HBox {
         Date timeStampDoorbell = new Date();
         
         // Encoded Images (base64 string)
-        String encodedImageRay = "";
-        try {
-            File myObj = new File("images/imageRay");
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                encodedImageRay = data;
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-        
-        String encodedImageRim = "";
-        try {
-            File myObj = new File("images/imageRim");
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                encodedImageRim = data;
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-        
-        String encodedImageMatteo = "";
-        try {
-            File myObj = new File("images/imageMatteo");
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                encodedImageMatteo = data;
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-        
+        String encodedImageRay = readImage("images/imageRay");        
+        String encodedImageRim = readImage("images/imageRim");
+        String encodedImageMatteo = readImage("images/imageMatteo");
+                
         // Temperature reading - Ray
         Tile tempTileRay = TileBuilder.create()
                        .skinType(SkinType.GAUGE)
@@ -386,6 +348,23 @@ public class FXScreen extends HBox {
         this.getChildren().addAll(tempTilesColumn, humidtyTilesColumn, imageTilesColumn, doorbellTilesColumn, exitTile);
         this.setSpacing(5);
         
+    }
+    
+    //Reads the image base64 representation
+    private String readImage(String imagePath) {
+        try {
+            File myObj = new File(imagePath);
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                return data;
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        return null;
     }
     
     //Stop the threads and close the application
