@@ -6,19 +6,46 @@ package datacomproject.mqtt;
 
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 
+import datacomproject.mqttclientapp.KeyStore.KeyStoreHelper;
 import datacomproject.mqttclientapp.mqtt.MQTT;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.UnsupportedEncodingException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
+import java.security.spec.ECGenParameterSpec;
 
 /**
  *
  * @author Matteo
  */
-public class MQTTTest {
+public class MQTTTest{
     MQTT mqtt = new MQTT();
     JSONObject json = new JSONObject();
+    PublicKey publicKey;
+    PrivateKey privateKey;
+    Certificate certificate;
+
+    public MQTTTest() throws Exception{
+        KeyPairGenerator generator = KeyPairGenerator.getInstance("EC");
+        ECGenParameterSpec ecParaSpec = new ECGenParameterSpec("secp256r1");
+        generator.initialize(ecParaSpec);
+        KeyPair keys = generator.generateKeyPair();
+        publicKey = keys.getPublic();
+        privateKey = keys.getPrivate();
+        String alias = "TEST";
+        KeyStoreHelper ksh = new KeyStoreHelper();
+        ksh.loadKeyStore("password".toCharArray(), "src/test/java/datacomproject/KeyStore/ECcertif.ks");
+        certificate = ksh.extractCertificate(alias);
+    }
     
     @Test
     public void MQTTGetClientTest(){
@@ -28,35 +55,24 @@ public class MQTTTest {
     
     @Test
     public void MQTTCreateConnectionTest(){
-        boolean connectionEstablished = mqtt.createConnection("TestUsername", "TestPassword");
-        assertEquals(false, connectionEstablished);
+        mqtt.getMqttClient();
+        boolean connectionEstablished = mqtt.createConnection("matteorobidoux", "password");
+        assertEquals(true, connectionEstablished);
     }
 
     @Test
-    public void MQTTPublishMessageTestNullPointerException(){
-        assertThrows(NullPointerException.class, () -> {
-            //mqtt.publishMessage("Test", json);
-        });
-    }
-    
-    @Test
-    public void MQTTSubscribeTestNullPointerException(){
-        assertThrows(NullPointerException.class, () -> {
-            mqtt.subscribe();
-        });
-    }
-    
-    @Test
-    public void MQTTRetrieveMessageTestNullPointerException(){
-        assertThrows(NullPointerException.class, () -> {
-            //mqtt.retrieveMessage();
-        });
+    public void MQTTPublishDataMessageTest() throws Exception{
+        mqtt.getMqttClient();
+        mqtt.createConnection("matteorobidoux", "password");
+        JSONObject message = mqtt.publishDataMessage(privateKey,"Test", json);
+        assertNotNull(message);
     }
 
     @Test
-    public void MQTTDisconnectTestNullPointerException(){
-        assertThrows(NullPointerException.class, () -> {
-            mqtt.disconnect();
-        });
+    public void MQTTPublishCertificateMessageTest() throws CertificateEncodingException, JSONException, UnsupportedEncodingException{
+        mqtt.getMqttClient();
+        mqtt.createConnection("matteorobidoux", "password");
+        JSONObject message = mqtt.publishCertificateMessage(certificate);
+        assertNotNull(message);
     }
 }

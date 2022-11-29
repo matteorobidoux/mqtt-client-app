@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.hivemq.client.mqtt.MqttClient;
@@ -99,7 +100,7 @@ public class MQTT {
                             jsonObjectsMatteo.add(jsonObject);
                         } else if(publish.getTopic().toString().contains("rimdallali")){
                             jsonObjectsRim.add(jsonObject);
-                        } else if(publish.getTopic().toString().contains("rayhernaz")){
+                        } else if(publish.getTopic().toString().contains("rayhernandez")){
                             jsonObjectsRay.add(jsonObject);
                         }
                     }
@@ -123,23 +124,25 @@ public class MQTT {
     }
     
     // Publish message to a specific topic sending a JSON object which contains the datas being sent including the signature
-    public void publishDataMessage(PrivateKey privateKey, String topic, JSONObject data) throws Exception{
+    public JSONObject publishDataMessage(PrivateKey privateKey, String topic, JSONObject data) throws Exception{
         byte[] signature = signatureHelper.signMessage(privateKey, data.toString());
         data.put("signature", new String(Base64.getEncoder().encode(signature), "UTF-8"));
         client.publishWith()
                 .topic(getTopic(topic))
                 .payload(UTF_8.encode(data.toString()))
                 .send();
+        return data;
     }
 
     // Publishes a message with the certificate within it
-    public void publishCerificateMessage(String topic, Certificate certificate) throws CertificateEncodingException, JSONException, UnsupportedEncodingException{
+    public JSONObject publishCertificateMessage(Certificate certificate) throws CertificateEncodingException, JSONException, UnsupportedEncodingException{
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("certificate", new String(Base64.getEncoder().encode(certificate.getEncoded()), "UTF-8"));
         client.publishWith()
-                .topic(getTopic(topic))
+                .topic(getTopic("certificate"))
                 .payload(UTF_8.encode(jsonObject.toString()))
                 .send();
+        return jsonObject;
     }
 
     // Gets the topic using the topic path and client username to create it
