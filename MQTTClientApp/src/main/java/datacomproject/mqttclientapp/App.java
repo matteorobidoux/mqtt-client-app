@@ -4,16 +4,21 @@ import java.io.Console;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 import java.text.Normalizer;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.json.JSONException;
+
 import datacomproject.mqttclientapp.KeyStore.KeyStoreHelper;
+import datacomproject.mqttclientapp.mqtt.MQTT;
 import datacomproject.mqttclientapp.sensors.*;
 
 /**
@@ -23,11 +28,26 @@ import datacomproject.mqttclientapp.sensors.*;
 public class App {
 
     public KeyStoreHelper ksh = new KeyStoreHelper();
+    public MQTT mqtt = new MQTT();
 
     public static void main(String[] args) throws Exception {
         App app = new App();
-        app.initialize();
+        app.initializeKeyStore();
+        app.initializeMQTT();
+        // mqtt.retrieveMessage();
+
         app.displayData();
+    }
+
+    public void initializeMQTT() throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException {
+        mqtt.getMqttClient();
+        String alias = getUserAlias();
+        mqtt.createConnection("rimdallali", "password");
+        PublicKey publicKey = ksh.extractCertificate(alias).getPublicKey();
+        mqtt.retrieveMessage(publicKey);
+        mqtt.subscribe();
+        mqtt.publishCertificateMessage(ksh.extractCertificate(alias));
+        System.out.println(mqtt.certificates);
     }
 
     public void displayData() {
@@ -47,7 +67,7 @@ public class App {
         motion_sensor.startThread();
     }
 
-    public void initialize() throws Exception {
+    public void initializeKeyStore() throws Exception {
         this.getUserInput();
         // boolean validAlias = false;
         String alias = getUserAlias();

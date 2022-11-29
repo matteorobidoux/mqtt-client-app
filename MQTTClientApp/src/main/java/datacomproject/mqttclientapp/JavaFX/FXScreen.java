@@ -293,13 +293,13 @@ public class FXScreen extends HBox {
                 .build();
         
         //Setup a tile with an exit button to end the application
-        var exitButton = new Button("Exit");
+        Button exitButton = new Button("Exit");
 
         //Setup event handler for the exit button
         exitButton.setOnAction(e -> endApplication());
 
         //Setup the tile
-        var exitTile = TileBuilder.create()
+        Tile exitTile = TileBuilder.create()
                 .skinType(SkinType.CUSTOM)
                 .prefSize(150, 300)
                 .textSize(TextSize.BIGGER)

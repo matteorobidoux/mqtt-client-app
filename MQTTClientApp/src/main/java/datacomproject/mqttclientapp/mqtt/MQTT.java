@@ -85,14 +85,14 @@ public class MQTT {
     }
     
     // Rerieves all messages sent to the client and/or certificate, verifies signature if it is a message and adds the data to the correct user List
-    public void retrieveMessage(PublicKey publicKey, String alg) {
+    public void retrieveMessage(PublicKey publicKey) {
         client.toAsync().publishes(ALL, publish -> { 
             JSONObject jsonObject = new JSONObject(UTF_8.decode(publish.getPayload().get()).toString());
             if(!jsonObject.has("certificate")){    
                 try {
                     byte[] signature = Base64.getDecoder().decode(jsonObject.get("signature").toString());
                     jsonObject.remove("signature");
-                    if(signatureHelper.verifySignature(signature, publicKey, alg, jsonObject.toString())){
+                    if(signatureHelper.verifySignature(signature, publicKey, "SHA256withECDSA", jsonObject.toString())){
                         System.out.println("Received message: " +
                             publish.getTopic() + " -> " +
                             jsonObject);
