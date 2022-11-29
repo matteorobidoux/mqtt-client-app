@@ -67,7 +67,7 @@ public class App {
             //     System.out.println("WORKED: START\n" + mqtt.certificates + "\nEND");
             //     messageRetrieved = true;
             // }
-            System.out.println(mqtt.certificates);
+            System.out.println(mqtt.certificates.size());
             // System.out.println(mqtt)
         }
         
