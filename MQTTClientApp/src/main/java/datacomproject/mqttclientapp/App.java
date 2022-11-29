@@ -71,7 +71,7 @@ public class App {
         boolean messageRetrieved = false;
         mqtt.retrieveMessage(publicKey);
 
-        while(!messageRetrieved) {
+        while(messageRetrieved == false) {
             if(mqtt.certificates.size() > 0) {
                 System.out.println("WORKED");
                 messageRetrieved = true;
