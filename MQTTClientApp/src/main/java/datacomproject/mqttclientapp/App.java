@@ -62,10 +62,11 @@ public class App {
         
         boolean messageRetrieved = false;
         mqtt.retrieveMessage(publicKey);
-        
+
         while(!messageRetrieved) {
             if(!mqtt.certificates.isEmpty()) {
-                System.out.println(mqtt.certificates);
+                System.out.println("WORKED: START\n" + mqtt.certificates + "\nEND");
+                messageRetrieved = true;
             }
         }
         
