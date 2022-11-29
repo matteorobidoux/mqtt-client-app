@@ -55,7 +55,6 @@ public class App {
         }
         
         PublicKey publicKey = ksh.extractCertificate(alias).getPublicKey();
-
         
         mqtt.subscribe();
         mqtt.publishCertificateMessage(ksh.extractCertificate(alias));
@@ -63,14 +62,16 @@ public class App {
         boolean messageRetrieved = false;
         mqtt.retrieveMessage(publicKey);
 
-        while(!messageRetrieved) {
-            if(!mqtt.certificates.isEmpty()) {
-                System.out.println("WORKED: START\n" + mqtt.certificates + "\nEND");
-                messageRetrieved = true;
-            }
+        while(true) {
+            // if(!mqtt.certificates.isEmpty()) {
+            //     System.out.println("WORKED: START\n" + mqtt.certificates + "\nEND");
+            //     messageRetrieved = true;
+            // }
+            System.out.println(mqtt.certificates);
+            // System.out.println(mqtt)
         }
         
-        System.out.println(mqtt.certificates);
+        // System.out.println(mqtt.certificates);
     }
 
     public void displayData() {
