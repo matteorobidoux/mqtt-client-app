@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.hivemq.client.mqtt.MqttClient;

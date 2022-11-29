@@ -30,10 +30,11 @@ import datacomproject.mqttclientapp.sensors.*;
 public class App {
 
     public KeyStoreHelper ksh = new KeyStoreHelper();
-    public MQTT mqtt = new MQTT();
+    public MQTT mqtt;
 
     public static void main(String[] args) throws Exception {
         App app = new App();
+        
         app.initializeKeyStore();
         app.initializeMQTT();
         // mqtt.retrieveMessage();
@@ -42,7 +43,10 @@ public class App {
     }
 
     public void initializeMQTT() throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException {
+        mqtt = new MQTT();
+        System.out.println("here1");
         Mqtt5BlockingClient client = mqtt.getMqttClient();
+        System.out.println("here2");
         String alias = getUserAlias();
         mqtt.createConnection("rimdallali", "password");
         PublicKey publicKey = ksh.extractCertificate(alias).getPublicKey();
