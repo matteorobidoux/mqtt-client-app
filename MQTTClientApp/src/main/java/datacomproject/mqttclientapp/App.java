@@ -17,6 +17,8 @@ import java.util.regex.Pattern;
 
 import org.json.JSONException;
 
+import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
+
 import datacomproject.mqttclientapp.KeyStore.KeyStoreHelper;
 import datacomproject.mqttclientapp.mqtt.MQTT;
 import datacomproject.mqttclientapp.sensors.*;
@@ -40,7 +42,7 @@ public class App {
     }
 
     public void initializeMQTT() throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException {
-        mqtt.getMqttClient();
+        Mqtt5BlockingClient client = mqtt.getMqttClient();
         String alias = getUserAlias();
         mqtt.createConnection("rimdallali", "password");
         PublicKey publicKey = ksh.extractCertificate(alias).getPublicKey();
