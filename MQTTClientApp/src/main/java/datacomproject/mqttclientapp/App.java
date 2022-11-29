@@ -14,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import datacomproject.mqttclientapp.KeyStore.KeyStoreHelper;
+import datacomproject.mqttclientapp.mqtt.MQTT;
 import datacomproject.mqttclientapp.sensors.*;
 
 /**
@@ -23,11 +24,14 @@ import datacomproject.mqttclientapp.sensors.*;
 public class App {
 
     public KeyStoreHelper ksh = new KeyStoreHelper();
+    public static MQTT m = new MQTT();
 
     public static void main(String[] args) throws Exception {
         App app = new App();
         app.initialize();
         app.displayData();
+        m.getMqttClient();
+        m.createConnection("matteorobidoux", "password");
     }
 
     public void displayData() {
