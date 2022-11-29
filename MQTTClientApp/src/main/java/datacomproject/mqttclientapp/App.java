@@ -30,7 +30,7 @@ import datacomproject.mqttclientapp.sensors.*;
 public class App {
 
     public KeyStoreHelper ksh = new KeyStoreHelper();
-    public static MQTT mqtt = new MQTT();
+    public MQTT mqtt = new MQTT();
 
     public static void main(String[] args) throws Exception {
         App app = new App();
@@ -47,8 +47,13 @@ public class App {
         System.out.println("here1");
         Mqtt5BlockingClient client = mqtt.getMqttClient();
         System.out.println("here2");
-        String alias = getUserAlias();
-        mqtt.createConnection("rimdallali", "password");
+        // String alias = getUserAlias();
+        String alias = "DEMO";
+        boolean validCred = false;
+        while (!validCred) {
+            validCred = mqtt.createConnection("rimdallali", "password");
+        }
+        
         PublicKey publicKey = ksh.extractCertificate(alias).getPublicKey();
         mqtt.retrieveMessage(publicKey);
         mqtt.subscribe();

@@ -44,11 +44,11 @@ public class MQTT {
         try{
             System.out.println("Retrieving MQTT Client...");
             client = MqttClient.builder()
-                    .useMqttVersion5()
-                    .serverHost("5a81e32977cf48798ae1059437f7dd15.s1.eu.hivemq.cloud")
-                    .serverPort(8883)
-                    .sslWithDefaultConfig()
-                    .buildBlocking();
+                .useMqttVersion5()
+                .serverHost("5a81e32977cf48798ae1059437f7dd15.s1.eu.hivemq.cloud")
+                .serverPort(8883)
+                .sslWithDefaultConfig()
+                .buildBlocking();
         } catch(Mqtt5ConnAckException e){
             System.out.println("Unable to Retrieve MQTT Client!");
             System.exit(0);
