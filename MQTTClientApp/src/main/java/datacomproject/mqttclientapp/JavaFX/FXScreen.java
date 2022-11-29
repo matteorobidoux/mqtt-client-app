@@ -35,22 +35,10 @@ public class FXScreen extends HBox {
         Date timeStampDoorbell = new Date();
         
         // Encoded Images (base64 string)
-        String encodedImageRay = "";
-        String encodedImageRim = "";
-        try {
-      File myObj = new File("src/image.txt");
-      Scanner myReader = new Scanner(myObj);
-      while (myReader.hasNextLine()) {
-        String data = myReader.nextLine();
-        encodedImageRim = data;
-      }
-      myReader.close();
-    } catch (FileNotFoundException e) {
-      System.out.println("An error occurred.");
-      e.printStackTrace();
-    }
-        String encodedImageMatteo = "";
-        
+        String encodedImageRay = readImage("images/imageRay");        
+        String encodedImageRim = readImage("images/imageRim");
+        String encodedImageMatteo = readImage("images/imageMatteo");
+                
         // Temperature reading - Ray
         Tile tempTileRay = TileBuilder.create()
                        .skinType(SkinType.GAUGE)
@@ -111,7 +99,7 @@ public class FXScreen extends HBox {
                 .skinType(SkinType.IMAGE)
                 .prefSize(300, 300)
                 .title("Ray's Motion Detected Image")
-//                .image(new Image(encodedImageRay)) //add imagePath string
+                .image(new Image(encodedImageRay)) //add imagePath string
                 .imageMask(ImageMask.ROUND)
                 .text("Taken at: " + timeStampMotion)
                 .build();
@@ -281,7 +269,7 @@ public class FXScreen extends HBox {
                 .skinType(SkinType.IMAGE)
                 .prefSize(300, 300)
                 .title("Matteo's Motion Detected Image")
-//                .image(new Image(encodedImageMatteo)) //add imagePath string
+                .image(new Image(encodedImageMatteo)) //add imagePath string
                 .imageMask(ImageMask.ROUND)
                 .text("Taken at: " + timeStampMotion)
                 .build();
@@ -360,6 +348,23 @@ public class FXScreen extends HBox {
         this.getChildren().addAll(tempTilesColumn, humidtyTilesColumn, imageTilesColumn, doorbellTilesColumn, exitTile);
         this.setSpacing(5);
         
+    }
+    
+    //Reads the image base64 representation
+    private String readImage(String imagePath) {
+        try {
+            File myObj = new File(imagePath);
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                return data;
+            }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        return null;
     }
     
     //Stop the threads and close the application
