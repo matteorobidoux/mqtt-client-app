@@ -79,19 +79,25 @@ public class MQTT {
     // Client subscribes to all topics begining with mqtt/
     public void subscribe(){
         client.subscribeWith()
-                .topicFilter("mqtt/#")
-                .send();
+            .topicFilter("mqtt/#")
+            .send();
     }
     
     // Rerieves all messages sent to the client and/or certificate, verifies signature if it is a message and adds the data to the correct user List
-    public void retrieveMessage(PublicKey publicKey) {
+    public void retrieveMessage() {
         client.toAsync().publishes(ALL, publish -> { 
             JSONObject jsonObject = new JSONObject(UTF_8.decode(publish.getPayload().get()).toString());
             if(!jsonObject.has("certificate")){    
                 try {
                     byte[] signature = Base64.getDecoder().decode(jsonObject.get("signature").toString());
                     jsonObject.remove("signature");
-                    if(signatureHelper.verifySignature(signature, publicKey, "SHA256withECDSA", jsonObject.toString())){
+                    Certificate certificate = null;
+                    for (JSONObject certificateObject : certificates) {
+                        if(certificateObject.has(publish.getTopic().toString().split("/")[1])){
+                            certificate = retrieveCertificate(certificateObject, publish.getTopic().toString().split("/")[1]);
+                        }
+                    }
+                    if(signatureHelper.verifySignature(signature, certificate.getPublicKey(), "SHA256withECDSA", jsonObject.toString())){
                         System.out.println("Received message: " +
                             publish.getTopic() + " -> " +
                             jsonObject);
@@ -99,7 +105,7 @@ public class MQTT {
                             jsonObjectsMatteo.add(jsonObject);
                         } else if(publish.getTopic().toString().contains("rimdallali")){
                             jsonObjectsRim.add(jsonObject);
-                        } else if(publish.getTopic().toString().contains("rayhernandez")){
+                        } else if(publish.getTopic().toString().contains("ray")){
                             jsonObjectsRay.add(jsonObject);
                         }
                     }
@@ -155,10 +161,10 @@ public class MQTT {
     }
 
     // Takes in a jsonObject and returns a certificate
-    public Certificate retrieveCertificate(JSONObject jsonCertificate) throws CertificateException{
-        if(jsonCertificate.has("certificate")){
+    public Certificate retrieveCertificate(JSONObject jsonCertificate, String key) throws CertificateException{
+        if(jsonCertificate.has(key)){
             CertificateFactory cf   = CertificateFactory.getInstance("X.509");
-            return cf.generateCertificate(new ByteArrayInputStream(Base64.getDecoder().decode(jsonCertificate.get("certificate").toString())));
+            return cf.generateCertificate(new ByteArrayInputStream(Base64.getDecoder().decode(jsonCertificate.get(key).toString())));
         } else {
             return null;
         }

@@ -69,7 +69,7 @@ public class App {
         mqtt.publishCertificateMessage(ksh.extractCertificate(alias));
         
         boolean messageRetrieved = false;
-        mqtt.retrieveMessage(publicKey);
+        mqtt.retrieveMessage();
 
         while(messageRetrieved == false) {
             System.out.println(mqtt.certificates.size());
