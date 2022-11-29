@@ -1,4 +1,4 @@
-package datacomproject.mqttclientapp.mqtt;
+package datacomproject.KeyStore;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
