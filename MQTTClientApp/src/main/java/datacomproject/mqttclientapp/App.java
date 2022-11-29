@@ -23,6 +23,15 @@ import datacomproject.mqttclientapp.KeyStore.KeyStoreHelper;
 import datacomproject.mqttclientapp.mqtt.MQTT;
 import datacomproject.mqttclientapp.sensors.*;
 
+
+/**
+ * RimDallali
+ * Rim20021
+ * 
+ * ../KeyStore/ECcertif.ks
+ * password
+ * DEMO
+ */
 /**
  *
  * @author Rim Dallali
@@ -62,12 +71,11 @@ public class App {
         boolean messageRetrieved = false;
         mqtt.retrieveMessage(publicKey);
 
-        while(true) {
-            // if(!mqtt.certificates.isEmpty()) {
-            //     System.out.println("WORKED: START\n" + mqtt.certificates + "\nEND");
-            //     messageRetrieved = true;
-            // }
-            System.out.println(mqtt.certificates.size());
+        while(!messageRetrieved) {
+            if(mqtt.certificates.size() > 0) {
+                System.out.println("WORKED");
+                messageRetrieved = true;
+            }
             // System.out.println(mqtt)
         }
         
