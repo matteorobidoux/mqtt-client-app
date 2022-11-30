@@ -44,8 +44,7 @@ public class Row {
 
   public Row(String username) {
     this.username = username;
-    this.encodedImage = readImage("image.txt"); //TODO change that
-    this.buildRow();
+    // this.encodedImage = readImage("image");
   }
 
   public void updateDHT() {
@@ -115,7 +114,7 @@ public class Row {
         .skinType(SkinType.IMAGE)
         .prefSize(300, 300)
         .title(username + "'s Motion Detected Image")
-        .image(new Image(encodedImage)) // add imagePath string
+        // .image(new Image(encodedImage)) // add imagePath string
         .imageMask(ImageMask.ROUND)
         .text("Taken at: " + timeStampMotion)
         .build();
