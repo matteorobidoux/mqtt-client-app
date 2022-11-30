@@ -4,18 +4,34 @@ import java.io.Console;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 import java.text.Normalizer;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.json.JSONException;
+
+import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
+
 import datacomproject.mqttclientapp.KeyStore.KeyStoreHelper;
+import datacomproject.mqttclientapp.mqtt.MQTT;
 import datacomproject.mqttclientapp.sensors.*;
 
+
+/**
+ * RimDallali
+ * Rim20021
+ * 
+ * ../KeyStore/ECcertif.ks
+ * password
+ * DEMO
+ */
 /**
  *
  * @author Rim Dallali
@@ -23,11 +39,47 @@ import datacomproject.mqttclientapp.sensors.*;
 public class App {
 
     public KeyStoreHelper ksh = new KeyStoreHelper();
+    public MQTT mqtt = new MQTT();
 
     public static void main(String[] args) throws Exception {
         App app = new App();
-        app.initialize();
+        
+        app.initializeKeyStore();
+        app.initializeMQTT();
+        // mqtt.retrieveMessage();
+
         app.displayData();
+    }
+
+    public void initializeMQTT() throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException {
+        // mqtt = new MQTT();
+        System.out.println("here1");
+        Mqtt5BlockingClient client = mqtt.getMqttClient();
+        System.out.println("here2");
+        // String alias = getUserAlias();
+        String alias = "DEMO";
+        boolean validCred = false;
+        while (!validCred) {
+            validCred = mqtt.createConnection("rimdallali", "password");
+        }
+        
+        PublicKey publicKey = ksh.extractCertificate(alias).getPublicKey();
+        
+        mqtt.subscribe();
+        mqtt.publishCertificateMessage(ksh.extractCertificate(alias));
+        
+        boolean messageRetrieved = false;
+        mqtt.retrieveMessage();
+
+        while(messageRetrieved == false) {
+            System.out.println(mqtt.certificates.size());
+            if(mqtt.certificates.size() > 0) {
+                System.out.println(mqtt.certificates.get(0));
+                messageRetrieved = true;
+            }
+            // System.out.println(mqtt)
+        }
+        // System.out.println(mqtt.certificates);
     }
 
     public void displayData() {
@@ -47,7 +99,7 @@ public class App {
         motion_sensor.startThread();
     }
 
-    public void initialize() throws Exception {
+    public void initializeKeyStore() throws Exception {
         this.getUserInput();
         // boolean validAlias = false;
         String alias = getUserAlias();
