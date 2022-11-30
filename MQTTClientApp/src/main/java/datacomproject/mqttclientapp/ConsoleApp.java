@@ -39,7 +39,7 @@ import javafx.stage.Stage;
  *
  * @author Rim Dallali
  */
-public class App {
+public class ConsoleApp {
 
     public KeyStoreHelper ksh = new KeyStoreHelper();
     public MQTT mqtt = new MQTT();
@@ -47,23 +47,15 @@ public class App {
     public FXScreen fxScreen;
     TilesFXApp gui = new TilesFXApp();
 
-    public static void main(String[] args) throws Exception {
-        App app = new App();
-
-//        app.initializeKeyStore();
-//        app.initializeMQTT();
-//        app.launchGUI();
-        // mqtt.retrieveMessage();
-        app.launchGUI();
-        app.displayData();
-    }
-
-    public void launchGUI() throws IOException {
-        Platform.runLater(() -> {
-            javafx.application.Application.launch(TilesFXApp.class);
-            fxScreen = TilesFXApp.fxScreen;
-        });
-    }
+//    public static void main(String[] args) throws Exception {
+//        ConsoleApp app = new ConsoleApp();
+//
+////        app.initializeKeyStore();
+////        app.initializeMQTT();
+////        app.launchGUI();
+//        // mqtt.retrieveMessage();
+//        app.displayData();
+//    }
 
     public void initializeMQTT() throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException {
         // mqtt = new MQTT();
