@@ -46,7 +46,7 @@ public class ConsoleApp {
     public String username;
     public String password;
 
-    public FXScreen fxScreen;
+    // public FXScreen fxScreen;
     TilesFXApp gui = new TilesFXApp();
 
 //    public static void main(String[] args) throws Exception {
@@ -97,7 +97,7 @@ public class ConsoleApp {
         System.out.println(mqtt.certificates);
     }
 
-    public void displayData() throws IOException {
+    public void displayData(FXScreen fxScreen) throws IOException {
 //        fxScreen = new FXScreen();
         // getting temperature and humidity data
         System.out.println("Capturing temperature and humidity data...");

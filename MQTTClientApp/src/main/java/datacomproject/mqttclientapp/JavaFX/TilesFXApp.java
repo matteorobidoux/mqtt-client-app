@@ -29,7 +29,7 @@ public class TilesFXApp extends Application {
         try {
             // consoleApp.initializeKeyStore();
             // consoleApp.initializeMQTT();
-            consoleApp.displayData();
+            consoleApp.displayData(fxScreen);
 
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -14,7 +14,7 @@ import javafx.application.Platform;
 public class DHTSensor extends AbstractSensor {
     
     private final String programPath = "src/main/Python/DHT11.py";
-    private FXScreen fxScreen;
+    // private FXScreen fxScreen;
     
     public void startThread(FXScreen fxScreen) {
         Thread dhtThread = new Thread(() -> {
