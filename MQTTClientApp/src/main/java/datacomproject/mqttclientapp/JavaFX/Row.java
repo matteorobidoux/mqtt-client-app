@@ -63,7 +63,7 @@ public class Row {
   public void buildRow() {
     tempTile = TileBuilder.create()
         .skinType(SkinType.GAUGE)
-        .prefSize(300, 150)
+        .prefSize(450, 225)
         .title(username + "'s Temperature")
         .unit("°C")
         .threshold(100)
@@ -75,24 +75,24 @@ public class Row {
     textAreaTemp.setStyle("-fx-control-inner-background: #2A2A2A; "
         + "-fx-text-inner-color: white;"
         + "-fx-text-box-border: transparent;");
-    textAreaTemp.setText("\n\nTaken at: \n" + timeStampDHT);
+    textAreaTemp.setText("" + timeStampDHT);
     textAreaTempVBox = new VBox(textAreaTemp);
 
     tempTimeTile = TileBuilder.create()
         .skinType(SkinType.CUSTOM)
-        .prefSize(300, 150)
+        .prefSize(150, 75)
         .textSize(TextSize.BIGGER)
-        .title(username + "'s Temperature")
+        .title("Temperature taken at: ")
         .graphic(textAreaTempVBox)
         .build();
 
     humidityTile = TileBuilder.create()
         .skinType(SkinType.PERCENTAGE)
-        .prefSize(300, 150)
+        .prefSize(450, 225)
         .title(username + "'s Humidity")
         .unit("%")
         .maxValue(100)
-        .text("Taken at: " + timeStampDHT)
+        .text("" + timeStampDHT)
         .build();
 
     TextArea textAreaHumidity = new TextArea();
@@ -100,14 +100,14 @@ public class Row {
     textAreaHumidity.setStyle("-fx-control-inner-background: #2A2A2A; "
         + "-fx-text-inner-color: white;"
         + "-fx-text-box-border: transparent;");
-    textAreaHumidity.setText("\n\nTaken at: \n" + timeStampDHT);
+    textAreaHumidity.setText(""+timeStampDHT);
     textAreaHumidityVBox = new VBox(textAreaHumidity);
 
     humidityTimeTile = TileBuilder.create()
         .skinType(SkinType.CUSTOM)
-        .prefSize(300, 150)
+        .prefSize(150, 75)
         .textSize(TextSize.BIGGER)
-        .title(username + "'s Humidity")
+        .title("Humidity taken at: ")
         .graphic(textAreaHumidityVBox)
         .build();
 
