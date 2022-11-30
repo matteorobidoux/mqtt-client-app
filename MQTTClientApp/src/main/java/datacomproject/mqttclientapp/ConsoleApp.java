@@ -43,6 +43,8 @@ public class ConsoleApp {
 
     public KeyStoreHelper ksh = new KeyStoreHelper();
     public MQTT mqtt = new MQTT();
+    public String username;
+    public String password;
 
     public FXScreen fxScreen;
     TilesFXApp gui = new TilesFXApp();
@@ -57,7 +59,13 @@ public class ConsoleApp {
 //        app.displayData();
 //    }
 
-    public void initializeMQTT() throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException {
+    //TODO update this to get input
+    public void getMqttCredentials() {
+        this.username = "rimdallali";
+        this.password = "password";
+    }
+
+    public void initializeMQTT() throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException { 
         // mqtt = new MQTT();
         System.out.println("here1");
         Mqtt5BlockingClient client = mqtt.getMqttClient();
@@ -66,7 +74,8 @@ public class ConsoleApp {
         String alias = "DEMO";
         boolean validCred = false;
         while (!validCred) {
-            validCred = mqtt.createConnection("rimdallali", "password");
+            getMqttCredentials();
+            validCred = mqtt.createConnection(username, password);
         }
 
         PublicKey publicKey = ksh.extractCertificate(alias).getPublicKey();
@@ -85,7 +94,7 @@ public class ConsoleApp {
             }
             // System.out.println(mqtt)
         }
-        // System.out.println(mqtt.certificates);
+        System.out.println(mqtt.certificates);
     }
 
     public void displayData() throws IOException {

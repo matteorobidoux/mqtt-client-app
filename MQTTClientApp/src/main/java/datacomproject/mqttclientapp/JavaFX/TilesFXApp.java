@@ -27,11 +27,13 @@ public class TilesFXApp extends Application {
         consoleApp = new ConsoleApp();
         
         try {
-            consoleApp.initializeKeyStore();
+            // consoleApp.initializeKeyStore();
+            // consoleApp.initializeMQTT();
+            consoleApp.displayData();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        consoleApp.initializeMQTT();
         
         Scene scene = new Scene(fxScreen); //1060, 910
         TilesFXApp.theStage = stage;
