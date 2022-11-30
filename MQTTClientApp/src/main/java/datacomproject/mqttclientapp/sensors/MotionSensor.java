@@ -4,6 +4,7 @@ import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import datacomproject.mqttclientapp.Camera.CameraApp;
 import datacomproject.mqttclientapp.JavaFX.FXScreen;
+import javafx.application.Platform;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -41,15 +42,22 @@ public class MotionSensor extends AbstractSensor {
 
                             CameraApp runApp = new CameraApp();
                             runApp.execute(pi4j);
-                            try {
-                                Path imagePath = Paths.get("./image.txt");
-                                byte[] imageBytes = Files.readAllBytes(imagePath);
-                                InputStream targetStream = new ByteArrayInputStream(imageBytes);
-                                
-                            } catch (IOException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // fxScreen.row1.updateDoorbell(timeStamp);
+                                    try {
+                                        Path imagePath = Paths.get("./image.txt");
+                                        byte[] imageBytes = Files.readAllBytes(imagePath);
+                                        InputStream targetStream = new ByteArrayInputStream(imageBytes);
+                                        fxScreen.row1.updateImage(targetStream);
+                                    } catch (IOException e) {
+                                        // ignore
+                                    }
+
+                                }
+                            });
+                            
 
                             // Shutdown Pi4J
                             pi4j.shutdown();
