@@ -56,11 +56,11 @@ public class Row {
   }
 
   public void updateImage() {
-
+ 
   }
 
-  public void updateDoorbell() {
-      
+  public void updateDoorbell(Date timeStamp) {
+      doorbellTextArea.setText("\n\nDoorbell pressed at: \n" + timeStamp);
   }
 
   public void buildRow() {
@@ -73,7 +73,7 @@ public class Row {
         .build();
 
     // container for timestamp for temperature DHT11 sensors
-    TextArea textAreaTemp = new TextArea();
+    textAreaTemp = new TextArea();
     textAreaTemp.setEditable(false);
     textAreaTemp.setStyle("-fx-control-inner-background: #2A2A2A; "
         + "-fx-text-inner-color: white;"
@@ -98,7 +98,7 @@ public class Row {
         .text("" + timeStampDHT)
         .build();
 
-    TextArea textAreaHumidity = new TextArea();
+    textAreaHumidity = new TextArea();
     textAreaHumidity.setEditable(false);
     textAreaHumidity.setStyle("-fx-control-inner-background: #2A2A2A; "
         + "-fx-text-inner-color: white;"
