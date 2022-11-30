@@ -44,6 +44,7 @@ public class Row {
 
   public Row(String username) {
     this.username = username;
+    this.buildRow();
     // this.encodedImage = readImage("image");
   }
 
