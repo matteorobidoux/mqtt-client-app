@@ -1,11 +1,7 @@
 package datacomproject.mqttclientapp.JavaFX;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.Scanner;
-
 import eu.hansolo.tilesfx.Tile;
 import eu.hansolo.tilesfx.TileBuilder;
 import eu.hansolo.tilesfx.Tile.ImageMask;
@@ -20,7 +16,7 @@ public class Row {
   Date timeStampMotion = new Date();
   Date timeStampDoorbell = new Date();
 
-  Tile tempTile;
+  Tile tempTile; 
   Tile tempTimeTile;
   Tile humidityTile;
   Tile doorbellTile;
@@ -154,21 +150,5 @@ public class Row {
 
     humidityTimeTilesColumn = new VBox(humidityTile, humidityTimeTile);
     humidityTimeTilesColumn.setMinWidth(300);
-  }
-
-  private String readImage(String imagePath) {
-    try {
-      File myObj = new File(imagePath);
-      Scanner myReader = new Scanner(myObj);
-      while (myReader.hasNextLine()) {
-        String data = myReader.nextLine();
-        return data;
-      }
-      myReader.close();
-    } catch (FileNotFoundException e) {
-      System.out.println("An error occurred.");
-      e.printStackTrace();
-    }
-    return null;
   }
 }

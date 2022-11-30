@@ -4,14 +4,10 @@ package datacomproject.mqttclientapp.JavaFX;
 import eu.hansolo.tilesfx.*;
 import eu.hansolo.tilesfx.Tile.*;
 import eu.hansolo.tilesfx.TileBuilder;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
 import javafx.application.Platform;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
-import javafx.scene.image.*;
 
 /**
  * @author Ray Hernaez

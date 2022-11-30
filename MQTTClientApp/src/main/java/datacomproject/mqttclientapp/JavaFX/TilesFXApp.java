@@ -2,8 +2,6 @@ package datacomproject.mqttclientapp.JavaFX;
 
 import datacomproject.mqttclientapp.ConsoleApp;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;

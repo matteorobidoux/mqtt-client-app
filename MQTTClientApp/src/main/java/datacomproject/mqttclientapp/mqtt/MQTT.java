@@ -97,9 +97,7 @@ public class MQTT {
                         }
                     }
                     if(signatureHelper.verifySignature(signature, certificate.getPublicKey(), "SHA256withECDSA", jsonObject.toString())){
-                        System.out.println("Received message: " +
-                            publish.getTopic() + " -> " +
-                            jsonObject);
+                        System.out.println("Received message: " + publish.getTopic() + " -> " + jsonObject);
                         if(publish.getTopic().toString().contains("matteorobidoux")){
                             jsonObjectsMatteo.add(jsonObject);
                         } else if(publish.getTopic().toString().contains("rimdallali")){
@@ -112,9 +110,7 @@ public class MQTT {
                     System.out.println("There Was A Problem Verifying The Signature..." + e);
                 }
             } else {
-                System.out.println("Received Certificate: " +
-                            publish.getTopic() + " -> " +
-                            jsonObject);
+                System.out.println("Received Certificate: " + publish.getTopic() + " -> " + jsonObject);
                 try {
                     JSONObject certificateJSONObject = new JSONObject();
                     certificateJSONObject.put(publish.getTopic().toString().split("/")[1], jsonObject.get("certificate"));
@@ -122,7 +118,6 @@ public class MQTT {
                 } catch (JSONException e) {
                     System.out.println("Error Retrieving Certificate");
                 }
-                          
             }
         });
     }
@@ -130,7 +125,7 @@ public class MQTT {
     // Publish message to a specific topic sending a JSON object which contains the datas being sent including the signature
     public JSONObject publishDataMessage(PrivateKey privateKey, String topic, JSONObject data) throws Exception{
         byte[] signature = signatureHelper.signMessage(privateKey, data.toString());
-        data.put("signature", new String(Base64.getEncoder().encode(signature), "UTF-8"));
+        data.put("signature", new String(Base64.getEncoder().encode(signature), "UTF-8")); 
         client.publishWith()
                 .topic(getTopic(topic))
                 .payload(UTF_8.encode(data.toString()))

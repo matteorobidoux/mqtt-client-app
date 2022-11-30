@@ -6,17 +6,13 @@ import datacomproject.mqttclientapp.Camera.CameraApp;
 import datacomproject.mqttclientapp.JavaFX.FXScreen;
 import javafx.application.Platform;
 
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
-import javax.imageio.*;
 
 /**
  *
@@ -54,11 +50,8 @@ public class MotionSensor extends AbstractSensor {
                                     } catch (IOException e) {
                                         // ignore
                                     }
-
                                 }
                             });
-                            
-
                             // Shutdown Pi4J
                             pi4j.shutdown();
                         });

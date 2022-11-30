@@ -1,10 +1,9 @@
 package datacomproject.mqttclientapp.sensors;
 
 import datacomproject.mqttclientapp.JavaFX.FXScreen;
-import java.io.IOException;
+import datacomproject.mqttclientapp.mqtt.MQTT;
+
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 
 /**
@@ -14,8 +13,8 @@ import javafx.application.Platform;
 public class DHTSensor extends AbstractSensor {
     
     private final String programPath = "src/main/Python/DHT11.py";
-    // private FXScreen fxScreen;
-    
+    public MQTT mqtt = new MQTT();
+
     public void startThread(FXScreen fxScreen) {
         Thread dhtThread = new Thread(() -> {
             while (true) {
@@ -24,6 +23,7 @@ public class DHTSensor extends AbstractSensor {
                     double humidity = Double.parseDouble(output.split(" ")[0]);
                     double temperature = Double.parseDouble(output.split(" ")[1]);
                     Date timeStamp = new Date();
+                    // mqtt.publishDataMessage(null, output, null);
 //                    fxScreen = new FXScreen();
                     
                     Platform.runLater(new Runnable() {
