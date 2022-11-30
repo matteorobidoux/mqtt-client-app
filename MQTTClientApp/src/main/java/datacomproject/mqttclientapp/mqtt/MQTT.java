@@ -3,7 +3,6 @@ package datacomproject.mqttclientapp.mqtt;
 import datacomproject.mqttclientapp.KeyStore.*;
 
 import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.hivemq.client.mqtt.MqttClient;
@@ -45,11 +43,11 @@ public class MQTT {
         try{
             System.out.println("Retrieving MQTT Client...");
             client = MqttClient.builder()
-                    .useMqttVersion5()
-                    .serverHost("5a81e32977cf48798ae1059437f7dd15.s1.eu.hivemq.cloud")
-                    .serverPort(8883)
-                    .sslWithDefaultConfig()
-                    .buildBlocking();
+                .useMqttVersion5()
+                .serverHost("5a81e32977cf48798ae1059437f7dd15.s1.eu.hivemq.cloud")
+                .serverPort(8883)
+                .sslWithDefaultConfig()
+                .buildBlocking();
         } catch(Mqtt5ConnAckException e){
             System.out.println("Unable to Retrieve MQTT Client!");
             System.exit(0);
@@ -80,8 +78,8 @@ public class MQTT {
     // Client subscribes to all topics begining with mqtt/
     public void subscribe(){
         client.subscribeWith()
-                .topicFilter("mqtt/#")
-                .send();
+            .topicFilter("mqtt/#")
+            .send();
     }
     
     // Rerieves all messages sent to the client and/or certificate, verifies signature if it is a message and adds the data to the correct user List
@@ -136,6 +134,7 @@ public class MQTT {
         client.publishWith()
                 .topic(getTopic(topic))
                 .payload(UTF_8.encode(data.toString()))
+                .retain(true)
                 .send();
         return data;
     }
@@ -147,6 +146,7 @@ public class MQTT {
         client.publishWith()
                 .topic(getTopic("certificate"))
                 .payload(UTF_8.encode(jsonObject.toString()))
+                .retain(true)
                 .send();
         return jsonObject;
     }
