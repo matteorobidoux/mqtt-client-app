@@ -79,7 +79,6 @@ public class App {
             }
             // System.out.println(mqtt)
         }
-        
         // System.out.println(mqtt.certificates);
     }
 

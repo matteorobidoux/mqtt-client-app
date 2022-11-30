@@ -3,7 +3,6 @@ package datacomproject.mqttclientapp.mqtt;
 import datacomproject.mqttclientapp.KeyStore.*;
 
 import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
@@ -135,6 +134,7 @@ public class MQTT {
         client.publishWith()
                 .topic(getTopic(topic))
                 .payload(UTF_8.encode(data.toString()))
+                .retain(true)
                 .send();
         return data;
     }
@@ -146,6 +146,7 @@ public class MQTT {
         client.publishWith()
                 .topic(getTopic("certificate"))
                 .payload(UTF_8.encode(jsonObject.toString()))
+                .retain(true)
                 .send();
         return jsonObject;
     }

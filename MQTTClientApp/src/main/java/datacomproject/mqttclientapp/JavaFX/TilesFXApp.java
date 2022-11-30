@@ -19,7 +19,6 @@ public class TilesFXApp extends Application {
     public void start(Stage stage) throws IOException {
         Scene scene = new Scene(new FXScreen()); //1060, 910
         TilesFXApp.theStage = stage;
-        
         //Set the active scene
         theStage.setScene(scene);
         theStage.show();
