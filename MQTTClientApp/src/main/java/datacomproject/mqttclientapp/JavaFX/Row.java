@@ -2,6 +2,7 @@ package datacomproject.mqttclientapp.JavaFX;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -26,7 +27,7 @@ public class Row {
   Tile humidityTimeTile;
 
   Tile imageTile;
-  String encodedImage;
+  InputStream imageInputStream;
 
   VBox textAreaTempVBox;
   TextArea textAreaTemp;
@@ -45,7 +46,6 @@ public class Row {
   public Row(String username) {
     this.username = username;
     this.buildRow();
-    // this.encodedImage = readImage("image");
   }
 
   public void updateDHT(double temperature, double humidity, Date timestamp) {
@@ -55,12 +55,21 @@ public class Row {
       textAreaHumidity.setText(timestamp.toString());
   }
 
-  public void updateImage() {
- 
+  public void updateImage(InputStream imageIS) {
+    this.imageInputStream = imageIS;
+    imageTile = TileBuilder.create()
+        .skinType(SkinType.IMAGE)
+        .prefSize(300, 300)
+        .title(username + "'s Motion Detected Image")
+        .image(new Image(imageInputStream)) // add imagePath string
+        .imageMask(ImageMask.ROUND)
+        .text("Taken at: " + timeStampMotion)
+        .build(); 
+    // imageTile.setValue(imageIS); 
   }
 
   public void updateDoorbell(Date timeStamp) {
-      doorbellTextArea.setText("\n\nDoorbell pressed at: \n" + timeStamp);
+      doorbellTextArea.setText("\n\nDoorbell pressed at: \n" + timeStamp); 
   }
 
   public void buildRow() {
@@ -118,7 +127,7 @@ public class Row {
         .skinType(SkinType.IMAGE)
         .prefSize(300, 300)
         .title(username + "'s Motion Detected Image")
-        // .image(new Image(encodedImage)) // add imagePath string
+        .image(new Image(imageInputStream)) // add imagePath string
         .imageMask(ImageMask.ROUND)
         .text("Taken at: " + timeStampMotion)
         .build();

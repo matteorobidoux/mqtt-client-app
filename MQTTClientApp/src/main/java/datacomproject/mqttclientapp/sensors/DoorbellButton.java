@@ -29,7 +29,6 @@ public class DoorbellButton extends AbstractSensor {
                             }
                         });
                     } else if (output.equals("off") && buttonState) {
-                        System.out.println("button state => released");
                         buttonState = false;
                     }
 
