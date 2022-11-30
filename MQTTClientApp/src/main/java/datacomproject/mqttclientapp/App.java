@@ -18,19 +18,22 @@ import java.util.regex.Pattern;
 import org.json.JSONException;
 
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
+import datacomproject.mqttclientapp.JavaFX.FXScreen;
+import datacomproject.mqttclientapp.JavaFX.TilesFXApp;
 
 import datacomproject.mqttclientapp.KeyStore.KeyStoreHelper;
 import datacomproject.mqttclientapp.mqtt.MQTT;
 import datacomproject.mqttclientapp.sensors.*;
-
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.stage.Stage;
 
 /**
- * RimDallali
- * Rim20021
- * 
- * ../KeyStore/ECcertif.ks
- * password
- * DEMO
+ * RimDallali Rim20021
+ *
+ * ../KeyStore/ECcertif.ks password DEMO
  */
 /**
  *
@@ -41,14 +44,25 @@ public class App {
     public KeyStoreHelper ksh = new KeyStoreHelper();
     public MQTT mqtt = new MQTT();
 
+    public FXScreen fxScreen;
+    TilesFXApp gui = new TilesFXApp();
+
     public static void main(String[] args) throws Exception {
         App app = new App();
-        
-        app.initializeKeyStore();
-        app.initializeMQTT();
-        // mqtt.retrieveMessage();
 
+//        app.initializeKeyStore();
+//        app.initializeMQTT();
+//        app.launchGUI();
+        // mqtt.retrieveMessage();
+        app.launchGUI();
         app.displayData();
+    }
+
+    public void launchGUI() throws IOException {
+        Platform.runLater(() -> {
+            javafx.application.Application.launch(TilesFXApp.class);
+            fxScreen = TilesFXApp.fxScreen;
+        });
     }
 
     public void initializeMQTT() throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException {
@@ -62,18 +76,18 @@ public class App {
         while (!validCred) {
             validCred = mqtt.createConnection("rimdallali", "password");
         }
-        
+
         PublicKey publicKey = ksh.extractCertificate(alias).getPublicKey();
-        
+
         mqtt.subscribe();
         mqtt.publishCertificateMessage(ksh.extractCertificate(alias));
-        
+
         boolean messageRetrieved = false;
         mqtt.retrieveMessage();
 
-        while(messageRetrieved == false) {
+        while (messageRetrieved == false) {
             System.out.println(mqtt.certificates.size());
-            if(mqtt.certificates.size() > 0) {
+            if (mqtt.certificates.size() > 0) {
                 System.out.println(mqtt.certificates.get(0));
                 messageRetrieved = true;
             }
@@ -82,21 +96,22 @@ public class App {
         // System.out.println(mqtt.certificates);
     }
 
-    public void displayData() {
+    public void displayData() throws IOException {
+//        fxScreen = new FXScreen();
         // getting temperature and humidity data
         System.out.println("Capturing temperature and humidity data...");
         DHTSensor dht_sensor = new DHTSensor();
-        dht_sensor.startThread();
+        dht_sensor.startThread(fxScreen);
 
         // getting doorbell data if pressed
         System.out.println("getting doorbell data if pressed...");
         DoorbellButton doorbell_button = new DoorbellButton();
-        doorbell_button.startThread();
+        doorbell_button.startThread(fxScreen);
 
         // getting doorbell data if pressed
         System.out.println("getting motion sensor data if detected...");
         MotionSensor motion_sensor = new MotionSensor();
-        motion_sensor.startThread();
+        motion_sensor.startThread(fxScreen);
     }
 
     public void initializeKeyStore() throws Exception {
@@ -155,7 +170,7 @@ public class App {
                 // normalize the alias input
                 normalizedAlias = Normalizer.normalize(alias, Normalizer.Form.NFKC);
                 validAlias = ksh.checkAlias(normalizedAlias);
-                scanner.close(); 
+                scanner.close();
                 if (!validAlias) {
                     System.out.println("Invalid Alias, please try again");
                 } else {
@@ -171,7 +186,7 @@ public class App {
     /**
      * Prompts the user to enter a filename for where to store the secret key
      * Helper method
-     * 
+     *
      * @return String
      * @throws EOFException
      */
@@ -207,9 +222,8 @@ public class App {
     }
 
     /**
-     * Password validation
-     * Helper method
-     * 
+     * Password validation Helper method
+     *
      * @param password
      * @return boolean
      */

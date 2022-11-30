@@ -48,8 +48,11 @@ public class Row {
     // this.encodedImage = readImage("image");
   }
 
-  public void updateDHT() {
-
+  public void updateDHT(double temperature, double humidity, Date timestamp) {
+      tempTile.setValue(temperature);
+      humidityTile.setValue(humidity);
+      textAreaTemp.setText(timestamp.toString());
+      textAreaHumidity.setText(timestamp.toString());
   }
 
   public void updateImage() {
@@ -57,7 +60,7 @@ public class Row {
   }
 
   public void updateDoorbell() {
-
+      
   }
 
   public void buildRow() {

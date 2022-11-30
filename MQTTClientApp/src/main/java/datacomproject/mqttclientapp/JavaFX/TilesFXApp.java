@@ -14,10 +14,13 @@ public class TilesFXApp extends Application {
     
     //Allows the stage be easily accessible
     public static Stage theStage;
-
+    public static FXScreen fxScreen;
+    
+    
     @Override
     public void start(Stage stage) throws IOException {
-        Scene scene = new Scene(new FXScreen()); //1060, 910
+        fxScreen = new FXScreen();
+        Scene scene = new Scene(fxScreen); //1060, 910
         TilesFXApp.theStage = stage;
         //Set the active scene
         theStage.setScene(scene);

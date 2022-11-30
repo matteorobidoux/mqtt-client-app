@@ -1,5 +1,6 @@
 package datacomproject.mqttclientapp.sensors;
 
+import datacomproject.mqttclientapp.JavaFX.FXScreen;
 import java.util.Date;
 
 /**
@@ -10,7 +11,7 @@ public class DoorbellButton extends AbstractSensor {
 
     private final String programPath = "src/main/Python/Doorbell.py";
 
-    public void startThread() {
+    public void startThread(FXScreen fxScreen) {
         Thread doorbellThread = new Thread(() -> {
             boolean buttonState = false;
             while (true) {
@@ -19,6 +20,7 @@ public class DoorbellButton extends AbstractSensor {
                     if (output.equals("on") && !buttonState) {
                         buttonState = true;
                         Date timeStamp = new Date();
+//                        fxScreen.row1.updateDHT(temperature, humidity, timeStamp);
                         System.out.println("button state => pressed at " + timeStamp);
                         //take timestamp here
                     } else if (output.equals("off") && buttonState) {

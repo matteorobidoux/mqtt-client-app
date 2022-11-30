@@ -3,6 +3,7 @@ package datacomproject.mqttclientapp.sensors;
 import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import datacomproject.mqttclientapp.Camera.CameraApp;
+import datacomproject.mqttclientapp.JavaFX.FXScreen;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ public class MotionSensor extends AbstractSensor {
 
     private final String programPath = "src/main/Python/SenseLED.py";
 
-    public void startThread() {
+    public void startThread(FXScreen fxScreen) {
         Thread motionThread = new Thread(() -> {
             boolean motionState = false;
             while (true) {
