@@ -31,6 +31,7 @@ public class FXScreen extends HBox {
 		Row row1 = new Row("rim");
 		Row row2 = new Row("matteo");
 		Row row3 = new Row("ray");
+		
 
 		// Setup a tile with an exit button to end the application
 		Button exitButton = new Button("Exit");

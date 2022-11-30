@@ -45,6 +45,7 @@ public class Row {
   public Row(String username) {
     this.username = username;
     this.encodedImage = readImage("image.txt"); //TODO change that
+    this.buildRow();
   }
 
   public void updateDHT() {
