@@ -46,12 +46,11 @@ public class FXScreen extends HBox {
 				.build();
 
 		///////////////////////////////////////////////
-		VBox tempTilesColumn = new VBox(row1.tempTimeTilesColumn, row3.tempTimeTilesColumn, row3.tempTimeTilesColumn);
+		VBox tempTilesColumn = new VBox(row1.tempTimeTilesColumn, row2.tempTimeTilesColumn, row3.tempTimeTilesColumn);
 		tempTilesColumn.setMinWidth(300);
 		tempTilesColumn.setSpacing(5);
 
-		VBox humidtyTilesColumn = new VBox(row1.humidityTimeTilesColumn, row2.humidityTimeTilesColumn,
-				row3.humidityTimeTilesColumn);
+		VBox humidtyTilesColumn = new VBox(row1.humidityTimeTilesColumn, row2.humidityTimeTilesColumn, row3.humidityTimeTilesColumn);
 		humidtyTilesColumn.setMinWidth(300);
 		humidtyTilesColumn.setSpacing(5);
 
