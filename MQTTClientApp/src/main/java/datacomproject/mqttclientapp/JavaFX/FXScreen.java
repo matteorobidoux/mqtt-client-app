@@ -9,10 +9,6 @@ import javafx.application.Platform;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 
-/**
- * @author Ray Hernaez
- */
-
 /* Class to Create the GUI with the help of TilesFX library */
 public class FXScreen extends HBox {
 

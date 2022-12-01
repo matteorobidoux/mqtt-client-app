@@ -11,7 +11,6 @@ import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.text.Normalizer;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,10 +18,11 @@ import org.json.JSONException;
 
 import datacomproject.mqttclientapp.JavaFX.FXScreen;
 import datacomproject.mqttclientapp.JavaFX.TilesFXApp;
-
+import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import datacomproject.mqttclientapp.KeyStore.KeyStoreHelper;
 import datacomproject.mqttclientapp.mqtt.MQTT;
 import datacomproject.mqttclientapp.sensors.*;
+
 /**
  * RimDallali Rim20021
  *
@@ -44,24 +44,17 @@ public class ConsoleApp {
     Console console = System.console();
     TilesFXApp gui = new TilesFXApp();
 
-    // TODO update this to get input
-    // public void getMqttCredentials() {
-    // this.username = "rimdallali";
-    // this.password = "password";
-    // }
-
-    public void initializeMQTT()
-            throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException {
-        mqtt.getMqttClient();
+    public void initializeMQTT() throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException {
+        Mqtt5BlockingClient client = mqtt.getMqttClient();
 
         boolean validCred = false;
         while (!validCred) {
             getMQTTUserInput();
-            validCred = mqtt.createConnection(username, password);
+            validCred = mqtt.createConnection("rimdallali", "password");
         }
 
         mqtt.subscribe();
-        mqtt.publishCertificateMessage(ksh.extractCertificate(this.alias));
+        mqtt.publishCertificateMessage(ksh.extractCertificate(alias));
 
         boolean messageRetrieved = false;
         mqtt.retrieveMessage();
@@ -76,7 +69,7 @@ public class ConsoleApp {
         System.out.println(mqtt.certificates);
     }
 
-    public void displayData(FXScreen fxScreen) throws IOException {
+    public void displayData(FXScreen fxScreen) {
         // getting temperature and humidity data
         System.out.println("Capturing temperature and humidity data...");
         DHTSensor dht_sensor = new DHTSensor();
@@ -105,7 +98,6 @@ public class ConsoleApp {
     }
 
     public void getMQTTUserInput() {
-        Console console = System.console();
         // getting and validating username
         System.out.println("------------------------------------------------");
         String user = getMQTTUsername();
@@ -118,8 +110,6 @@ public class ConsoleApp {
     }
 
     public void getKeyStoreUserInput() throws Exception {
-//        Console console = System.console();
-
         // getting and validating filename
         System.out.println("------------------------------------------------");
         System.out.println("-- Provide path where the keystore is located --");
