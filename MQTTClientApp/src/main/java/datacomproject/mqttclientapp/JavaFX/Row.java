@@ -31,7 +31,7 @@ public class Row {
   VBox textAreaHumidityVBox;
   static TextArea textAreaHumidity;
 
-  TextArea doorbellTextArea;
+  static TextArea doorbellTextArea;
   VBox doorbellTextAreaVBox;
 
   VBox humidityTimeTilesColumn;
@@ -64,7 +64,7 @@ public class Row {
     // imageTile.setValue(imageIS); 
   }
 
-  public void updateDoorbell(Date timeStamp) {
+  public static void updateDoorbell(Date timeStamp) {
       doorbellTextArea.setText("\n\nDoorbell pressed at: \n" + timeStamp); 
   }
 

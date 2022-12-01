@@ -138,9 +138,12 @@ public class MQTT {
     private void updateData(List<JSONObject> jsonObjectList) {
         double temperature = Double.parseDouble(jsonObjectList.get(0).getString("temperature"));
         double humidity = Double.parseDouble(jsonObjectList.get(0).getString("humidity"));
-        Date timeStamp = new Date();
+        Date timeStampDHT = new Date();
+        // Date timeStampMotion = new Date();
+        Date timeStampDoorbell = new Date();
 
-        Row.updateDHT(temperature, humidity, timeStamp);
+        Row.updateDHT(temperature, humidity, timeStampDHT);
+        Row.updateDoorbell(timeStampDoorbell);
     }
     
     // Publish message to a specific topic sending a JSON object which contains the datas being sent including the signature
