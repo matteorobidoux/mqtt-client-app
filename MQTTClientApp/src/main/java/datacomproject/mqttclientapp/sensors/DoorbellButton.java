@@ -5,40 +5,40 @@ import javafx.application.Platform;
 
 import java.util.Date;
 
-/**
- *
- * @author Rim Dallali
- */
 public class DoorbellButton extends AbstractSensor {
 
-    private final String programPath = "src/main/Python/Doorbell.py";
+	private final String programPath = "src/main/Python/Doorbell.py";
 
-    public void startThread(FXScreen fxScreen) {
-        Thread doorbellThread = new Thread(() -> {
-            boolean buttonState = false;
-            while (true) {
-                try {
-                    String output = callProcess(programPath);
-                    if (output.equals("on") && !buttonState) {
-                        buttonState = true;
-                        Date timeStamp = new Date();
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                fxScreen.row1.updateDoorbell(timeStamp);
-                            }
-                        });
-                    } else if (output.equals("off") && buttonState) {
-                        buttonState = false;
-                    }
+	/**
+	 * Starts the thread to retrieve sensor data from the doorbell
+	 * 
+	 * @param fxScreen
+	 */
+	public void startThread(FXScreen fxScreen) {
+		Thread doorbellThread = new Thread(() -> {
+			boolean buttonState = false;
+			while (true) {
+				try {
+					String output = callProcess(programPath);
+					if (output.equals("on") && !buttonState) {
+						buttonState = true;
+						Date timeStamp = new Date();
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								fxScreen.row1.updateDoorbell(timeStamp);
+							}
+						});
+					} else if (output.equals("off") && buttonState) {
+						buttonState = false;
+					}
+				} catch (Exception ex) {
+					System.err.println("exampleThread thread got interrupted");
+				}
+			}
+		});
 
-                } catch (Exception ex) {
-                    System.err.println("exampleThread thread got interrupted");
-                }
-            }
-        });
-
-        //Start the thread
-        doorbellThread.start();
-    }
+		// Start the thread
+		doorbellThread.start();
+	}
 }

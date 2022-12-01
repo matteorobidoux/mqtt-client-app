@@ -1,26 +1,16 @@
 package datacomproject.mqtt;
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
- */
 
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
-
 import datacomproject.mqttclientapp.KeyStore.KeyStoreHelper;
 import datacomproject.mqttclientapp.mqtt.MQTT;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.UnsupportedEncodingException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateEncodingException;
 import java.security.spec.ECGenParameterSpec;
 
 /**
@@ -69,7 +59,7 @@ public class MQTTTest{
     }
 
     @Test
-    public void MQTTPublishCertificateMessageTest() throws CertificateEncodingException, JSONException, UnsupportedEncodingException{
+    public void MQTTPublishCertificateMessageTest() throws Exception{
         mqtt.getMqttClient();
         mqtt.createConnection("matteorobidoux", "password");
         JSONObject message = mqtt.publishCertificateMessage(certificate);
