@@ -55,7 +55,7 @@ public class ConsoleApp {
 						}
         }
 
-        mqtt.retrieveFX(gui.fxScreen);
+        mqtt.retrieveFX(gui.fxScreen, ksh);
         mqtt.subscribe();
         mqtt.publishCertificateMessage(ksh.extractCertificate(alias));
 

@@ -23,6 +23,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -38,6 +40,7 @@ public class MQTT {
     public List<JSONObject> jsonObjectsRim = new ArrayList<JSONObject>();
     public List<JSONObject> certificates = new ArrayList<JSONObject>();
     public FXScreen fxScreen;
+    public KeyStoreHelper ksh;
 
     // Retrives MQTT Client
     public Mqtt5BlockingClient getMqttClient(){
@@ -91,12 +94,8 @@ public class MQTT {
                 try {
                     byte[] signature = Base64.getDecoder().decode(jsonObject.get("signature").toString());
                     jsonObject.remove("signature");
-                    Certificate certificate = null;
-                    for (JSONObject certificateObject : certificates) {
-                        if(certificateObject.has(publish.getTopic().toString().split("/")[1])){
-                            certificate = retrieveCertificate(certificateObject, publish.getTopic().toString().split("/")[1]);
-                        }
-                    }
+                    Certificate certificate = ksh.extractCertificate(publish.getTopic().toString().split("/")[1]);
+                    
                     if(signatureHelper.verifySignature(signature, certificate.getPublicKey(), "SHA256withECDSA", jsonObject.toString())){
                         System.out.println("Received message: " + publish.getTopic() + " -> " + jsonObject);
                         if(publish.getTopic().toString().contains("matteorobidoux")){
@@ -185,11 +184,14 @@ public class MQTT {
             } else {
                 System.out.println("Received Certificate: " + publish.getTopic() + " -> " + jsonObject);
                 try {
-                    JSONObject certificateJSONObject = new JSONObject();
-                    certificateJSONObject.put(publish.getTopic().toString().split("/")[1], jsonObject.get("certificate"));
-                    certificates.add(certificateJSONObject);
+                    CertificateFactory cf   = CertificateFactory.getInstance("X.509");
+                    Certificate c =  cf.generateCertificate(new ByteArrayInputStream(Base64.getDecoder().decode(jsonObject.get("certificate").toString())));
+                    ksh.storeCertificate(c, publish.getTopic().toString().split("/")[1]);
+      
                 } catch (JSONException e) {
                     System.out.println("Error Retrieving Certificate");
+                } catch (CertificateException ex) {
+                    Logger.getLogger(MQTT.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -239,7 +241,8 @@ public class MQTT {
         }
     }
 
-    public void retrieveFX(FXScreen setFxScreen){
+    public void retrieveFX(FXScreen setFxScreen, KeyStoreHelper ksh1){
         fxScreen = setFxScreen;
+        ksh = ksh1;
     }
 }
