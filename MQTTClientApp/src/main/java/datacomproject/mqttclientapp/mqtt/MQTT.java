@@ -9,6 +9,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONException;
@@ -16,6 +17,7 @@ import org.json.JSONObject;
 import com.hivemq.client.mqtt.MqttClient;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import com.hivemq.client.mqtt.mqtt5.exceptions.Mqtt5ConnAckException;
+import datacomproject.mqttclientapp.JavaFX.Row;
 
 import static com.hivemq.client.mqtt.MqttGlobalPublishFilter.ALL;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -100,10 +102,21 @@ public class MQTT {
                         System.out.println("Received message: " + publish.getTopic() + " -> " + jsonObject);
                         if(publish.getTopic().toString().contains("matteorobidoux")){
                             jsonObjectsMatteo.add(jsonObject);
+
+                            updateData(jsonObjectsMatteo);
+                            jsonObjectsMatteo.clear();
+
                         } else if(publish.getTopic().toString().contains("rimdallali")){
                             jsonObjectsRim.add(jsonObject);
-                        } else if(publish.getTopic().toString().contains("ray")){
+
+                            updateData(jsonObjectsRim);
+                            jsonObjectsRim.clear();
+
+                        } else if(publish.getTopic().toString().contains("rayhernaez")){
                             jsonObjectsRay.add(jsonObject);
+
+                            updateData(jsonObjectsRay);
+                            jsonObjectsRay.clear();
                         }
                     }
                 } catch (Exception e) {
@@ -120,6 +133,14 @@ public class MQTT {
                 }
             }
         });
+    }
+
+    private void updateData(List<JSONObject> jsonObjectList) {
+        double temperature = Double.parseDouble(jsonObjectList.get(0).getString("temperature"));
+        double humidity = Double.parseDouble(jsonObjectList.get(0).getString("humidity"));
+        Date timeStamp = new Date();
+
+        Row.updateDHT(temperature, humidity, timeStamp);
     }
     
     // Publish message to a specific topic sending a JSON object which contains the datas being sent including the signature
