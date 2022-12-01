@@ -51,24 +51,25 @@ public class ConsoleApp {
 
     TilesFXApp gui = new TilesFXApp();
 
-    //TODO update this to get input
-    public void getMqttCredentials() {
-        this.username = "rimdallali";
-        this.password = "password";
-    }
+    // TODO update this to get input
+    // public void getMqttCredentials() {
+    // this.username = "rimdallali";
+    // this.password = "password";
+    // }
 
-    public void initializeMQTT() throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException { 
+    public void initializeMQTT()
+            throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException {
         mqtt.getMqttClient();
-        
+
         boolean validCred = false;
         while (!validCred) {
-            getMqttCredentials();
+            getMQTTUserInput();
             validCred = mqtt.createConnection(username, password);
         }
 
         mqtt.subscribe();
-        mqtt.publishCertificateMessage(ksh.extractCertificate(this.alias));      
-                     
+        mqtt.publishCertificateMessage(ksh.extractCertificate(this.alias));
+
         boolean messageRetrieved = false;
         mqtt.retrieveMessage();
 
@@ -100,7 +101,7 @@ public class ConsoleApp {
     }
 
     public void initializeKeyStore() throws Exception {
-        this.getUserInput();
+        this.getKeyStoreUserInput();
         this.alias = getUserAlias();
 
         Certificate certificate = ksh.extractCertificate(this.alias);
@@ -110,7 +111,28 @@ public class ConsoleApp {
         System.out.println("Public Key has been retrieved");
     }
 
-    public void getUserInput() throws Exception {
+    public void getMQTTUserInput() {
+        Console console = System.console();
+        // getting and validating username
+        System.out.println("------------------------------------------------");
+        // boolean validCred = false;
+        // while (!validCred) {
+        String username = getMQTTUsername();
+        System.out.println("-------- Provide password --------");
+        char[] password = console.readPassword();
+
+        System.out.println("- Invalid credentials, try again -");
+        // if() {
+        // validCred = true;
+        this.password = new String(password);
+        this.username = username;
+        // } else {
+        // validCred = false;
+        // }
+        // }
+    }
+
+    public void getKeyStoreUserInput() throws Exception {
         Console console = System.console();
 
         // getting and validating filename
@@ -140,6 +162,17 @@ public class ConsoleApp {
                 validKeyStore = false;
             }
         }
+    }
+
+    public String getMQTTUsername() {
+        Scanner scanner = new Scanner(System.in);
+        String normalizedUsername = null;
+        System.out.println("----------- Enter your MQTT username -----------");
+        String username = scanner.nextLine();
+        // normalize the username input
+        normalizedUsername = Normalizer.normalize(username, Normalizer.Form.NFKC);
+        scanner.close();
+        return normalizedUsername;
     }
 
     public String getUserAlias() throws KeyStoreException {

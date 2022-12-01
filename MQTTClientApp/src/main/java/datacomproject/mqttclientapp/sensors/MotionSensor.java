@@ -13,8 +13,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -45,21 +43,16 @@ public class MotionSensor extends AbstractSensor {
                                 @Override
                                 public void run() {
                                     try {
-                                        // TODO update path not to be hardcoded
-                                        String imageDirPath = "/home/rimdallali/Pictures";
+                                        Path userHome = Paths.get(System.getProperty("user.home"));
+                                        String imageDirPath = userHome + "/Pictures";
                                         String imageAbsPath = getLatestFilefromDir(imageDirPath);
-                                        if (imageAbsPath == null) {
+                                        if (imageAbsPath != null) {
                                             Path imagePath = Paths.get(imageAbsPath);
                                             byte[] imageBytes = Files.readAllBytes(imagePath);
                                             InputStream targetStream = new ByteArrayInputStream(imageBytes);
                                             fxScreen.row1.updateImage(targetStream);
-                                        } else {
-                                            //do nothing
-                                        }
-
-                                    } catch (IOException e) {
-                                        // ignore
-                                    }
+                                        } 
+                                    } catch (IOException e) { }
                                 }
                             });
                             // Shutdown Pi4J
