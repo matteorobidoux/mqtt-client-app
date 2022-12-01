@@ -23,16 +23,17 @@ public class DHTSensor extends AbstractSensor {
                     double humidity = Double.parseDouble(output.split(" ")[0]);
                     double temperature = Double.parseDouble(output.split(" ")[1]);
                     Date timeStamp = new Date();
+                    
                     // mqtt.publishDataMessage(null, output, null);
 //                    fxScreen = new FXScreen();
-                    
+                    // mqtt.publishDataMessage(null, output, null);
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
                             fxScreen.row1.updateDHT(temperature, humidity, timeStamp);
                         }
                     });
-
+                    
                     //                    System.out.println("DHT sensor data captured at: " + timeStamp);
                     //                    System.out.println("temparature => " + temperature);
                     //                    System.out.println("humidity    => " + humidity);

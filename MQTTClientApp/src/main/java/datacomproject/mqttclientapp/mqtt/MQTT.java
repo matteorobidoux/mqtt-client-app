@@ -51,7 +51,7 @@ public class MQTT {
         } catch(Mqtt5ConnAckException e){
             System.out.println("Unable to Retrieve MQTT Client!");
             System.exit(0);
-        }  
+        }
         System.out.println("Retrieved MQTT Client!");   
         return client;
     }

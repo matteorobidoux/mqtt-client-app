@@ -25,8 +25,8 @@ public class TilesFXApp extends Application {
         consoleApp = new ConsoleApp();
         
         try {
-            // consoleApp.initializeKeyStore();
-            // consoleApp.initializeMQTT();
+            consoleApp.initializeKeyStore();
+            consoleApp.initializeMQTT();
             consoleApp.displayData(fxScreen);
 
         } catch (Exception ex) {

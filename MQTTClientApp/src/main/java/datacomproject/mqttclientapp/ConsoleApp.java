@@ -45,19 +45,11 @@ public class ConsoleApp {
     public MQTT mqtt = new MQTT();
     public String username;
     public String password;
+    public PublicKey publicKey;
+    public PrivateKey privateKey;
+    public String alias;
 
-    // public FXScreen fxScreen;
     TilesFXApp gui = new TilesFXApp();
-
-//    public static void main(String[] args) throws Exception {
-//        ConsoleApp app = new ConsoleApp();
-//
-////        app.initializeKeyStore();
-////        app.initializeMQTT();
-////        app.launchGUI();
-//        // mqtt.retrieveMessage();
-//        app.displayData();
-//    }
 
     //TODO update this to get input
     public void getMqttCredentials() {
@@ -66,23 +58,17 @@ public class ConsoleApp {
     }
 
     public void initializeMQTT() throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException { 
-        // mqtt = new MQTT();
-        System.out.println("here1");
-        Mqtt5BlockingClient client = mqtt.getMqttClient();
-        System.out.println("here2");
-        // String alias = getUserAlias();
-        String alias = "DEMO";
+        mqtt.getMqttClient();
+        
         boolean validCred = false;
         while (!validCred) {
             getMqttCredentials();
             validCred = mqtt.createConnection(username, password);
         }
 
-        PublicKey publicKey = ksh.extractCertificate(alias).getPublicKey();
-
         mqtt.subscribe();
-        mqtt.publishCertificateMessage(ksh.extractCertificate(alias));
-
+        mqtt.publishCertificateMessage(ksh.extractCertificate(this.alias));      
+                     
         boolean messageRetrieved = false;
         mqtt.retrieveMessage();
 
@@ -92,13 +78,11 @@ public class ConsoleApp {
                 System.out.println(mqtt.certificates.get(0));
                 messageRetrieved = true;
             }
-            // System.out.println(mqtt)
         }
         System.out.println(mqtt.certificates);
     }
 
     public void displayData(FXScreen fxScreen) throws IOException {
-//        fxScreen = new FXScreen();
         // getting temperature and humidity data
         System.out.println("Capturing temperature and humidity data...");
         DHTSensor dht_sensor = new DHTSensor();
@@ -117,13 +101,12 @@ public class ConsoleApp {
 
     public void initializeKeyStore() throws Exception {
         this.getUserInput();
-        // boolean validAlias = false;
         String alias = getUserAlias();
 
         Certificate certificate = ksh.extractCertificate(alias);
-        PrivateKey privateKey = ksh.extractPrivateKey(alias);
+        privateKey = ksh.extractPrivateKey(alias);
         System.out.println("------Getting the Public Key-------");
-        PublicKey publicKey = certificate.getPublicKey();
+        publicKey = certificate.getPublicKey();
         System.out.println("Public Key has been retrieved");
     }
 
