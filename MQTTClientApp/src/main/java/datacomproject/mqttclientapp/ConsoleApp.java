@@ -17,19 +17,12 @@ import java.util.regex.Pattern;
 
 import org.json.JSONException;
 
-import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import datacomproject.mqttclientapp.JavaFX.FXScreen;
 import datacomproject.mqttclientapp.JavaFX.TilesFXApp;
 
 import datacomproject.mqttclientapp.KeyStore.KeyStoreHelper;
 import datacomproject.mqttclientapp.mqtt.MQTT;
 import datacomproject.mqttclientapp.sensors.*;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Platform;
-import javafx.stage.Stage;
-
 /**
  * RimDallali Rim20021
  *
@@ -48,7 +41,7 @@ public class ConsoleApp {
     public PublicKey publicKey;
     public PrivateKey privateKey;
     public String alias;
-
+    Console console = System.console();
     TilesFXApp gui = new TilesFXApp();
 
     // TODO update this to get input
@@ -115,25 +108,17 @@ public class ConsoleApp {
         Console console = System.console();
         // getting and validating username
         System.out.println("------------------------------------------------");
-        // boolean validCred = false;
-        // while (!validCred) {
-        String username = getMQTTUsername();
+        String user = getMQTTUsername();
         System.out.println("-------- Provide password --------");
-        char[] password = console.readPassword();
+        char[] pswd = console.readPassword();
 
         System.out.println("- Invalid credentials, try again -");
-        // if() {
-        // validCred = true;
-        this.password = new String(password);
-        this.username = username;
-        // } else {
-        // validCred = false;
-        // }
-        // }
+        this.password = new String(pswd);
+        this.username = user;
     }
 
     public void getKeyStoreUserInput() throws Exception {
-        Console console = System.console();
+//        Console console = System.console();
 
         // getting and validating filename
         System.out.println("------------------------------------------------");
@@ -165,29 +150,25 @@ public class ConsoleApp {
     }
 
     public String getMQTTUsername() {
-        Scanner scanner = new Scanner(System.in);
         String normalizedUsername = null;
         System.out.println("----------- Enter your MQTT username -----------");
-        String username = scanner.nextLine();
+        String user = console.readLine();
         // normalize the username input
-        normalizedUsername = Normalizer.normalize(username, Normalizer.Form.NFKC);
-        scanner.close();
+        normalizedUsername = Normalizer.normalize(user, Normalizer.Form.NFKC);
         return normalizedUsername;
     }
 
     public String getUserAlias() throws KeyStoreException {
         boolean validAlias = false;
-        Scanner scanner = new Scanner(System.in);
         String normalizedAlias = null;
         while (!validAlias) {
             try {
                 // getting and validating alias
                 System.out.println("---------------- Provide alias -----------------");
-                String alias = scanner.nextLine();
+                String userAlias = console.readLine();
                 // normalize the alias input
-                normalizedAlias = Normalizer.normalize(alias, Normalizer.Form.NFKC);
+                normalizedAlias = Normalizer.normalize(userAlias, Normalizer.Form.NFKC);
                 validAlias = ksh.checkAlias(normalizedAlias);
-                scanner.close();
                 if (!validAlias) {
                     System.out.println("Invalid Alias, please try again");
                 } else {
@@ -208,13 +189,12 @@ public class ConsoleApp {
      * @throws EOFException
      */
     private String getFilename() throws EOFException {
-        Scanner scanner = new Scanner(System.in);
         boolean validFile = false;
         String normalizedFilename = null;
         // getting and validating filename
         while (!validFile) {
             System.out.println("--- Provide filename ---");
-            String filename = scanner.nextLine();
+            String filename = console.readLine();
 
             // normalize the filename input
             normalizedFilename = Normalizer.normalize(filename, Normalizer.Form.NFKC);
