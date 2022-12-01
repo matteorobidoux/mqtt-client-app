@@ -61,15 +61,6 @@ public class ConsoleApp {
 
         boolean messageRetrieved = false;
         mqtt.retrieveMessage();
-
-        while (messageRetrieved == false) {
-            System.out.println(mqtt.certificates.size());
-            if (mqtt.certificates.size() > 0) {
-                System.out.println(mqtt.certificates.get(0));
-                messageRetrieved = true;
-            }
-        }
-        System.out.println(mqtt.certificates);
     }
 
     public void displayData(FXScreen fxScreen) {
