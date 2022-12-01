@@ -101,9 +101,9 @@ public class ConsoleApp {
 
     public void initializeKeyStore() throws Exception {
         this.getUserInput();
-        String alias = getUserAlias();
+        this.alias = getUserAlias();
 
-        Certificate certificate = ksh.extractCertificate(alias);
+        Certificate certificate = ksh.extractCertificate(this.alias);
         privateKey = ksh.extractPrivateKey(alias);
         System.out.println("------Getting the Public Key-------");
         publicKey = certificate.getPublicKey();
