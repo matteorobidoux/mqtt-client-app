@@ -49,7 +49,10 @@ public class ConsoleApp {
         boolean validCred = false;
         while (!validCred) {
             getMQTTUserInput();
-            validCred = mqtt.createConnection("matteorobidoux", "password");
+            validCred = mqtt.createConnection(this.username, this.password);
+						if(!validCred) {
+							System.out.println("- Invalid credentials, try again -");
+						}
         }
 
         mqtt.retrieveFX(gui.fxScreen);
@@ -104,7 +107,6 @@ public class ConsoleApp {
         System.out.println("-------- Provide password --------");
         char[] pswd = console.readPassword();
 
-        System.out.println("- Invalid credentials, try again -");
         this.password = new String(pswd);
         this.username = user;
     }
