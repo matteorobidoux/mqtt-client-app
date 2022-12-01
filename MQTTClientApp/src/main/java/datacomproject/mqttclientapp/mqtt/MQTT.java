@@ -125,7 +125,7 @@ public class MQTT {
                                     fxScreen.row3.updateDoorbell(jsonObject.getString("doorbell"));
                                 }
                             }
-                        } else if(publish.getTopic().toString().contains("rimdallali")){
+                        } if(publish.getTopic().toString().contains("rimdallali")){
                             if(fxScreen.row1.username.contains("rimdallali")){
                                 if(jsonObject.has("dht")){
                                     fxScreen.row1.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
@@ -151,7 +151,7 @@ public class MQTT {
                                     fxScreen.row3.updateDoorbell(jsonObject.getString("doorbell"));
                                 }
                             }
-                        } else if(publish.getTopic().toString().contains("carletondavis")){
+                        } if(publish.getTopic().toString().contains("carletondavis")){
                             if(fxScreen.row1.username.contains("carletondavis")){
                                 if(jsonObject.has("dht")){
                                     fxScreen.row1.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));

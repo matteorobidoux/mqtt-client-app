@@ -49,7 +49,7 @@ public class ConsoleApp {
         boolean validCred = false;
         while (!validCred) {
             getMQTTUserInput();
-            validCred = mqtt.createConnection("rimdallali", "password");
+            validCred = mqtt.createConnection("matteorobidoux", "password");
         }
 
         mqtt.retrieveFX(gui.fxScreen);
