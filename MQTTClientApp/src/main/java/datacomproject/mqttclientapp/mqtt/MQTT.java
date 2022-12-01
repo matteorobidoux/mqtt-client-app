@@ -19,6 +19,7 @@ import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import com.hivemq.client.mqtt.mqtt5.exceptions.Mqtt5ConnAckException;
 import datacomproject.mqttclientapp.JavaFX.Row;
 import datacomproject.mqttclientapp.JavaFX.FXScreen;
+import datacomproject.mqttclientapp.JavaFX.TilesFXApp;
 
 import static com.hivemq.client.mqtt.MqttGlobalPublishFilter.ALL;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -144,17 +145,15 @@ public class MQTT {
         // Date timeStampMotion = new Date();
         Date timeStampDoorbell = new Date();
 
-        FXScreen fxScreen = new FXScreen();
-
         if (username.equals("rimdallali")) {
-            fxScreen.row1.updateDHT(temperature, humidity, timeStampDHT);
-            fxScreen.row1.updateDoorbell(timeStampDoorbell);
+            TilesFXApp.fxScreen.row1.updateDHT(temperature, humidity, timeStampDHT);
+            TilesFXApp.fxScreen.row1.updateDoorbell(timeStampDoorbell);
         } else if (username.equals("matteorobidoux")) {
-            fxScreen.row2.updateDHT(temperature, humidity, timeStampDHT);
-            fxScreen.row2.updateDoorbell(timeStampDoorbell);
+            TilesFXApp.fxScreen.row2.updateDHT(temperature, humidity, timeStampDHT);
+            TilesFXApp.fxScreen.row2.updateDoorbell(timeStampDoorbell);
         } else if (username.equals("rayhernaez")) {
-            fxScreen.row3.updateDHT(temperature, humidity, timeStampDHT);
-            fxScreen.row3.updateDoorbell(timeStampDoorbell);
+            TilesFXApp.fxScreen.row3.updateDHT(temperature, humidity, timeStampDHT);
+            TilesFXApp.fxScreen.row3.updateDoorbell(timeStampDoorbell);
         }
         
 
