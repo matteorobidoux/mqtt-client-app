@@ -1,6 +1,11 @@
 package datacomproject.mqttclientapp.JavaFX;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Date;
 import eu.hansolo.tilesfx.Tile;
 import eu.hansolo.tilesfx.TileBuilder;
@@ -39,10 +44,13 @@ public class Row {
 
   String username;
 
-  public Row(String username) {
+  public Row(String username) throws IOException {
     this.username = username;
+    Path imagePath = Paths.get("./loading.png"); 
+    byte[] imageBytes = Files.readAllBytes(imagePath);
+    this.imageInputStream = new ByteArrayInputStream(imageBytes);
     this.buildRow();
-  }
+  }  
 
   public void updateDHT(double temperature, double humidity, Date timestamp) {
       tempTile.setValue(temperature);
