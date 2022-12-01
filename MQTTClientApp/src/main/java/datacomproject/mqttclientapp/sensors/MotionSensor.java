@@ -45,9 +45,10 @@ public class MotionSensor extends AbstractSensor {
                                 @Override
                                 public void run() {
                                     try {
-                                        //TODO update path not to be hardcoded
+                                        // TODO update path not to be hardcoded
                                         String imageDirPath = "home/rimdallali/Pictures/";
-                                        Path imagePath = getLatestFilefromDir(imageDirPath);
+                                        String imageAbsPath = getLatestFilefromDir(imageDirPath);
+                                        Path imagePath = Paths.get(imageAbsPath);
                                         byte[] imageBytes = Files.readAllBytes(imagePath);
                                         InputStream targetStream = new ByteArrayInputStream(imageBytes);
                                         fxScreen.row1.updateImage(targetStream);
@@ -74,19 +75,19 @@ public class MotionSensor extends AbstractSensor {
         motionThread.start();
     }
 
-    private Path getLatestFilefromDir(String dirPath){
+    private String getLatestFilefromDir(String dirPath) {
         File dir = new File(dirPath);
         File[] files = dir.listFiles();
         if (files == null || files.length == 0) {
             return null;
         }
-    
+
         File lastModifiedFile = files[0];
         for (int i = 1; i < files.length; i++) {
-           if (lastModifiedFile.lastModified() < files[i].lastModified()) {
-               lastModifiedFile = files[i];
-           }
+            if (lastModifiedFile.lastModified() < files[i].lastModified()) {
+                lastModifiedFile = files[i];
+            }
         }
-        return lastModifiedFile.toPath();
+        return lastModifiedFile.getAbsolutePath();
     }
 }
