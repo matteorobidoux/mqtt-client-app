@@ -4,6 +4,7 @@ import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import datacomproject.mqttclientapp.Camera.CameraApp;
 import datacomproject.mqttclientapp.JavaFX.FXScreen;
+import datacomproject.mqttclientapp.mqtt.MQTT;
 import javafx.application.Platform;
 
 import java.io.ByteArrayInputStream;
@@ -13,7 +14,10 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.PrivateKey;
 import java.util.Date;
+
+import org.json.JSONObject;
 
 /**
  *
@@ -23,7 +27,7 @@ public class MotionSensor extends AbstractSensor {
 
     private final String programPath = "src/main/Python/SenseLED.py";
 
-    public void startThread(FXScreen fxScreen) {
+    public void startThread(FXScreen fxScreen, MQTT mqtt, PrivateKey privateKey) {
         Thread motionThread = new Thread(() -> {
             boolean motionState = false;
             while (true) {
@@ -49,10 +53,11 @@ public class MotionSensor extends AbstractSensor {
                                         if (imageAbsPath != null) {
                                             Path imagePath = Paths.get(imageAbsPath);
                                             byte[] imageBytes = Files.readAllBytes(imagePath);
-                                            InputStream targetStream = new ByteArrayInputStream(imageBytes);
-                                            fxScreen.row1.updateImage(targetStream);
+                                            JSONObject imageObject = new JSONObject();
+                                            imageObject.put("image", imageBytes);
+                                            mqtt.publishDataMessage(privateKey, "image", imageObject);
                                         }
-                                    } catch (IOException e) {}
+                                    } catch (Exception e) {}
                                 }
                             });
                             // Shutdown Pi4J

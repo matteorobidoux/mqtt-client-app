@@ -47,7 +47,7 @@ public class Row {
     VBox humidityTimeTilesColumn;
     VBox tempTimeTilesColumn;
 
-    String username;
+    public String username;
 
     public Row(String username) throws IOException {
         this.username = username;
@@ -57,7 +57,7 @@ public class Row {
         this.buildRow();
     }
 
-    public void updateDHT(double temperature, double humidity, Date timestamp) {
+    public void updateDHT(double temperature, double humidity, String timestamp) {
         tempTile.setValue(temperature);
         humidityTile.setValue(humidity);
         textAreaTemp.setText(timestamp.toString());
@@ -69,7 +69,7 @@ public class Row {
         imageTile.setImage(new Image(imageIS));
     }
 
-    public void updateDoorbell(Date timeStamp) {
+    public void updateDoorbell(String timeStamp) {
         doorbellTextArea.setText("\n\nDoorbell pressed at: \n" + timeStamp);
     }
 

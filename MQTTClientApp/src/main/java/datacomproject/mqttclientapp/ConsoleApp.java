@@ -46,13 +46,13 @@ public class ConsoleApp {
 
     public void initializeMQTT() throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException {
         Mqtt5BlockingClient client = mqtt.getMqttClient();
-
         boolean validCred = false;
         while (!validCred) {
             getMQTTUserInput();
             validCred = mqtt.createConnection("rimdallali", "password");
         }
 
+        mqtt.retrieveFX(gui.fxScreen);
         mqtt.subscribe();
         mqtt.publishCertificateMessage(ksh.extractCertificate(alias));
 
@@ -73,17 +73,17 @@ public class ConsoleApp {
         // getting temperature and humidity data
         System.out.println("Capturing temperature and humidity data...");
         DHTSensor dht_sensor = new DHTSensor();
-        dht_sensor.startThread(fxScreen);
+        dht_sensor.startThread(fxScreen, mqtt, privateKey);
 
         // getting doorbell data if pressed
         System.out.println("getting doorbell data if pressed...");
         DoorbellButton doorbell_button = new DoorbellButton();
-        doorbell_button.startThread(fxScreen);
+        doorbell_button.startThread(fxScreen, mqtt, privateKey);
 
         // getting doorbell data if pressed
         System.out.println("getting motion sensor data if detected...");
         MotionSensor motion_sensor = new MotionSensor();
-        motion_sensor.startThread(fxScreen);
+        motion_sensor.startThread(fxScreen, mqtt, privateKey);
     }
 
     public void initializeKeyStore() throws Exception {

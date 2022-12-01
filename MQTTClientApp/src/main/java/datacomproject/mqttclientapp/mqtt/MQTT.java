@@ -1,5 +1,6 @@
 package datacomproject.mqttclientapp.mqtt;
 
+import datacomproject.mqttclientapp.JavaFX.FXScreen;
 import datacomproject.mqttclientapp.KeyStore.*;
 
 import java.security.PrivateKey;
@@ -35,8 +36,8 @@ public class MQTT {
     private SignatureHelper signatureHelper = new SignatureHelper();
     public List<JSONObject> jsonObjectsMatteo = new ArrayList<JSONObject>();
     public List<JSONObject> jsonObjectsRim = new ArrayList<JSONObject>();
-    public List<JSONObject> jsonObjectsRay = new ArrayList<JSONObject>();
     public List<JSONObject> certificates = new ArrayList<JSONObject>();
+    public FXScreen fxScreen;
 
     // Retrives MQTT Client
     public Mqtt5BlockingClient getMqttClient(){
@@ -99,11 +100,83 @@ public class MQTT {
                     if(signatureHelper.verifySignature(signature, certificate.getPublicKey(), "SHA256withECDSA", jsonObject.toString())){
                         System.out.println("Received message: " + publish.getTopic() + " -> " + jsonObject);
                         if(publish.getTopic().toString().contains("matteorobidoux")){
-                            jsonObjectsMatteo.add(jsonObject);
+                            if(fxScreen.row1.username.contains("matteorobidoux")){
+                                if(jsonObject.has("dht")){
+                                    fxScreen.row1.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
+                                } else if(jsonObject.has("image")){
+                                    fxScreen.row1.updateImage(null);
+                                } else if(jsonObject.has("doorbell")){
+                                    fxScreen.row1.updateDoorbell(jsonObject.getString("doorbell"));
+                                }
+                            } else if(fxScreen.row2.username.contains("matteorobidoux")){
+                                if(jsonObject.has("dht")){
+                                    fxScreen.row2.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
+                                } else if(jsonObject.has("image")){
+                                    fxScreen.row2.updateImage(null);
+                                } else if(jsonObject.has("doorbell")){
+                                    fxScreen.row2.updateDoorbell(jsonObject.getString("doorbell"));
+                                }
+                            } else if(fxScreen.row3.username.contains("matteorobidoux")){
+                                if(jsonObject.has("dht")){
+                                    fxScreen.row3.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
+                                } else if(jsonObject.has("image")){
+                                    fxScreen.row3.updateImage(null);
+                                } else if(jsonObject.has("doorbell")){
+                                    fxScreen.row3.updateDoorbell(jsonObject.getString("doorbell"));
+                                }
+                            }
                         } else if(publish.getTopic().toString().contains("rimdallali")){
-                            jsonObjectsRim.add(jsonObject);
-                        } else if(publish.getTopic().toString().contains("ray")){
-                            jsonObjectsRay.add(jsonObject);
+                            if(fxScreen.row1.username.contains("rimdallali")){
+                                if(jsonObject.has("dht")){
+                                    fxScreen.row1.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
+                                } else if(jsonObject.has("image")){
+                                    fxScreen.row1.updateImage(null);
+                                } else if(jsonObject.has("doorbell")){
+                                    fxScreen.row1.updateDoorbell(jsonObject.getString("doorbell"));
+                                }
+                            } else if(fxScreen.row2.username.contains("rimdallali")){
+                                if(jsonObject.has("dht")){
+                                    fxScreen.row2.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
+                                } else if(jsonObject.has("image")){
+                                    fxScreen.row2.updateImage(null);
+                                } else if(jsonObject.has("doorbell")){
+                                    fxScreen.row2.updateDoorbell(jsonObject.getString("doorbell"));
+                                }
+                            } else if(fxScreen.row3.username.contains("rimdallali")){
+                                if(jsonObject.has("dht")){
+                                    fxScreen.row3.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
+                                } else if(jsonObject.has("image")){
+                                    fxScreen.row3.updateImage(null);
+                                } else if(jsonObject.has("doorbell")){
+                                    fxScreen.row3.updateDoorbell(jsonObject.getString("doorbell"));
+                                }
+                            }
+                        } else if(publish.getTopic().toString().contains("carletondavis")){
+                            if(fxScreen.row1.username.contains("carletondavis")){
+                                if(jsonObject.has("dht")){
+                                    fxScreen.row1.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
+                                } else if(jsonObject.has("image")){
+                                    fxScreen.row1.updateImage(null);
+                                } else if(jsonObject.has("doorbell")){
+                                    fxScreen.row1.updateDoorbell(jsonObject.getString("doorbell"));
+                                }
+                            } else if(fxScreen.row2.username.contains("carletondavis")){
+                                if(jsonObject.has("dht")){
+                                    fxScreen.row2.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
+                                } else if(jsonObject.has("image")){
+                                    fxScreen.row2.updateImage(null);
+                                } else if(jsonObject.has("doorbell")){
+                                    fxScreen.row2.updateDoorbell(jsonObject.getString("doorbell"));
+                                }
+                            } else if(fxScreen.row3.username.contains("carletondavis")){
+                                if(jsonObject.has("dht")){
+                                    fxScreen.row3.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
+                                } else if(jsonObject.has("image")){
+                                    fxScreen.row3.updateImage(null);
+                                } else if(jsonObject.has("doorbell")){
+                                    fxScreen.row3.updateDoorbell(jsonObject.getString("doorbell"));
+                                }
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -164,5 +237,9 @@ public class MQTT {
         } else {
             return null;
         }
+    }
+
+    public void retrieveFX(FXScreen setFxScreen){
+        fxScreen = setFxScreen;
     }
 }
