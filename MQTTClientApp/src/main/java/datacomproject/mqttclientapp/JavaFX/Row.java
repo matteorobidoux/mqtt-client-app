@@ -46,7 +46,7 @@ public class Row {
 
   public Row(String username) throws IOException {
     this.username = username;
-    Path imagePath = Paths.get("./loading.png"); 
+    Path imagePath = Paths.get("./src/loading.png"); 
     byte[] imageBytes = Files.readAllBytes(imagePath);
     this.imageInputStream = new ByteArrayInputStream(imageBytes);
     this.buildRow();

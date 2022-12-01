@@ -7,11 +7,14 @@ import datacomproject.mqttclientapp.JavaFX.FXScreen;
 import javafx.application.Platform;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -41,9 +44,10 @@ public class MotionSensor extends AbstractSensor {
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    // fxScreen.row1.updateDoorbell(timeStamp);
                                     try {
-                                        Path imagePath = Paths.get("./loading.png");
+                                        //TODO update path not to be hardcoded
+                                        String imageDirPath = "home/rimdallali/Pictures/";
+                                        Path imagePath = getLatestFilefromDir(imageDirPath);
                                         byte[] imageBytes = Files.readAllBytes(imagePath);
                                         InputStream targetStream = new ByteArrayInputStream(imageBytes);
                                         fxScreen.row1.updateImage(targetStream);
@@ -68,5 +72,21 @@ public class MotionSensor extends AbstractSensor {
         });
         // Start the thread
         motionThread.start();
+    }
+
+    private Path getLatestFilefromDir(String dirPath){
+        File dir = new File(dirPath);
+        File[] files = dir.listFiles();
+        if (files == null || files.length == 0) {
+            return null;
+        }
+    
+        File lastModifiedFile = files[0];
+        for (int i = 1; i < files.length; i++) {
+           if (lastModifiedFile.lastModified() < files[i].lastModified()) {
+               lastModifiedFile = files[i];
+           }
+        }
+        return lastModifiedFile.toPath();
     }
 }
