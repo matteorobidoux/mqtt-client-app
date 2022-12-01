@@ -43,7 +43,7 @@ public class MotionSensor extends AbstractSensor {
                                 public void run() {
                                     // fxScreen.row1.updateDoorbell(timeStamp);
                                     try {
-                                        Path imagePath = Paths.get("./image.txt");
+                                        Path imagePath = Paths.get("./loading.png");
                                         byte[] imageBytes = Files.readAllBytes(imagePath);
                                         InputStream targetStream = new ByteArrayInputStream(imageBytes);
                                         fxScreen.row1.updateImage(targetStream);
