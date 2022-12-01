@@ -11,109 +11,105 @@ import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.text.Normalizer;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.json.JSONException;
 
+import datacomproject.mqttclientapp.JavaFX.FXScreen;
+import datacomproject.mqttclientapp.JavaFX.TilesFXApp;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
-
 import datacomproject.mqttclientapp.KeyStore.KeyStoreHelper;
 import datacomproject.mqttclientapp.mqtt.MQTT;
 import datacomproject.mqttclientapp.sensors.*;
 
-
 /**
- * RimDallali
- * Rim20021
- * 
- * ../KeyStore/ECcertif.ks
- * password
- * DEMO
+ * RimDallali Rim20021
+ *
+ * ../KeyStore/ECcertif.ks password DEMO
  */
 /**
  *
  * @author Rim Dallali
  */
-public class App {
+public class ConsoleApp {
 
     public KeyStoreHelper ksh = new KeyStoreHelper();
     public MQTT mqtt = new MQTT();
-
-    public static void main(String[] args) throws Exception {
-        App app = new App();
-        
-        app.initializeKeyStore();
-        app.initializeMQTT();
-        // mqtt.retrieveMessage();
-
-        app.displayData();
-    }
+    public String username;
+    public String password;
+    public PublicKey publicKey;
+    public PrivateKey privateKey;
+    public String alias;
+    Console console = System.console();
+    TilesFXApp gui = new TilesFXApp();
 
     public void initializeMQTT() throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException {
-        // mqtt = new MQTT();
-        System.out.println("here1");
         Mqtt5BlockingClient client = mqtt.getMqttClient();
-        System.out.println("here2");
-        // String alias = getUserAlias();
-        String alias = "DEMO";
+
         boolean validCred = false;
         while (!validCred) {
+            getMQTTUserInput();
             validCred = mqtt.createConnection("rimdallali", "password");
         }
-        
-        PublicKey publicKey = ksh.extractCertificate(alias).getPublicKey();
-        
+
         mqtt.subscribe();
         mqtt.publishCertificateMessage(ksh.extractCertificate(alias));
-        
+
         boolean messageRetrieved = false;
         mqtt.retrieveMessage();
 
-        while(messageRetrieved == false) {
+        while (messageRetrieved == false) {
             System.out.println(mqtt.certificates.size());
-            if(mqtt.certificates.size() > 0) {
+            if (mqtt.certificates.size() > 0) {
                 System.out.println(mqtt.certificates.get(0));
                 messageRetrieved = true;
             }
-            // System.out.println(mqtt)
         }
-        // System.out.println(mqtt.certificates);
+        System.out.println(mqtt.certificates);
     }
 
-    public void displayData() {
+    public void displayData(FXScreen fxScreen) {
         // getting temperature and humidity data
         System.out.println("Capturing temperature and humidity data...");
         DHTSensor dht_sensor = new DHTSensor();
-        dht_sensor.startThread();
+        dht_sensor.startThread(fxScreen);
 
         // getting doorbell data if pressed
         System.out.println("getting doorbell data if pressed...");
         DoorbellButton doorbell_button = new DoorbellButton();
-        doorbell_button.startThread();
+        doorbell_button.startThread(fxScreen);
 
         // getting doorbell data if pressed
         System.out.println("getting motion sensor data if detected...");
         MotionSensor motion_sensor = new MotionSensor();
-        motion_sensor.startThread();
+        motion_sensor.startThread(fxScreen);
     }
 
     public void initializeKeyStore() throws Exception {
-        this.getUserInput();
-        // boolean validAlias = false;
-        String alias = getUserAlias();
+        this.getKeyStoreUserInput();
+        this.alias = getUserAlias();
 
-        Certificate certificate = ksh.extractCertificate(alias);
-        PrivateKey privateKey = ksh.extractPrivateKey(alias);
+        Certificate certificate = ksh.extractCertificate(this.alias);
+        privateKey = ksh.extractPrivateKey(alias);
         System.out.println("------Getting the Public Key-------");
-        PublicKey publicKey = certificate.getPublicKey();
+        publicKey = certificate.getPublicKey();
         System.out.println("Public Key has been retrieved");
     }
 
-    public void getUserInput() throws Exception {
-        Console console = System.console();
+    public void getMQTTUserInput() {
+        // getting and validating username
+        System.out.println("------------------------------------------------");
+        String user = getMQTTUsername();
+        System.out.println("-------- Provide password --------");
+        char[] pswd = console.readPassword();
 
+        System.out.println("- Invalid credentials, try again -");
+        this.password = new String(pswd);
+        this.username = user;
+    }
+
+    public void getKeyStoreUserInput() throws Exception {
         // getting and validating filename
         System.out.println("------------------------------------------------");
         System.out.println("-- Provide path where the keystore is located --");
@@ -143,19 +139,26 @@ public class App {
         }
     }
 
+    public String getMQTTUsername() {
+        String normalizedUsername = null;
+        System.out.println("----------- Enter your MQTT username -----------");
+        String user = console.readLine();
+        // normalize the username input
+        normalizedUsername = Normalizer.normalize(user, Normalizer.Form.NFKC);
+        return normalizedUsername;
+    }
+
     public String getUserAlias() throws KeyStoreException {
         boolean validAlias = false;
-        Scanner scanner = new Scanner(System.in);
         String normalizedAlias = null;
         while (!validAlias) {
             try {
                 // getting and validating alias
                 System.out.println("---------------- Provide alias -----------------");
-                String alias = scanner.nextLine();
+                String userAlias = console.readLine();
                 // normalize the alias input
-                normalizedAlias = Normalizer.normalize(alias, Normalizer.Form.NFKC);
+                normalizedAlias = Normalizer.normalize(userAlias, Normalizer.Form.NFKC);
                 validAlias = ksh.checkAlias(normalizedAlias);
-                scanner.close(); 
                 if (!validAlias) {
                     System.out.println("Invalid Alias, please try again");
                 } else {
@@ -171,18 +174,17 @@ public class App {
     /**
      * Prompts the user to enter a filename for where to store the secret key
      * Helper method
-     * 
+     *
      * @return String
      * @throws EOFException
      */
     private String getFilename() throws EOFException {
-        Scanner scanner = new Scanner(System.in);
         boolean validFile = false;
         String normalizedFilename = null;
         // getting and validating filename
         while (!validFile) {
             System.out.println("--- Provide filename ---");
-            String filename = scanner.nextLine();
+            String filename = console.readLine();
 
             // normalize the filename input
             normalizedFilename = Normalizer.normalize(filename, Normalizer.Form.NFKC);
@@ -207,9 +209,8 @@ public class App {
     }
 
     /**
-     * Password validation
-     * Helper method
-     * 
+     * Password validation Helper method
+     *
      * @param password
      * @return boolean
      */

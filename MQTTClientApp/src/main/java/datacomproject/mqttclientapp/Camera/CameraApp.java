@@ -27,7 +27,6 @@ public class CameraApp implements IApplication {
         Camera camera = new Camera();
         
         Path userHome = Paths.get(System.getProperty("user.home"));
-        System.out.println(userHome);
 
         System.out.println("Setting up the config to take a picture.");
         

@@ -1,9 +1,10 @@
 package datacomproject.mqttclientapp.sensors;
 
+import datacomproject.mqttclientapp.JavaFX.FXScreen;
 import java.io.IOException;
 
 public abstract class AbstractSensor {
-  abstract public void startThread();
+  abstract public void startThread(FXScreen fxScreen);
 
   // Start the process and get the output
   protected String callProcess(String programPath) {
