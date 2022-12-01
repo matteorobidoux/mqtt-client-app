@@ -46,10 +46,12 @@ public class MotionSensor extends AbstractSensor {
                                 public void run() {
                                     try {
                                         // TODO update path not to be hardcoded
-                                        String imageDirPath = "home/rimdallali/Pictures/";
+                                        String imageDirPath = "/home/rimdallali/Pictures";
+                                      
                                         String imageAbsPath = getLatestFilefromDir(imageDirPath);
+//                                        System.out.println(imageAbsPath);
                                         Path imagePath = Paths.get(imageAbsPath);
-                                        byte[] imageBytes = Files.readAllBytes(imagePath);
+                                        byte[] imageBytes = Files.readAllBytes(imagePath.toAbsolutePath());
                                         InputStream targetStream = new ByteArrayInputStream(imageBytes);
                                         fxScreen.row1.updateImage(targetStream);
                                     } catch (IOException e) {
@@ -88,6 +90,7 @@ public class MotionSensor extends AbstractSensor {
                 lastModifiedFile = files[i];
             }
         }
+        System.out.println(lastModifiedFile.getName());
         return lastModifiedFile.getAbsolutePath();
     }
 }
