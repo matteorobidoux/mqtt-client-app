@@ -61,15 +61,7 @@ public class Row {
 
   public void updateImage(InputStream imageIS) {
     this.imageInputStream = imageIS;
-    imageTile = TileBuilder.create()
-        .skinType(SkinType.IMAGE)
-        .prefSize(300, 300)
-        .title(username + "'s Motion Detected Image")
-        .image(new Image(imageInputStream)) // add imagePath string
-        .imageMask(ImageMask.ROUND)
-        .text("Taken at: " + timeStampMotion)
-        .build(); 
-    // imageTile.setValue(imageIS); 
+    imageTile.setImage(new Image(imageIS));  
   }
 
   public void updateDoorbell(Date timeStamp) {

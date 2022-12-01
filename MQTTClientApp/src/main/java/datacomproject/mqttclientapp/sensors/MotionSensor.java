@@ -46,12 +46,17 @@ public class MotionSensor extends AbstractSensor {
                                 public void run() {
                                     try {
                                         // TODO update path not to be hardcoded
-                                        String imageDirPath = "home/rimdallali/Pictures/";
+                                        String imageDirPath = "/home/rimdallali/Pictures";
                                         String imageAbsPath = getLatestFilefromDir(imageDirPath);
-                                        Path imagePath = Paths.get(imageAbsPath);
-                                        byte[] imageBytes = Files.readAllBytes(imagePath);
-                                        InputStream targetStream = new ByteArrayInputStream(imageBytes);
-                                        fxScreen.row1.updateImage(targetStream);
+                                        if (imageAbsPath == null) {
+                                            Path imagePath = Paths.get(imageAbsPath);
+                                            byte[] imageBytes = Files.readAllBytes(imagePath);
+                                            InputStream targetStream = new ByteArrayInputStream(imageBytes);
+                                            fxScreen.row1.updateImage(targetStream);
+                                        } else {
+                                            //do nothing
+                                        }
+
                                     } catch (IOException e) {
                                         // ignore
                                     }
