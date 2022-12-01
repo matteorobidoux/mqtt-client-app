@@ -18,11 +18,13 @@ import com.hivemq.client.mqtt.MqttClient;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import com.hivemq.client.mqtt.mqtt5.exceptions.Mqtt5ConnAckException;
 import datacomproject.mqttclientapp.JavaFX.Row;
+import datacomproject.mqttclientapp.JavaFX.FXScreen;
 
 import static com.hivemq.client.mqtt.MqttGlobalPublishFilter.ALL;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 
@@ -103,19 +105,19 @@ public class MQTT {
                         if(publish.getTopic().toString().contains("matteorobidoux")){
                             jsonObjectsMatteo.add(jsonObject);
 
-                            updateData(jsonObjectsMatteo);
+                            updateData(jsonObjectsMatteo, "matteorobidoux");
                             jsonObjectsMatteo.clear();
 
                         } else if(publish.getTopic().toString().contains("rimdallali")){
                             jsonObjectsRim.add(jsonObject);
 
-                            updateData(jsonObjectsRim);
+                            updateData(jsonObjectsRim, "rimdallali");
                             jsonObjectsRim.clear();
 
                         } else if(publish.getTopic().toString().contains("rayhernaez")){
                             jsonObjectsRay.add(jsonObject);
 
-                            updateData(jsonObjectsRay);
+                            updateData(jsonObjectsRay, "rayhernaez");
                             jsonObjectsRay.clear();
                         }
                     }
@@ -135,15 +137,29 @@ public class MQTT {
         });
     }
 
-    private void updateData(List<JSONObject> jsonObjectList) {
+    private void updateData(List<JSONObject> jsonObjectList, String username) throws IOException {
         double temperature = Double.parseDouble(jsonObjectList.get(0).getString("temperature"));
         double humidity = Double.parseDouble(jsonObjectList.get(0).getString("humidity"));
         Date timeStampDHT = new Date();
         // Date timeStampMotion = new Date();
         Date timeStampDoorbell = new Date();
 
-        Row.updateDHT(temperature, humidity, timeStampDHT);
-        Row.updateDoorbell(timeStampDoorbell);
+        FXScreen fxScreen = new FXScreen();
+
+        if (username.equals("rimdallali")) {
+            fxScreen.row1.updateDHT(temperature, humidity, timeStampDHT);
+            fxScreen.row1.updateDoorbell(timeStampDoorbell);
+        } else if (username.equals("matteorobidoux")) {
+            fxScreen.row2.updateDHT(temperature, humidity, timeStampDHT);
+            fxScreen.row2.updateDoorbell(timeStampDoorbell);
+        } else if (username.equals("rayhernaez")) {
+            fxScreen.row3.updateDHT(temperature, humidity, timeStampDHT);
+            fxScreen.row3.updateDoorbell(timeStampDoorbell);
+        }
+        
+
+        // Row.updateDHT(temperature, humidity, timeStampDHT);
+        // Row.updateDoorbell(timeStampDoorbell);
     }
     
     // Publish message to a specific topic sending a JSON object which contains the datas being sent including the signature

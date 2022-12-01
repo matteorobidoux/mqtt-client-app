@@ -16,9 +16,9 @@ public class Row {
   Date timeStampMotion = new Date();
   Date timeStampDoorbell = new Date();
 
-  static Tile tempTile; 
+  Tile tempTile; 
   Tile tempTimeTile;
-  static Tile humidityTile;
+  Tile humidityTile;
   Tile doorbellTile;
   Tile humidityTimeTile;
 
@@ -26,12 +26,12 @@ public class Row {
   InputStream imageInputStream;
 
   VBox textAreaTempVBox;
-  static TextArea textAreaTemp;
+  TextArea textAreaTemp;
 
   VBox textAreaHumidityVBox;
-  static TextArea textAreaHumidity;
+  TextArea textAreaHumidity;
 
-  static TextArea doorbellTextArea;
+  TextArea doorbellTextArea;
   VBox doorbellTextAreaVBox;
 
   VBox humidityTimeTilesColumn;
@@ -44,7 +44,7 @@ public class Row {
     this.buildRow();
   }
 
-  public static void updateDHT(double temperature, double humidity, Date timestamp) {
+  public void updateDHT(double temperature, double humidity, Date timestamp) {
       tempTile.setValue(temperature);
       humidityTile.setValue(humidity);
       textAreaTemp.setText(timestamp.toString());
@@ -64,7 +64,7 @@ public class Row {
     // imageTile.setValue(imageIS); 
   }
 
-  public static void updateDoorbell(Date timeStamp) {
+  public void updateDoorbell(Date timeStamp) {
       doorbellTextArea.setText("\n\nDoorbell pressed at: \n" + timeStamp); 
   }
 
