@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.PrivateKey;
+import java.util.Base64;
 import java.util.Date;
 
 import org.json.JSONObject;
@@ -54,7 +55,7 @@ public class MotionSensor extends AbstractSensor {
                                             Path imagePath = Paths.get(imageAbsPath);
                                             byte[] imageBytes = Files.readAllBytes(imagePath);
                                             JSONObject imageObject = new JSONObject();
-                                            imageObject.put("image", imageBytes);
+                                            imageObject.put("image", new String(Base64.getEncoder().encode(imageBytes), "UTF-8"));
                                             mqtt.publishDataMessage(privateKey, "image", imageObject);
                                         }
                                     } catch (Exception e) {}

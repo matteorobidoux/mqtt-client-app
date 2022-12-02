@@ -108,6 +108,7 @@ public class MQTT {
                                     fxScreen.row2.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
                                 } else if(publish.getTopic().toString().contains("image")){
                                     fxScreen.row2.updateImage(imageToInputStream(jsonObject.get("image")));
+                                    System.out.println("image");
                                 } else if(publish.getTopic().toString().contains("doorbell")){
                                     fxScreen.row2.updateDoorbell(jsonObject.getString("doorbell"));
                                 }
@@ -203,11 +204,7 @@ public class MQTT {
     }
 
     public InputStream imageToInputStream(Object image) throws IOException{
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
-        oos.writeObject(image);
-        oos.flush();
-        oos.close();
-        return new ByteArrayInputStream(baos.toByteArray());
+        byte[] img = Base64.getDecoder().decode(image.toString());
+        return new ByteArrayInputStream(img);
     }
 }
