@@ -18,7 +18,6 @@ import org.json.JSONException;
 
 import datacomproject.mqttclientapp.JavaFX.FXScreen;
 import datacomproject.mqttclientapp.JavaFX.TilesFXApp;
-import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import datacomproject.mqttclientapp.KeyStore.KeyStoreHelper;
 import datacomproject.mqttclientapp.mqtt.MQTT;
 import datacomproject.mqttclientapp.sensors.*;
@@ -45,7 +44,7 @@ public class ConsoleApp {
     TilesFXApp gui = new TilesFXApp();
 
     public void initializeMQTT() throws KeyStoreException, CertificateEncodingException, JSONException, UnsupportedEncodingException {
-        Mqtt5BlockingClient client = mqtt.getMqttClient();
+        mqtt.getMqttClient();
         boolean validCred = false;
         while (!validCred) {
             getMQTTUserInput();
@@ -55,11 +54,9 @@ public class ConsoleApp {
 						}
         }
 
-        mqtt.retrieveFX(gui.fxScreen, ksh);
+        mqtt.setVariables(TilesFXApp.fxScreen, ksh);
         mqtt.subscribe();
         mqtt.publishCertificateMessage(ksh.extractCertificate(alias));
-
-        boolean messageRetrieved = false;
         mqtt.retrieveMessage();
     }
 

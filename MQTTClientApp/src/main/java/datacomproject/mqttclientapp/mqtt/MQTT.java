@@ -22,6 +22,10 @@ import static com.hivemq.client.mqtt.MqttGlobalPublishFilter.ALL;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -99,79 +103,31 @@ public class MQTT {
                     if(signatureHelper.verifySignature(signature, certificate.getPublicKey(), "SHA256withECDSA", jsonObject.toString())){
                         System.out.println("Received message: " + publish.getTopic() + " -> " + jsonObject);
                         if(publish.getTopic().toString().contains("matteorobidoux")){
-                            if(fxScreen.row1.username.contains("matteorobidoux")){
-                                if(publish.getTopic().toString().contains("dht")){
-                                    fxScreen.row1.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
-                                } else if(jsonObject.has("image")){
-                                    fxScreen.row1.updateImage(null);
-                                } else if(publish.getTopic().toString().contains("doorbell")){
-                                    fxScreen.row1.updateDoorbell(jsonObject.getString("doorbell"));
-                                }
-                            } else if(fxScreen.row2.username.contains("matteorobidoux")){
+                           if(fxScreen.row2.username.contains("matteorobidoux")){
                                 if(publish.getTopic().toString().contains("dht")){
                                     fxScreen.row2.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
-                                } else if(jsonObject.has("image")){
-                                    fxScreen.row2.updateImage(null);
+                                } else if(publish.getTopic().toString().contains("image")){
+                                    fxScreen.row2.updateImage(imageToInputStream(jsonObject.get("image")));
                                 } else if(publish.getTopic().toString().contains("doorbell")){
                                     fxScreen.row2.updateDoorbell(jsonObject.getString("doorbell"));
-                                }
-                            } else if(fxScreen.row3.username.contains("matteorobidoux")){
-                                if(publish.getTopic().toString().contains("dht")){
-                                    fxScreen.row3.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
-                                } else if(jsonObject.has("image")){
-                                    fxScreen.row3.updateImage(null);
-                                } else if(publish.getTopic().toString().contains("doorbell")){
-                                    fxScreen.row3.updateDoorbell(jsonObject.getString("doorbell"));
                                 }
                             }
                         } if(publish.getTopic().toString().contains("rimdallali")){
                             if(fxScreen.row1.username.contains("rimdallali")){
                                 if(publish.getTopic().toString().contains("dht")){
                                     fxScreen.row1.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
-                                } else if(jsonObject.has("image")){
-                                    fxScreen.row1.updateImage(null);
+                                } else if(publish.getTopic().toString().contains("image")){
+                                    fxScreen.row1.updateImage(imageToInputStream(jsonObject.get("image")));
                                 } else if(publish.getTopic().toString().contains("doorbell")){
                                     fxScreen.row1.updateDoorbell(jsonObject.getString("doorbell"));
-                                }
-                            } else if(fxScreen.row2.username.contains("rimdallali")){
-                                if(publish.getTopic().toString().contains("dht")){
-                                    fxScreen.row2.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
-                                } else if(jsonObject.has("image")){
-                                    fxScreen.row2.updateImage(null);
-                                } else if(publish.getTopic().toString().contains("doorbell")){
-                                    fxScreen.row2.updateDoorbell(jsonObject.getString("doorbell"));
-                                }
-                            } else if(fxScreen.row3.username.contains("rimdallali")){
-                                if(publish.getTopic().toString().contains("dht")){
-                                    fxScreen.row3.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
-                                } else if(jsonObject.has("image")){
-                                    fxScreen.row3.updateImage(null);
-                                } else if(publish.getTopic().toString().contains("doorbell")){
-                                    fxScreen.row3.updateDoorbell(jsonObject.getString("doorbell"));
                                 }
                             }
                         } if(publish.getTopic().toString().contains("carletondavis")){
-                            if(fxScreen.row1.username.contains("carletondavis")){
-                                if(jsonObject.has("dht")){
-                                    fxScreen.row1.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
-                                } else if(jsonObject.has("image")){
-                                    fxScreen.row1.updateImage(null);
-                                } else if(jsonObject.has("doorbell")){
-                                    fxScreen.row1.updateDoorbell(jsonObject.getString("doorbell"));
-                                }
-                            } else if(fxScreen.row2.username.contains("carletondavis")){
-                                if(jsonObject.has("dht")){
-                                    fxScreen.row2.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
-                                } else if(jsonObject.has("image")){
-                                    fxScreen.row2.updateImage(null);
-                                } else if(jsonObject.has("doorbell")){
-                                    fxScreen.row2.updateDoorbell(jsonObject.getString("doorbell"));
-                                }
-                            } else if(fxScreen.row3.username.contains("carletondavis")){
+                            if(fxScreen.row3.username.contains("carletondavis")){
                                 if(jsonObject.has("dht")){
                                     fxScreen.row3.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"), jsonObject.getString("timestamp"));
-                                } else if(jsonObject.has("image")){
-                                    fxScreen.row3.updateImage(null);
+                                } else if(publish.getTopic().toString().contains("image")){
+                                    fxScreen.row3.updateImage(imageToInputStream(jsonObject.get("image")));
                                 } else if(jsonObject.has("doorbell")){
                                     fxScreen.row3.updateDoorbell(jsonObject.getString("doorbell"));
                                 }
@@ -241,8 +197,17 @@ public class MQTT {
         }
     }
 
-    public void retrieveFX(FXScreen setFxScreen, KeyStoreHelper ksh1){
+    public void setVariables(FXScreen setFxScreen, KeyStoreHelper ksh1){
         fxScreen = setFxScreen;
         ksh = ksh1;
+    }
+
+    public InputStream imageToInputStream(Object image) throws IOException{
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(image);
+        oos.flush();
+        oos.close();
+        return new ByteArrayInputStream(baos.toByteArray());
     }
 }

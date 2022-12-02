@@ -20,7 +20,7 @@ public class FXScreen extends HBox {
     public FXScreen() throws IOException {
         row1 = new Row("rimdallali");
         row2 = new Row("matteorobidoux");
-        row3 = new Row("carleton");
+        row3 = new Row("carletondavis");
         // Build the screen
         this.buildScreen();
     }
