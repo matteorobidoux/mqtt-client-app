@@ -1,10 +1,7 @@
 package datacomproject.mqttclientapp.JavaFX;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.*;
-import java.util.Date;
 
 import eu.hansolo.tilesfx.Tile;
 import eu.hansolo.tilesfx.TileBuilder;
@@ -17,10 +14,6 @@ import javafx.scene.layout.VBox;
 
 public class Row {
 
-	private Date defaultTimeStampDHT = new Date();
-	private Date defaultTimeStampMotion = new Date();
-	private Date defaultTimeStampDoorbell = new Date();
-
 	private Tile tempTile;
 	private Tile tempTimeTile;
 	private Tile humidityTile;
@@ -28,7 +21,6 @@ public class Row {
 	Tile doorbellTile;
 
 	Tile imageTile;
-	private InputStream imageInputStream;
 
 	private VBox textAreaTempVBox;
 	private TextArea textAreaTemp;
@@ -46,9 +38,6 @@ public class Row {
 
 	public Row(String username) throws IOException {
 		this.username = username;
-		Path imagePath = Paths.get("./src/assets/loading.png");
-		byte[] imageBytes = Files.readAllBytes(imagePath);
-		this.imageInputStream = new ByteArrayInputStream(imageBytes);
 		this.buildRow();
 	}
 
@@ -73,7 +62,6 @@ public class Row {
 	 * @param timestamp
 	 */
 	public void updateImage(InputStream imageIS, String timestamp) {
-		this.imageInputStream = imageIS;
 		imageTile.setImage(new Image(imageIS));
 		imageTile.setText("Taken at: " + timestamp);
 	}
@@ -105,7 +93,6 @@ public class Row {
 		textAreaTemp.setStyle("-fx-control-inner-background: #2A2A2A; "
 				+ "-fx-text-inner-color: white;"
 				+ "-fx-text-box-border: transparent;");
-		textAreaTemp.setText("" + defaultTimeStampDHT);
 		textAreaTempVBox = new VBox(textAreaTemp);
 
 		tempTimeTile = TileBuilder.create()
@@ -122,14 +109,12 @@ public class Row {
 				.title(username + "'s Humidity")
 				.unit("%")
 				.maxValue(100)
-				.text("" + defaultTimeStampDHT)
 				.build();
 		textAreaHumidity = new TextArea();
 		textAreaHumidity.setEditable(false);
 		textAreaHumidity.setStyle("-fx-control-inner-background: #2A2A2A; "
 				+ "-fx-text-inner-color: white;"
 				+ "-fx-text-box-border: transparent;");
-		textAreaHumidity.setText("" + defaultTimeStampDHT);
 		textAreaHumidityVBox = new VBox(textAreaHumidity);
 
 		humidityTimeTile = TileBuilder.create()
@@ -144,9 +129,7 @@ public class Row {
 				.skinType(SkinType.IMAGE)
 				.prefSize(300, 300)
 				.title(username + "'s Motion Detected Image")
-				.image(new Image(imageInputStream))
 				.imageMask(ImageMask.ROUND)
-				.text("Taken at: " + defaultTimeStampMotion)
 				.build();
 
 		doorbellTextArea = new TextArea();
@@ -154,7 +137,6 @@ public class Row {
 		doorbellTextArea.setStyle("-fx-control-inner-background: #2A2A2A; "
 				+ "-fx-text-inner-color: white;"
 				+ "-fx-text-box-border: transparent;");
-		doorbellTextArea.setText("\n\nDoorbell pressed at: \n" + defaultTimeStampDoorbell);
 		doorbellTextAreaVBox = new VBox(doorbellTextArea);
 
 		// Doorbell Buzzer (Date and Time display) -

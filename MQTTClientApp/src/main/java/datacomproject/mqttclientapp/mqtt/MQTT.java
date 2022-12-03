@@ -1,6 +1,7 @@
 package datacomproject.mqttclientapp.mqtt;
 
 import datacomproject.mqttclientapp.JavaFX.FXScreen;
+import datacomproject.mqttclientapp.JavaFX.Row;
 import datacomproject.mqttclientapp.KeyStore.*;
 
 import java.security.PrivateKey;
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 import com.hivemq.client.mqtt.MqttClient;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import com.hivemq.client.mqtt.mqtt5.exceptions.Mqtt5ConnAckException;
+import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish;
 
 import static com.hivemq.client.mqtt.MqttGlobalPublishFilter.ALL;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -21,8 +23,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MQTT {
 
@@ -34,8 +34,8 @@ public class MQTT {
 	private final String USER3 = "carletondavis";
 
 	private SignatureHelper signatureHelper = new SignatureHelper();
-	public FXScreen fxScreen;
-	public KeyStoreHelper ksh;
+	private FXScreen fxScreen;
+	private KeyStoreHelper ksh;
 
 	/**
 	 * Retrieve MQTT client
@@ -111,41 +111,17 @@ public class MQTT {
 						System.out.println("Received message: " + publish.getTopic() + " -> " + jsonObject);
 						if (publish.getTopic().toString().contains(USER2)) {
 							if (fxScreen.row2.username.contains(USER2)) {
-								if (publish.getTopic().toString().contains("dht")) {
-									fxScreen.row2.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"),
-											jsonObject.getString("timestamp"));
-								} else if (publish.getTopic().toString().contains("image")) {
-									fxScreen.row2.updateImage(imageToInputStream(jsonObject.get("image")),
-											jsonObject.getString("motionTimestamp"));
-								} else if (publish.getTopic().toString().contains("doorbell")) {
-									fxScreen.row2.updateDoorbell(jsonObject.getString("doorbell"));
-								}
+								updateGUI(publish, jsonObject, fxScreen.row2);
 							}
 						}
 						if (publish.getTopic().toString().contains(USER1)) {
 							if (fxScreen.row1.username.contains(USER1)) {
-								if (publish.getTopic().toString().contains("dht")) {
-									fxScreen.row1.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"),
-											jsonObject.getString("timestamp"));
-								} else if (publish.getTopic().toString().contains("image")) {
-									fxScreen.row1.updateImage(imageToInputStream(jsonObject.get("image")),
-											jsonObject.getString("motionTimestamp"));
-								} else if (publish.getTopic().toString().contains("doorbell")) {
-									fxScreen.row1.updateDoorbell(jsonObject.getString("doorbell"));
-								}
+								updateGUI(publish, jsonObject, fxScreen.row1);
 							}
 						}
 						if (publish.getTopic().toString().contains(USER3)) {
 							if (fxScreen.row3.username.contains(USER3)) {
-								if (publish.getTopic().toString().contains("dht")) {
-									fxScreen.row3.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"),
-											jsonObject.getString("timestamp"));
-								} else if (publish.getTopic().toString().contains("image")) {
-									fxScreen.row3.updateImage(imageToInputStream(jsonObject.get("image")),
-											jsonObject.getString("motionTimestamp"));
-								} else if (publish.getTopic().toString().contains("doorbell")) {
-									fxScreen.row3.updateDoorbell(jsonObject.getString("doorbell"));
-								}
+								updateGUI(publish, jsonObject, fxScreen.row3);
 							}
 						}
 					}
@@ -160,13 +136,33 @@ public class MQTT {
 							new ByteArrayInputStream(Base64.getDecoder().decode(jsonObject.get("certificate").toString())));
 					ksh.storeCertificate(c, publish.getTopic().toString().split("/")[1]);
 
-				} catch (JSONException e) {
-					System.out.println("Error Retrieving Certificate");
-				} catch (CertificateException ex) {
-					Logger.getLogger(MQTT.class.getName()).log(Level.SEVERE, null, ex);
+				} catch (JSONException | CertificateException e) {
+					System.out.println("Error Retrieving Data");
 				}
 			}
 		});
+	}
+
+	/**
+	 * Call the row's gui update method according to received data
+	 * 
+	 * @param publish
+	 * @param jsonObject
+	 * @param row
+	 * 
+	 * @throws JSONException
+	 * @throws IOException
+	 */
+	private void updateGUI(Mqtt5Publish publish, JSONObject jsonObject, Row row) throws JSONException, IOException {
+		if (publish.getTopic().toString().contains("dht")) {
+			row.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"),
+					jsonObject.getString("timestamp"));
+		} else if (publish.getTopic().toString().contains("image")) {
+			row.updateImage(imageToInputStream(jsonObject.get("image")),
+					jsonObject.getString("motionTimestamp"));
+		} else if (publish.getTopic().toString().contains("doorbell")) {
+			row.updateDoorbell(jsonObject.getString("doorbell"));
+		}
 	}
 
 	/**
@@ -226,25 +222,6 @@ public class MQTT {
 	 */
 	public void disconnect() {
 		client.disconnect();
-	}
-
-	/**
-	 * Return certificate corresponding the given jsonObject and key
-	 * 
-	 * @param jsonCertificate
-	 * @param key
-	 * @return Certificate
-	 * 
-	 * @throws CertificateException
-	 */
-	public Certificate retrieveCertificate(JSONObject jsonCertificate, String key) throws CertificateException {
-		if (jsonCertificate.has(key)) {
-			CertificateFactory cf = CertificateFactory.getInstance("X.509");
-			return cf.generateCertificate(
-					new ByteArrayInputStream(Base64.getDecoder().decode(jsonCertificate.get(key).toString())));
-		} else {
-			return null;
-		}
 	}
 
 	/**
