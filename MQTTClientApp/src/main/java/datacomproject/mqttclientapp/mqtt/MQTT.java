@@ -5,12 +5,9 @@ import datacomproject.mqttclientapp.KeyStore.*;
 
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,29 +21,21 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Matteo
- */
 public class MQTT {
 
 	private Mqtt5BlockingClient client;
 	private String username;
-	private String host = "5a81e32977cf48798ae1059437f7dd15.s1.eu.hivemq.cloud";
+	private final String HOST = "5a81e32977cf48798ae1059437f7dd15.s1.eu.hivemq.cloud";
+	private final String USER1 = "rimdallali";
+	private final String USER2 = "matteorobidoux";
+	private final String USER3 = "carletondavis";
+
 	private SignatureHelper signatureHelper = new SignatureHelper();
-	public List<JSONObject> jsonObjectsMatteo = new ArrayList<JSONObject>();
-	public List<JSONObject> jsonObjectsRim = new ArrayList<JSONObject>();
-	public List<JSONObject> certificates = new ArrayList<JSONObject>();
 	public FXScreen fxScreen;
 	public KeyStoreHelper ksh;
-
-	private String user1 = "rimdallali";
-	private String user2 = "matteorobidoux";
-	private String user3 = "carletondavis";
 
 	/**
 	 * Retrieve MQTT client
@@ -58,7 +47,7 @@ public class MQTT {
 			System.out.println("Retrieving MQTT Client...");
 			client = MqttClient.builder()
 					.useMqttVersion5()
-					.serverHost(host)
+					.serverHost(HOST)
 					.serverPort(8883)
 					.sslWithDefaultConfig()
 					.buildBlocking();
@@ -105,9 +94,8 @@ public class MQTT {
 	}
 
 	/**
-	 * Retrieve all messages sent to the client and/or certificate
-	 * Verify signature if it is a message and adds the data to the correct user
-	 * list
+	 * Retrieve all messages and/or certificate sent to the client
+	 * Verify signature if it's a message and add data to correct user list
 	 */
 	public void retrieveMessage() {
 		client.toAsync().publishes(ALL, publish -> {
@@ -121,39 +109,41 @@ public class MQTT {
 					if (signatureHelper.verifySignature(signature, certificate.getPublicKey(), "SHA256withECDSA",
 							jsonObject.toString())) {
 						System.out.println("Received message: " + publish.getTopic() + " -> " + jsonObject);
-						if (publish.getTopic().toString().contains(user2)) {
-							if (fxScreen.row2.username.contains(user2)) {
+						if (publish.getTopic().toString().contains(USER2)) {
+							if (fxScreen.row2.username.contains(USER2)) {
 								if (publish.getTopic().toString().contains("dht")) {
 									fxScreen.row2.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"),
 											jsonObject.getString("timestamp"));
 								} else if (publish.getTopic().toString().contains("image")) {
-									fxScreen.row2.updateImage(imageToInputStream(jsonObject.get("image")));
-									System.out.println("image");
+									fxScreen.row2.updateImage(imageToInputStream(jsonObject.get("image")),
+											jsonObject.getString("motionTimestamp"));
 								} else if (publish.getTopic().toString().contains("doorbell")) {
 									fxScreen.row2.updateDoorbell(jsonObject.getString("doorbell"));
 								}
 							}
 						}
-						if (publish.getTopic().toString().contains(user1)) {
-							if (fxScreen.row1.username.contains(user1)) {
+						if (publish.getTopic().toString().contains(USER1)) {
+							if (fxScreen.row1.username.contains(USER1)) {
 								if (publish.getTopic().toString().contains("dht")) {
 									fxScreen.row1.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"),
 											jsonObject.getString("timestamp"));
 								} else if (publish.getTopic().toString().contains("image")) {
-									fxScreen.row1.updateImage(imageToInputStream(jsonObject.get("image")));
+									fxScreen.row1.updateImage(imageToInputStream(jsonObject.get("image")),
+											jsonObject.getString("motionTimestamp"));
 								} else if (publish.getTopic().toString().contains("doorbell")) {
 									fxScreen.row1.updateDoorbell(jsonObject.getString("doorbell"));
 								}
 							}
 						}
-						if (publish.getTopic().toString().contains(user3)) {
-							if (fxScreen.row3.username.contains(user3)) {
-								if (jsonObject.has("dht")) {
+						if (publish.getTopic().toString().contains(USER3)) {
+							if (fxScreen.row3.username.contains(USER3)) {
+								if (publish.getTopic().toString().contains("dht")) {
 									fxScreen.row3.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"),
 											jsonObject.getString("timestamp"));
 								} else if (publish.getTopic().toString().contains("image")) {
-									fxScreen.row3.updateImage(imageToInputStream(jsonObject.get("image")));
-								} else if (jsonObject.has("doorbell")) {
+									fxScreen.row3.updateImage(imageToInputStream(jsonObject.get("image")),
+											jsonObject.getString("motionTimestamp"));
+								} else if (publish.getTopic().toString().contains("doorbell")) {
 									fxScreen.row3.updateDoorbell(jsonObject.getString("doorbell"));
 								}
 							}
@@ -202,7 +192,7 @@ public class MQTT {
 	}
 
 	/**
-	 * Publishe a message with the certificate within it
+	 * Publish a message with the certificate within it
 	 * 
 	 * @param certificate
 	 * @return JSONObject
@@ -210,7 +200,7 @@ public class MQTT {
 	 * @throws Exception
 	 */
 	public JSONObject publishCertificateMessage(Certificate certificate)
-			throws CertificateEncodingException, JSONException, UnsupportedEncodingException {
+			throws Exception {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("certificate", new String(Base64.getEncoder().encode(certificate.getEncoded()), "UTF-8"));
 		client.publishWith()

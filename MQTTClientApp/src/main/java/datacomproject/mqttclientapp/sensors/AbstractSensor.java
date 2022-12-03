@@ -9,7 +9,12 @@ import java.security.PrivateKey;
 public abstract class AbstractSensor {
   abstract public void startThread(FXScreen fxScreen, MQTT mqtt, PrivateKey privateKey);
 
-  // Start the process and get the output
+  /**
+   * Start the process and get the output
+   * 
+   * @param programPath
+   * @return String
+   */
   protected String callProcess(String programPath) {
     String output = "";
     try {
