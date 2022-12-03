@@ -23,8 +23,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MQTT {
 
@@ -138,10 +136,8 @@ public class MQTT {
 							new ByteArrayInputStream(Base64.getDecoder().decode(jsonObject.get("certificate").toString())));
 					ksh.storeCertificate(c, publish.getTopic().toString().split("/")[1]);
 
-				} catch (JSONException e) {
-					System.out.println("Error Retrieving Certificate");
-				} catch (CertificateException ex) {
-					Logger.getLogger(MQTT.class.getName()).log(Level.SEVERE, null, ex);
+				} catch (JSONException | CertificateException e) {
+					System.out.println("Error Retrieving Data");
 				}
 			}
 		});
