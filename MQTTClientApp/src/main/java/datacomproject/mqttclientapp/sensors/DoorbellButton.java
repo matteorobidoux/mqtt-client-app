@@ -31,7 +31,7 @@ public class DoorbellButton extends AbstractSensor {
 					if (output.equals("on") && !buttonState) {
 						buttonState = true;
 						Date timeStamp = new Date();
-						DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						String strDate = dateFormat.format(timeStamp);
 						publishData(strDate, mqtt, privateKey);
 					} else if (output.equals("off") && buttonState) {

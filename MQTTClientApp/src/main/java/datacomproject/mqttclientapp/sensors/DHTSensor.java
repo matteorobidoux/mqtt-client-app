@@ -31,7 +31,7 @@ public class DHTSensor extends AbstractSensor {
 					double humidity = Double.parseDouble(output.split(" ")[0]);
 					double temperature = Double.parseDouble(output.split(" ")[1]);
 					Date timeStamp = new Date();
-					DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+					DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					String strDate = dateFormat.format(timeStamp);
 
 					publishData(humidity, temperature, strDate, mqtt, privateKey);

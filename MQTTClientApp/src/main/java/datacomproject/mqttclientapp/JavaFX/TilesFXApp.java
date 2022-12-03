@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 public class TilesFXApp extends Application {
 
 	private Stage theStage;
-	public FXScreen fxScreen;
+	public static FXScreen fxScreen;
 	private ConsoleApp consoleApp;
 
 	@Override

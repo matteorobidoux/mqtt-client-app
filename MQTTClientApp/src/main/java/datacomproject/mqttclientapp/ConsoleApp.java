@@ -25,7 +25,7 @@ public class ConsoleApp {
 	private PrivateKey privateKey;
 	private String alias;
 	private Console console = System.console();
-	private TilesFXApp gui = new TilesFXApp();
+	// private TilesFXApp gui = new TilesFXApp();
 
 	/**
 	 * Promp the user for MQTT credentials until a connection can be established
@@ -43,7 +43,7 @@ public class ConsoleApp {
 			}
 		}
 
-		mqtt.setVariables(gui.fxScreen, ksh);
+		mqtt.setVariables(TilesFXApp.fxScreen, ksh);
 		mqtt.subscribe();
 		mqtt.publishCertificateMessage(ksh.extractCertificate(alias));
 		mqtt.retrieveMessage();
