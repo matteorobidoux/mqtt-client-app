@@ -34,8 +34,8 @@ public class MQTT {
 	private final String USER3 = "carletondavis";
 
 	private SignatureHelper signatureHelper = new SignatureHelper();
-	public FXScreen fxScreen;
-	public KeyStoreHelper ksh;
+	private FXScreen fxScreen;
+	private KeyStoreHelper ksh;
 
 	/**
 	 * Retrieve MQTT client
@@ -143,7 +143,17 @@ public class MQTT {
 		});
 	}
 
-	public void updateGUI(Mqtt5Publish publish, JSONObject jsonObject, Row row) throws JSONException, IOException {
+	/**
+	 * Call the row's gui update method according to received data
+	 * 
+	 * @param publish
+	 * @param jsonObject
+	 * @param row
+	 * 
+	 * @throws JSONException
+	 * @throws IOException
+	 */
+	private void updateGUI(Mqtt5Publish publish, JSONObject jsonObject, Row row) throws JSONException, IOException {
 		if (publish.getTopic().toString().contains("dht")) {
 			row.updateDHT(jsonObject.getDouble("temperature"), jsonObject.getDouble("humidity"),
 					jsonObject.getString("timestamp"));
@@ -212,25 +222,6 @@ public class MQTT {
 	 */
 	public void disconnect() {
 		client.disconnect();
-	}
-
-	/**
-	 * Return certificate corresponding the given jsonObject and key
-	 * 
-	 * @param jsonCertificate
-	 * @param key
-	 * @return Certificate
-	 * 
-	 * @throws CertificateException
-	 */
-	public Certificate retrieveCertificate(JSONObject jsonCertificate, String key) throws CertificateException {
-		if (jsonCertificate.has(key)) {
-			CertificateFactory cf = CertificateFactory.getInstance("X.509");
-			return cf.generateCertificate(
-					new ByteArrayInputStream(Base64.getDecoder().decode(jsonCertificate.get(key).toString())));
-		} else {
-			return null;
-		}
 	}
 
 	/**

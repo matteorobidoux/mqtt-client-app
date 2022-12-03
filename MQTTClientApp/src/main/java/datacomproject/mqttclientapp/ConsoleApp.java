@@ -25,12 +25,13 @@ public class ConsoleApp {
 	private PrivateKey privateKey;
 	private String alias;
 	private Console console = System.console();
-	// private TilesFXApp gui = new TilesFXApp();
 
 	/**
 	 * Promp the user for MQTT credentials until a connection can be established
 	 * Subscribes to topics and publishes the certificate and starts retrieving
 	 * published data
+	 * 
+	 * @throws Exception
 	 */
 	public void initializeMQTT() throws Exception {
 		mqtt.getMqttClient();
@@ -86,7 +87,7 @@ public class ConsoleApp {
 	/**
 	 * Get MQTT credentials from user input
 	 */
-	public void getMQTTUserInput() {
+	private void getMQTTUserInput() {
 		System.out.println("------------------------------------------------");
 		String user = getMQTTUsername();
 		System.out.println("-------- Provide password --------");
@@ -101,7 +102,7 @@ public class ConsoleApp {
 	 * 
 	 * @throws Exception
 	 */
-	public void getKeyStoreUserInput() throws Exception {
+	private void getKeyStoreUserInput() throws Exception {
 		// getting and validating filename
 		System.out.println("------------------------------------------------");
 		System.out.println("-- Provide path where the keystore is located --");
@@ -136,7 +137,7 @@ public class ConsoleApp {
 	 * 
 	 * @returns String
 	 */
-	public String getMQTTUsername() {
+	private String getMQTTUsername() {
 		String normalizedUsername = null;
 		System.out.println("----------- Enter your MQTT username -----------");
 		String user = console.readLine();
@@ -152,7 +153,7 @@ public class ConsoleApp {
 	 * 
 	 * @throws KeyStoreException
 	 */
-	public String getUserAlias() throws KeyStoreException {
+	private String getUserAlias() throws KeyStoreException {
 		boolean validAlias = false;
 		String normalizedAlias = null;
 		while (!validAlias) {
