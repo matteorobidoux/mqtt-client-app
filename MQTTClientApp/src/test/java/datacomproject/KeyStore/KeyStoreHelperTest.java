@@ -11,10 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import datacomproject.mqttclientapp.KeyStore.KeyStoreHelper;
 
-/**
- * @author Rim Dallali
- */
-
 public class KeyStoreHelperTest {
 
   KeyStoreHelper ksh;
