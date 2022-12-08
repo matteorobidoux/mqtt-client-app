@@ -41,3 +41,8 @@ runs tests in src/test/java:
 ### Contributors
 Matteo Robidoux
 Rim Dallali
+
+### CREDENTIALS FOR HIVEMQ LOGIN
+**make sure to copy paste the username**
+username: carletondavis
+password: password
